@@ -1,0 +1,47 @@
+
+root = true
+
+[*.{cc,cpp,h,cxx,hxx,cs}]
+
+# EditorConfigの共通設定
+# Widely Supported by Editors (https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties)
+
+indent_style = space  # Google
+# indent_size = 4
+tab_width = 8  # Google
+end_of_line = crlf  # 改行コードを crlf, lf, cr から選ぶ。Windows のローカルでの入力時は crlf に統一する。
+charset = utf-8-bom
+trim_trailing_whitespace = true  # Google「水平方向の空白：行末に空白をおいてはいけません。」
+insert_final_newline = true  # ファイル末端を改行で終える。
+
+# EditorConfigの共通設定
+# Supported By A Limited Number of Editors (https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties)
+
+max_line_length = 80  # Google C++
+
+
+# Visual C++ コード スタイルの設定
+# '///' の入力で XML ドキュメントコメントを生成する。
+cpp_generate_documentation_comments = xml
+
+
+# ReSharper の Formatting Style の設定
+# キャストの括弧の後にスペースを入れない。
+resharper_space_after_cast = false
+
+# 単一行の式の波括弧のすぐ内側にスペースを入れない。配列の初期化など。
+resharper_space_within_single_line_array_initializer_braces = false
+
+# Attribute の直後で改行する。
+resharper_place_attribute_on_same_line = false
+
+
+[**.{xaml,xml}]
+indent_style = space
+indent_size = 2
+tab_width = 8
+end_of_line = crlf
+charset = utf-8-bom
+trim_trailing_whitespace = true
+insert_final_newline = true
+# いくつかの設定は無効かもしれない。

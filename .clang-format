@@ -1,0 +1,8 @@
+---
+Language: Cpp
+# 基本スタイル
+BasedOnStyle: 'Google'
+
+# trueの場合、#includeをソートする。
+# SortIncludes: false
+...

@@ -1,0 +1,25 @@
+
+root = true
+
+[*.*]
+
+# Format document on Save の設定
+# このリポジトリの sln にしか影響しない。
+
+enable = true
+
+# ファイルの保存時に Visual Studio の「Edit.FormatDocument」を実行する。
+# Visual Studio のオプションで ClangFormat をオンにしていると、ClangFormat が
+# 実行される。
+command = Edit.FormatDocument
+
+# 下記の拡張子以外のすべてのファイルに適用する
+# .cxx/.hxx: C++/CLIのソースファイルにこの拡張子を割り当てている。
+#   C++/CLI のコードのフォーマットを ClangFormat で行うと書式が崩れるので、
+#   ReSharper でフォーマットを行う。
+# .rc: MFC のリソースファイル。除外しないと ClangFormat が適用され、書式が崩れ
+#   るため、除外する。
+allowed_extensions = 
+denied_extensions = .cxx .hxx .rc .cs .idl
+
+enable_in_debug = false  # 既定と同じ。
