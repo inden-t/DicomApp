@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\ImageViewerControl.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\ImageViewerControl.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\ImageViewerControl.xaml" />
+    <None Include="Views\ImageViewerControl.xaml.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="fo-dicom" Version="5.1.2" />
+    <PackageReference Include="fo-dicom.Codecs" Version="5.12.0" />
+    <PackageReference Include="fo-dicom.Imaging.Desktop" Version="5.1.2" />
+    <PackageReference Include="fo-dicom.Imaging.ImageSharp" Version="5.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    <PackageReference Include="ReactiveProperty" Version="9.5.0" />
+  </ItemGroup>
+
+</Project>

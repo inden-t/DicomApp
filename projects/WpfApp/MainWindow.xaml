@@ -1,0 +1,50 @@
+﻿<!-- xaml->xml-->
+<!-- 以下は、要件定義書に基づいて作成した Main Window の XAML コードです。-->
+<!-- -->
+<!-- ```xml-->
+<Window x:Class="DICOMViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DICOMViewer"
+        xmlns:global="clr-namespace:"
+        xmlns:viewmodels="clr-namespace:DICOMViewer.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="DICOM Viewer" Height="450" Width="800">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Menu Grid.Row="0">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Open" Command="{Binding OpenDICOMFileCommand}"/>
+        <Separator/>
+        <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
+      </MenuItem>
+      <MenuItem Header="_View">
+        <MenuItem Header="_Zoom In" Command="{Binding ZoomInCommand}"/>
+        <MenuItem Header="_Zoom Out" Command="{Binding ZoomOutCommand}"/>
+        <Separator/>
+        <MenuItem Header="_Pan" Command="{Binding PanCommand}"/>
+        <Separator/>
+        <MenuItem Header="_Rotate" Command="{Binding RotateCommand}"/>
+      </MenuItem>
+    </Menu>
+
+    <Image Grid.Row="1" Source="{Binding RenderedImage.Value}" />
+  </Grid>
+</Window>
+<!-- ```-->
+<!-- -->
+<!-- このXAMLコードでは以下のことを実現しています:-->
+<!-- -->
+<!-- 1. `MainWindow`クラスの定義と、WPFの基本的な要素の配置を行っています。-->
+<!-- 2. メニューバーを作成し、ファイルの操作(開く、終了)、画像の操作(ズーム、パン、回転)を行えるようにしています。-->
+<!-- 3. `ImageViewerControl`というカスタムコントロールを配置し、DICOM画像の表示を行う部分を担当させています。-->
+<!-- 4. `DataContext`を使ってViewModelとの連携を行っています。-->
+<!-- -->
+<!-- このXAMLコードは、要件定義書に沿って作成されたものです。実際の実装では、各コマンドの実装や、`ImageViewerControl`のコードなどが必要になります。-->

@@ -1,0 +1,28 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+	<!-- C++ で "///" 入力で生成されるドキュメントコメントの設定をオフにする。Visual Studio のドキュメントコメント生成機能を有効にするため。-->
+	<s:Boolean x:Key="/Default/CodeEditing/TypingAssist/Cpp/InsertDocCommentStub/@EntryValue">False</s:Boolean>
+
+	<!--ファイルの保存時に CodeCleanup を実行する。-->
+	<s:Boolean x:Key="/Default/CodeStyle/CodeCleanup/CleanupOnSave/@EntryValue">True</s:Boolean>
+
+	<!-- CodeCleanup を実行するファイルを C# と C++/CLI に限定する。 C++/CLI のファイルの拡張子は .cxx/.hxx とする。-->
+	<s:String x:Key="/Default/CodeStyle/CodeCleanup/CleanupOnSaveFileMask/@EntryValue">*.{cs,cxx,hxx}</s:String>
+
+	<!-- CodeCleanup で実行する内容は Reformat code のみとする。 ReSharper の様々な自動修正機能を使用せず、コードのフォーマットのみ実行する。-->
+	<s:String x:Key="/Default/CodeStyle/CodeCleanup/SilentCleanupProfile/@EntryValue">Built-in: Reformat Code</s:String>
+
+	<!-- C++(/CLI) の宣言の前後の連続の空白行の最大値を1行とする。.clangformat の読み込みでは設定されないため、 C++/CLI のフォーマット用にここで設定する。-->
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CppFormatting/KEEP_BLANK_LINES_IN_DECLARATIONS/@EntryValue">1</s:Int64>
+
+	<!-- .clangformat の設定を ReSharper に読み込む。-->
+	<s:Boolean x:Key="/Default/CodeStyle/EditorConfig/EnableClangFormatSupport/@EntryValue">True</s:Boolean>
+
+	<!-- .editorconfig の設定を ReSharper に読み込む。-->
+	<s:Boolean x:Key="/Default/CodeStyle/EditorConfig/EnableEditorConfigSupport/@EntryValue">True</s:Boolean>
+
+	<!-- ReSharper のバージョンアップに関わる設定が自動的に挿入されることがある。
+	参考: https://pleiades.io/help/resharper/Sharing_Configuration_Options.html#upgrading -->
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EFeature_002EServices_002ECpp_002ECodeStyle_002ESettingsUpgrade_002EFunctionReturnStyleSettingsUpgrader/@EntryIndexedValue">True</s:Boolean>
+
+</wpf:ResourceDictionary>
