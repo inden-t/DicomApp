@@ -11,12 +11,12 @@
              MouseWheel="UserControl_MouseWheel">
   <Grid>
     <Image x:Name="DicomImage"
-             Stretch="Uniform"
-             Source="{Binding BitmapSourceImage.Value}"/>
+           Stretch="Uniform"
+           Source="{Binding BitmapSourceImage.Value}"/>
     <Canvas x:Name="CanvasOverlay"/>
     <b:Interaction.Triggers>
       <b:EventTrigger EventName="MouseMove">
-        <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}" />
+        <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}"/>
       </b:EventTrigger>
     </b:Interaction.Triggers>
   </Grid>
