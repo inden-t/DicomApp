@@ -14,7 +14,7 @@ namespace DICOMViewer.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private DICOMFile _dicomFile;
-        private ImageViewer _imageViewer;
+        private ImageViewerViewModel _imageViewerViewModel;
 
         public ReactiveProperty<BitmapSource> RenderedImage { get; }
 
@@ -25,10 +25,12 @@ namespace DICOMViewer.ViewModels
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
 
-        public MainWindowViewModel(ImageViewer imageViewer)
+        public MainWindowViewModel(
+            ImageViewerViewModel imageViewerViewModel)
         {
-            _imageViewer = imageViewer;
-            RenderedImage = _imageViewer.BitmapSourceImage;
+            _imageViewerViewModel = imageViewerViewModel;
+
+            RenderedImage = _imageViewerViewModel.BitmapSourceImage;
 
             OpenDICOMFileCommand.Subscribe(_ => { OpenDICOMFile(); });
             //ExitCommand          .Subscribe(_ => { OpenDICOMFile(); });
@@ -52,8 +54,9 @@ namespace DICOMViewer.ViewModels
                     _dicomFile.Load();
 
                     // DICOMデータセットからイメージを取得し、ImageViewerに設定する
-                    _imageViewer.SetImage(_dicomFile.GetImage());
-                    RenderedImage.Value = _imageViewer.BitmapSourceImage.Value;
+                    _imageViewerViewModel.SetImage(_dicomFile.GetImage());
+                    RenderedImage.Value =
+                        _imageViewerViewModel.BitmapSourceImage.Value;
                 }
                 catch (Exception ex)
                 {
@@ -65,22 +68,22 @@ namespace DICOMViewer.ViewModels
 
         public void ZoomIn()
         {
-            _imageViewer.Zoom(1.25);
+            _imageViewerViewModel.Zoom(1.25);
         }
 
         public void ZoomOut()
         {
-            _imageViewer.Zoom(0.8);
+            _imageViewerViewModel.Zoom(0.8);
         }
 
         public void Pan(double x, double y)
         {
-            _imageViewer.Pan(x, y);
+            _imageViewerViewModel.Pan(x, y);
         }
 
         public void Rotate(double angle)
         {
-            _imageViewer.Rotate(angle);
+            _imageViewerViewModel.Rotate(angle);
         }
 
         private string GetFilePath()

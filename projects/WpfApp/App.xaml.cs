@@ -52,7 +52,7 @@ namespace DICOMViewer
             services.AddScoped<MainWindow>();
             services.AddScoped<MainWindowViewModel>();
             services.AddScoped<DICOMFile>();
-            services.AddScoped<ImageViewer>();
+            services.AddScoped<ImageViewerViewModel>();
         }
     }
 }
