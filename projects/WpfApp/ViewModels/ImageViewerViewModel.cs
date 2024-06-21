@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using FellowOakDicom.Imaging;
@@ -55,6 +56,33 @@ namespace DICOMViewer.ViewModels
             _image.Scale = _zoom;
             var renderedImage = _image.RenderImage();
             BitmapSourceImage.Value = renderedImage.As<WriteableBitmap>();
+        }
+
+        private void UserControl_MouseWheel(object sender,
+            MouseWheelEventArgs e)
+        {
+            Zoom(Math.Pow(1.1, e.Delta / 120.0));
+        }
+
+        private void UserControl_MouseLeftButtonDown(object sender,
+            MouseButtonEventArgs e)
+        {
+            //this.CaptureMouse();
+        }
+
+        private void UserControl_MouseLeftButtonUp(object sender,
+            MouseButtonEventArgs e)
+        {
+            //this.ReleaseMouseCapture();
+        }
+
+        private void UserControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            //if (this.IsMouseCaptured)
+            //{
+            //    var delta = e.GetPosition(this) - e.GetPosition(ImageHost);
+            //    Pan(delta.X, delta.Y);
+            //}
         }
     }
 }

@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:DICOMViewer.ViewModels"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:interactivity="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
             >
@@ -12,5 +14,10 @@
              Stretch="Uniform"
              Source="{Binding BitmapSourceImage.Value}"/>
     <Canvas x:Name="CanvasOverlay"/>
+    <b:Interaction.Triggers>
+      <b:EventTrigger EventName="MouseMove">
+        <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}" />
+      </b:EventTrigger>
+    </b:Interaction.Triggers>
   </Grid>
 </UserControl>
