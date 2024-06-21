@@ -1,9 +1,4 @@
-﻿// cs
-// 要件定義書に基づいて、MainWindowViewModel クラスの実装を行います。このクラスは、メインウィンドウのビジネスロジックを担当します。
-// 
-// ```csharp
-
-using System;
+﻿using System;
 using System.Windows;
 using Reactive.Bindings;
 using System.Windows.Media.Imaging;
@@ -97,25 +92,3 @@ namespace DICOMViewer.ViewModels
         }
     }
 }
-// ```
-// 
-// このクラスは、以下の機能を提供します:
-// 
-// 1. **DICOM画像ファイルを開く**:
-//    - `OpenDICOMFile()` メソッドを呼び出すと、ファイルダイアログを表示し、ユーザーが選択したDICOMファイルを読み込みます。
-//    - DICOM画像データを取得し、`ImageViewer`に設定します。
-// 
-// 2. **DICOM画像をズームする**:
-//    - `ZoomIn()` メソッドを呼び出すと、画像をズームインします。
-//    - `ZoomOut()` メソッドを呼び出すと、画像をズームアウトします。
-//    - `ImageViewer`の`Zoom()`メソッドを呼び出して、実際の拡大/縮小処理を行います。
-// 
-// 3. **DICOM画像をパンする**:
-//    - `Pan()` メソッドを呼び出すと、画像をパンします。
-//    - `ImageViewer`の`Pan()`メソッドを呼び出して、実際の画像移動処理を行います。
-// 
-// 4. **DICOM画像を回転する**:
-//    - `Rotate()` メソッドを呼び出すと、画像を回転します。
-//    - `ImageViewer`の`Rotate()`メソッドを呼び出して、実際の画像回転処理を行います。
-// 
-// このクラスは、ユーザーインターフェースからの操作を受け取り、適切

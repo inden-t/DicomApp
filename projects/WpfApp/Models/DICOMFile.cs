@@ -1,9 +1,4 @@
-﻿// cs
-// 以下のように、DICOMFile クラスの実装を行います。
-// 
-// ```csharp
-
-using System;
+﻿using System;
 using System.IO;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
@@ -55,14 +50,3 @@ public class DICOMFile
         }
     }
 }
-// ```
-// 
-// このクラスの主な機能は以下の通りです:
-// 
-// 1. コンストラクタ `DICOMFile(string filePath)`: DICOM ファイルのパスを受け取り、クラスのプロパティに設定します。
-// 
-// 2. `Load()` メソッド: DICOM ファイルを読み込み、`DicomDataset` オブジェクトを取得します。ファイルの読み込みに失敗した場合は例外を投げます。
-// 
-// 3. `GetImage()` メソッド: `DicomDataset` から DICOM 画像データを取得し、`DicomImage` オブジェクトを返します。画像データの取得に失敗した場合は例外を投げます。
-// 
-// このクラスは、DICOM ファイルの読み込みと画像データの取得を担当します。他のクラス (例えば `MainWindowViewModel`) がこのクラスを使用して、DICOM 画像を表示したり操作したりすることができます。

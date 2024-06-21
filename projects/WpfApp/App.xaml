@@ -1,8 +1,4 @@
-<!-- xaml->xml-->
-<!-- はい、以下に App.xaml の内容を記載します。-->
-<!-- -->
-<!-- ```xml-->
-<Application x:Class="DICOMViewer.App"
+﻿<Application x:Class="DICOMViewer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:DICOMViewer">
@@ -10,14 +6,3 @@
 
   </Application.Resources>
 </Application>
-<!-- ```-->
-<!-- -->
-<!-- このXAMLファイルは、アプリケーションの起点となるクラスである `App` を定義しています。主な内容は以下の通りです:-->
-<!-- -->
-<!-- - `x:Class="DICOM_Viewer.App"`: `App` クラスが `DICOM_Viewer` 名前空間に属していることを示しています。-->
-<!-- - `xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"`: WPFの標準名前空間を定義しています。-->
-<!-- - `xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"`: XAML言語の名前空間を定義しています。-->
-<!-- - `xmlns:local="clr-namespace:DICOM_Viewer"`: アプリケーション内のリソースを参照するための名前空間を定義しています。-->
-<!-- - `StartupUri="MainWindow.xaml"`: アプリケーションの起動時に表示されるメインウィンドウのXAMLファイルを指定しています。-->
-<!-- -->
-<!-- この設定により、アプリケーションの起動時にMainWindowが表示されるようになります。-->

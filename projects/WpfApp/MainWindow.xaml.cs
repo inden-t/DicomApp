@@ -1,9 +1,4 @@
-﻿// cs
-// 以下は、要件定義書に基づいて作成したMainWindowクラスのプログラムです。
-// 
-// ```csharp
-
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using DICOMViewer.ViewModels;
 using DICOMViewer.Views;
@@ -29,12 +24,3 @@ namespace DICOMViewer
         }
     }
 }
-// ```
-// 
-// この MainWindow クラスは、以下のような機能を持っています:
-// 
-// 1. コンストラクタで MainWindowViewModel のインスタンスを作成し、DataContext に設定しています。
-// 2. OpenDICOMFile_Click、ZoomIn_Click、ZoomOut_Click、Pan_Click、Rotate_Click のメソッドは、それぞれ対応するViewModelのメソッドを呼び出しています。
-// 3. これらのメソッドは、ユーザーがGUIの操作を行った際に呼び出されます。
-// 
-// MainWindowクラスは、ユーザーインターフェースの管理とViewModelとの連携を担当しています。ユーザーの操作に応じて、適切なViewModelのメソッドを呼び出すことで、アプリケーションの動作を実現しています。
