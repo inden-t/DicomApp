@@ -3,50 +3,54 @@ using System.IO;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
 
-public class DICOMFile
+namespace DicomApp
 {
-    private string _filePath;
-    private DicomDataset _dataset;
-
-    public DICOMFile(string filePath)
+    public class DICOMFile
     {
-        _filePath = filePath;
-    }
+        private string _filePath;
+        private DicomDataset _dataset;
 
-    public void Load()
-    {
-        try
+        public DICOMFile(string filePath)
         {
-            // DicomFile オブジェクトを使用して DICOM ファイルを読み込む
-            var file = DicomFile.Open(_filePath);
-            _dataset = file.Dataset;
+            _filePath = filePath;
+        }
 
-            var transferSyntax = file.Dataset.InternalTransferSyntax;
-            if (transferSyntax == DicomTransferSyntax.RLELossless)
+        public void Load()
+        {
+            try
             {
-                // RLE圧縮されている
+                // DicomFile オブジェクトを使用して DICOM ファイルを読み込む
+                var file = DicomFile.Open(_filePath);
+                _dataset = file.Dataset;
+
+                var transferSyntax = file.Dataset.InternalTransferSyntax;
+                if (transferSyntax == DicomTransferSyntax.RLELossless)
+                {
+                    // RLE圧縮されている
+                }
+            }
+            catch (Exception ex)
+            {
+                // ファイルの読み込みに失敗した場合の例外処理
+                throw new Exception($"Failed to load DICOM file: {_filePath}",
+                    ex);
             }
         }
-        catch (Exception ex)
-        {
-            // ファイルの読み込みに失敗した場合の例外処理
-            throw new Exception($"Failed to load DICOM file: {_filePath}", ex);
-        }
-    }
 
-    public DicomImage GetImage()
-    {
-        try
+        public DicomImage GetImage()
         {
-            // _dataset から DICOM 画像データを取得する
-            var image = new DicomImage(_dataset);
-            return image;
-        }
-        catch (Exception ex)
-        {
-            // 画像データの取得に失敗した場合の例外処理
-            throw new Exception(
-                $"Failed to get DICOM image from file: {_filePath}", ex);
+            try
+            {
+                // _dataset から DICOM 画像データを取得する
+                var image = new DicomImage(_dataset);
+                return image;
+            }
+            catch (Exception ex)
+            {
+                // 画像データの取得に失敗した場合の例外処理
+                throw new Exception(
+                    $"Failed to get DICOM image from file: {_filePath}", ex);
+            }
         }
     }
 }
