@@ -15,11 +15,6 @@
   <ItemGroup>
     <Page Remove="Views\ImageViewerControl.xaml" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\ImageViewerControl.xaml" />
-    <None Include="Views\ImageViewerControl.xaml.cs" />
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="fo-dicom" Version="5.1.2" />
