@@ -9,7 +9,7 @@
         xmlns:views="clr-namespace:DicomApp.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="DICOM Viewer" Height="450" Width="800">
+        Title="DICOM Viewer" Height="900" Width="1200">
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="200"/>
