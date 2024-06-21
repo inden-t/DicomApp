@@ -33,6 +33,8 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<DICOMFile> SelectedDicomFile { get; } =
             new ReactiveProperty<DICOMFile>();
 
+        private int _currentImageIndex = 0;
+
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
@@ -46,15 +48,34 @@ namespace DicomApp.ViewModels
             //PanCommand           .Subscribe(_ => { Pan(); });
             //RotateCommand        .Subscribe(_ => { Rotate(); });
 
+            _imageViewerViewModel.ChangeImageCommand.Subscribe(delta => ChangeImage(delta));
+
             SelectedDicomFile.Subscribe(file =>
             {
                 if (file != null)
                 {
-                    _imageViewerViewModel.SetImage(file.GetImage());
-                    RenderedImage.Value =
-                        _imageViewerViewModel.BitmapSourceImage.Value;
+                    _currentImageIndex = DicomFiles.IndexOf(file);
+                    UpdateDisplayedImage();
                 }
             });
+        }
+
+        private void ChangeImage(int delta)
+        {
+            if (DicomFiles.Count == 0) return;
+
+            _currentImageIndex += delta > 0 ? 1 : -1;
+            _currentImageIndex = Math.Max(0, Math.Min(_currentImageIndex, DicomFiles.Count - 1));
+
+            UpdateDisplayedImage();
+        }
+
+        private void UpdateDisplayedImage()
+        {
+            var selectedFile = DicomFiles[_currentImageIndex];
+            _imageViewerViewModel.SetImage(selectedFile.GetImage());
+            RenderedImage.Value = _imageViewerViewModel.BitmapSourceImage.Value;
+            SelectedDicomFile.Value = selectedFile;
         }
 
         public void OpenDICOMFile()

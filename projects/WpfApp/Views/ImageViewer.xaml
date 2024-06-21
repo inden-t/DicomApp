@@ -8,7 +8,7 @@
              xmlns:interactivity="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
-            >
+             MouseWheel="UserControl_MouseWheel">
   <Grid>
     <Image x:Name="DicomImage"
              Stretch="Uniform"

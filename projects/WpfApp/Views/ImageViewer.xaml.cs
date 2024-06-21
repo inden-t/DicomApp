@@ -12,5 +12,12 @@ namespace DicomApp.Views
 
             DataContext = imageViewerViewModel;
         }
+
+        private void UserControl_MouseWheel(object sender,
+            System.Windows.Input.MouseWheelEventArgs e)
+        {
+            var viewModel = (ImageViewerViewModel)DataContext;
+            viewModel.ChangeImage(-e.Delta);
+        }
     }
 }

@@ -18,6 +18,14 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
+        public ReactiveCommand<int> ChangeImageCommand { get; } = new ReactiveCommand<int>();
+
+        public void ChangeImage(int delta)
+        {
+            // MainWindowViewModelに画像変更を通知
+            ChangeImageCommand.Execute(delta);
+        }
+
         public ImageViewerViewModel()
         {
         }
@@ -56,12 +64,6 @@ namespace DicomApp.ViewModels
             _image.Scale = _zoom;
             var renderedImage = _image.RenderImage();
             BitmapSourceImage.Value = renderedImage.As<WriteableBitmap>();
-        }
-
-        private void UserControl_MouseWheel(object sender,
-            MouseWheelEventArgs e)
-        {
-            Zoom(Math.Pow(1.1, e.Delta / 120.0));
         }
 
         private void UserControl_MouseLeftButtonDown(object sender,
