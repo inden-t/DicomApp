@@ -17,6 +17,11 @@ namespace DicomApp
             _filePath = filePath;
         }
 
+        public override string ToString()
+        {
+            return System.IO.Path.GetFileName(FilePath);
+        }
+
         public void Load()
         {
             try

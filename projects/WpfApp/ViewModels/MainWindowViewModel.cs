@@ -30,6 +30,9 @@ namespace DicomApp.ViewModels
             set => SetProperty(ref _dicomFiles, value);
         }
 
+        public ReactiveProperty<DICOMFile> SelectedDicomFile { get; } =
+            new ReactiveProperty<DICOMFile>();
+
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
@@ -42,6 +45,16 @@ namespace DicomApp.ViewModels
             ZoomOutCommand.Subscribe(_ => { ZoomOut(); });
             //PanCommand           .Subscribe(_ => { Pan(); });
             //RotateCommand        .Subscribe(_ => { Rotate(); });
+
+            SelectedDicomFile.Subscribe(file =>
+            {
+                if (file != null)
+                {
+                    _imageViewerViewModel.SetImage(file.GetImage());
+                    RenderedImage.Value =
+                        _imageViewerViewModel.BitmapSourceImage.Value;
+                }
+            });
         }
 
         public void OpenDICOMFile()

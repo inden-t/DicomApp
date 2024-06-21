@@ -36,8 +36,10 @@
       </MenuItem>
     </Menu>
 
-    <ListView Grid.Column="0" Grid.Row="1"
-              ItemsSource="{Binding DicomFiles}">
+    <ListView Grid.Column="0"
+        Grid.Row="1"
+              ItemsSource="{Binding DicomFiles}"
+              SelectedItem="{Binding SelectedDicomFile.Value, Mode=TwoWay}">
       <ListView.ItemTemplate>
         <DataTemplate>
           <TextBlock Text="{Binding FilePath}"/>
