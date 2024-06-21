@@ -10,6 +10,7 @@
         xmlns:local="clr-namespace:DICOMViewer"
         xmlns:global="clr-namespace:"
         xmlns:viewmodels="clr-namespace:DICOMViewer.ViewModels"
+        xmlns:views="clr-namespace:DICOMViewer.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="DICOM Viewer" Height="450" Width="800">
@@ -35,7 +36,7 @@
       </MenuItem>
     </Menu>
 
-    <Image Grid.Row="1" Source="{Binding RenderedImage.Value}" />
+    <ContentControl x:Name="ImageContainer" Grid.Row="1" />
   </Grid>
 </Window>
 <!-- ```-->

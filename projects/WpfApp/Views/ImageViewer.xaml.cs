@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DICOMViewer.ViewModels;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 using SixLabors.ImageSharp;
@@ -34,14 +35,18 @@ namespace DICOMViewer.Views
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
-        public ImageViewer()
+        public ImageViewer(ImageViewerViewModel imageViewerViewModel)
         {
-            // GUIコンポーネントの初期化
-            _imageControl = new Image();
-            _imageCanvas = new Canvas();
-            _imageCanvas.Children.Add(_imageControl);
+            InitializeComponent();
 
-            this.Content = _imageCanvas;
+            DataContext = imageViewerViewModel;
+
+            //// GUIコンポーネントの初期化
+            //_imageControl = new Image();
+            //_imageCanvas = new Canvas();
+            //_imageCanvas.Children.Add(_imageControl);
+
+            //this.Content = _imageCanvas;
         }
 
         public void SetImage(DicomImage image)
