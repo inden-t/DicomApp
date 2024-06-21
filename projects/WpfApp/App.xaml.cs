@@ -16,6 +16,8 @@ namespace DICOMViewer
     {
         private readonly IServiceProvider _serviceProvider;
 
+        private MainWindow _mainWindow;
+
         public App()
         {
             new DicomSetupBuilder().RegisterServices(s => s
@@ -37,6 +39,10 @@ namespace DICOMViewer
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // MainWindow の生成
+            _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            _mainWindow.Show();
         }
 
         private void ConfigureServices(IServiceCollection services)

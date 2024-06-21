@@ -12,10 +12,10 @@ namespace DICOMViewer
     {
         private readonly MainWindowViewModel _viewModel;
 
-        public MainWindow()
+        public MainWindow(MainWindowViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = new MainWindowViewModel();
+            _viewModel = viewModel;
 
             _viewModel.OpenDICOMFile();
             DataContext = _viewModel;

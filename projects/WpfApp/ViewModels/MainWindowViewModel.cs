@@ -24,9 +24,9 @@ namespace DICOMViewer.ViewModels
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(ImageViewer imageViewer)
         {
-            _imageViewer = new ImageViewer();
+            _imageViewer = imageViewer;
             RenderedImage = _imageViewer.BitmapSourceImage;
 
             OpenDICOMFileCommand.Subscribe(_ => { OpenDICOMFile(); });

@@ -5,8 +5,7 @@
 <Application x:Class="DICOMViewer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DICOMViewer"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:DICOMViewer">
   <Application.Resources>
 
   </Application.Resources>
