@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Reactive.Bindings;
 using System.Windows.Media.Imaging;
 using DicomApp.Views;
+using Microsoft.Win32;
 
 namespace DicomApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private DICOMFile _dicomFile;
+        private ObservableCollection<DICOMFile> _dicomFiles =
+            new ObservableCollection<DICOMFile>();
+
         private ImageViewerViewModel _imageViewerViewModel;
 
         public ReactiveProperty<BitmapSource> RenderedImage { get; }
@@ -20,8 +24,13 @@ namespace DicomApp.ViewModels
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
 
-        public MainWindowViewModel(
-            ImageViewerViewModel imageViewerViewModel)
+        public ObservableCollection<DICOMFile> DicomFiles
+        {
+            get => _dicomFiles;
+            set => SetProperty(ref _dicomFiles, value);
+        }
+
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
 
@@ -37,26 +46,34 @@ namespace DicomApp.ViewModels
 
         public void OpenDICOMFile()
         {
-            // ファイルダイアログを表示し、ユーザーが選択したDICOMファイルのパスを取得する
-            string filePath = GetFilePath();
+            string[] filePaths = GetFilePaths();
 
-            if (!string.IsNullOrEmpty(filePath))
+            if (filePaths != null && filePaths.Length > 0)
             {
-                try
-                {
-                    // DICOMファイルを読み込む
-                    _dicomFile = new DICOMFile(filePath);
-                    _dicomFile.Load();
+                DicomFiles.Clear();
 
-                    // DICOMデータセットからイメージを取得し、ImageViewerに設定する
-                    _imageViewerViewModel.SetImage(_dicomFile.GetImage());
+                foreach (string filePath in filePaths)
+                {
+                    try
+                    {
+                        DICOMFile dicomFile = new DICOMFile(filePath);
+                        dicomFile.Load();
+                        DicomFiles.Add(dicomFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                            $"Error opening DICOM file: {ex.Message}",
+                            "Error", MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                }
+
+                if (DicomFiles.Count > 0)
+                {
+                    _imageViewerViewModel.SetImage(DicomFiles[0].GetImage());
                     RenderedImage.Value =
                         _imageViewerViewModel.BitmapSourceImage.Value;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error opening DICOM file: {ex.Message}",
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -81,14 +98,20 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel.Rotate(angle);
         }
 
-        private string GetFilePath()
+        private string[] GetFilePaths()
         {
-            // ファイルダイアログを表示し、ユーザーが選択したファイルのパスを取得する
-            // 実装は省略
-            return
-                @"C:\develop\DicomApp\.dcm\series-000001\image-000050.dcm";
-            return
-                "C:\\develop\\DicomApp\\.dcm\\Nodule154images\\JPCLN050.dcm";
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter =
+                "DICOM ファイル (*.dcm)|*.dcm|すべてのファイル (*.*)|*.*";
+            openFileDialog.Title = "DICOM ファイルを選択してください";
+            openFileDialog.Multiselect = true;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                return openFileDialog.FileNames;
+            }
+
+            return null;
         }
     }
 }
