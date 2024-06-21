@@ -13,26 +13,26 @@
 ## 2. ファイル・フォルダ構成
 ```
 DICOM Viewer
-├── App.config
 ├── App.xaml
 ├── App.xaml.cs
 ├── MainWindow.xaml
 ├── MainWindow.xaml.cs
 ├── Models
-│   ├── DICOMFile.cs
-│   └── ImageViewer.cs
+│   └── DICOMFile.cs
 ├── ViewModels
-│   └── MainWindowViewModel.cs
+│   ├── ImageViewerViewModel.cs
+│   ├── MainWindowViewModel.cs
+│   └── ViewModelBase.cs
 └── Views
-    └── ImageViewerControl.xaml
-    └── ImageViewerControl.xaml.cs
+    ├── ImageViewer.xaml
+    └── ImageViewer.xaml.cs
 ```
 
 ## 3. クラス図
 ```mermaid
 classDiagram
     class App {
-        -IContainer container
+        -IServiceProvider serviceProvider
         +Run()
     }
     
@@ -44,7 +44,7 @@ classDiagram
     
     class MainWindowViewModel {
         -DICOMFile dicomFile
-        -ImageViewer imageViewer
+        -ImageViewerViewModel imageViewerViewModel
         +OpenDICOMFile()
         +ZoomIn()
         +ZoomOut()
@@ -55,24 +55,30 @@ classDiagram
     class DICOMFile {
         -string filePath
         -DicomDataset dataset
-        +Load(string filePath)
+        +Load()
         +GetImage()
     }
     
-    class ImageViewer {
+    class ImageViewerViewModel {
         -DicomImage image
         +Zoom(double factor)
         +Pan(double x, double y)
         +Rotate(double angle)
         +Render()
     }
+
+    class ViewModelBase {
+        +Dispose()
+    }
     
     App "1" -- "1" MainWindow
     MainWindow "1" -- "1" MainWindowViewModel
     MainWindowViewModel "1" -- "1" DICOMFile
-    MainWindowViewModel "1" -- "1" ImageViewer
+    MainWindowViewModel "1" -- "1" ImageViewerViewModel
+    MainWindowViewModel --|> ViewModelBase
+    ImageViewerViewModel --|> ViewModelBase
     DICOMFile "1" -- "1" DicomDataset
-    ImageViewer "1" -- "1" DicomImage
+    ImageViewerViewModel "1" -- "1" DicomImage
 ```
 
 ## 4. クラスの詳細
@@ -80,7 +86,7 @@ classDiagram
 ### App
 - **説明**: アプリケーションの起点となるクラス。アプリの初期化と実行を担当する。
 - **属性**:
-  - `IContainer container`: 依存関係の管理を行うコンテナ
+  - `IServiceProvider serviceProvider`: 依存関係の管理を行うプロバイダ
 - **操作**:
   - `Run()`: アプリケーションを起動する
 
@@ -96,7 +102,7 @@ classDiagram
 - **説明**: メインウィンドウのビジネスロジックを担当するクラス。
 - **属性**:
   - `DICOMFile dicomFile`: DICOM画像ファイルを表すモデル
-  - `ImageViewer imageViewer`: DICOM画像の表示を担当するビューモデル
+  - `ImageViewerViewModel imageViewerViewModel`: DICOM画像の表示を担当するビューモデル
 - **操作**:
   - `OpenDICOMFile()`: DICOM画像ファイルを開く
   - `ZoomIn()`: 画像をズームインする
@@ -110,10 +116,10 @@ classDiagram
   - `string filePath`: DICOM画像ファイルのパス
   - `DicomDataset dataset`: DICOM画像のデータセット
 - **操作**:
-  - `Load(string filePath)`: DICOM画像ファイルを読み込む
+  - `Load()`: DICOM画像ファイルを読み込む
   - `GetImage()`: DICOM画像データを取得する
 
-### ImageViewer
+### ImageViewerViewModel
 - **説明**: DICOM画像の表示と操作を担当するクラス。
 - **属性**:
   - `DicomImage image`: 表示するDICOM画像
@@ -123,6 +129,11 @@ classDiagram
   - `Rotate(double angle)`: 画像を回転する
   - `Render()`: 画像を描画する
 
+### ViewModelBase
+- **説明**: ビューモデルの基底クラス。ビューモデルの基本的な機能を提供する。
+- **操作**:
+  - `Dispose()`: ビューモデルのリソースを解放する
+
 ## 5. ユースケース
 
 1. **DICOM画像ファイルを開く**
@@ -130,19 +141,19 @@ classDiagram
    - 関連するメソッド: `OpenDICOMFile()`, `Load()`
 
 2. **DICOM画像を表示する**
-   - 関連するクラス: `MainWindowViewModel`, `ImageViewer`, `DICOMFile`
+   - 関連するクラス: `MainWindowViewModel`, `ImageViewerViewModel`, `DICOMFile`
    - 関連するメソッド: `GetImage()`, `Render()`
 
 3. **DICOM画像をズームする**
-   - 関連するクラス: `MainWindowViewModel`, `ImageViewer`
+   - 関連するクラス: `MainWindowViewModel`, `ImageViewerViewModel`
    - 関連するメソッド: `ZoomIn()`, `ZoomOut()`, `Zoom()`
 
 4. **DICOM画像をパンする**
-   - 関連するクラス: `MainWindowViewModel`, `ImageViewer`
+   - 関連するクラス: `MainWindowViewModel`, `ImageViewerViewModel`
    - 関連するメソッド: `Pan()`
 
 5. **DICOM画像を回転する**
-   - 関連するクラス: `MainWindowViewModel`, `ImageViewer`
+   - 関連するクラス: `MainWindowViewModel`, `ImageViewerViewModel`
    - 関連するメソッド: `Rotate()`
 
 ## 6. シーケンス図
@@ -158,8 +169,8 @@ sequenceDiagram
     MainWindowViewModel ->> DICOMFile: Load(filePath)
     DICOMFile ->> DICOMFile: Load(filePath)
     DICOMFile -->> MainWindowViewModel: dicomDataset
-    MainWindowViewModel ->> ImageViewer: SetImage(dicomImage)
-    ImageViewer -->> MainWindow: Render()
+    MainWindowViewModel ->> ImageViewerViewModel: SetImage(dicomImage)
+    ImageViewerViewModel -->> MainWindow: Render()
 ```
 
 ### DICOM画像をズームする
@@ -167,12 +178,12 @@ sequenceDiagram
 sequenceDiagram
     participant MainWindow
     participant MainWindowViewModel
-    participant ImageViewer
+    participant ImageViewerViewModel
 
     MainWindow ->> MainWindowViewModel: ZoomIn()
-    MainWindowViewModel ->> ImageViewer: Zoom(factor)
-    ImageViewer ->> ImageViewer: Zoom(factor)
-    ImageViewer -->> MainWindow: Render()
+    MainWindowViewModel ->> ImageViewerViewModel: Zoom(factor)
+    ImageViewerViewModel ->> ImageViewerViewModel: Zoom(factor)
+    ImageViewerViewModel -->> MainWindow: Render()
 ```
 
 ### DICOM画像をパンする
@@ -180,12 +191,12 @@ sequenceDiagram
 sequenceDiagram
     participant MainWindow
     participant MainWindowViewModel
-    participant ImageViewer
+    participant ImageViewerViewModel
 
     MainWindow ->> MainWindowViewModel: Pan(x, y)
-    MainWindowViewModel ->> ImageViewer: Pan(x, y)
-    ImageViewer ->> ImageViewer: Pan(x, y)
-    ImageViewer -->> MainWindow: Render()
+    MainWindowViewModel ->> ImageViewerViewModel: Pan(x, y)
+    ImageViewerViewModel ->> ImageViewerViewModel: Pan(x, y)
+    ImageViewerViewModel -->> MainWindow: Render()
 ```
 
 ### DICOM画像を回転する
@@ -193,10 +204,10 @@ sequenceDiagram
 sequenceDiagram
     participant MainWindow
     participant MainWindowViewModel
-    participant ImageViewer
+    participant ImageViewerViewModel
 
     MainWindow ->> MainWindowViewModel: Rotate(angle)
-    MainWindowViewModel ->> ImageViewer: Rotate(angle)
-    ImageViewer ->> ImageViewer: Rotate(angle)
-    ImageViewer -->> MainWindow: Render()
+    MainWindowViewModel ->> ImageViewerViewModel: Rotate(angle)
+    ImageViewerViewModel ->> ImageViewerViewModel: Rotate(angle)
+    ImageViewerViewModel -->> MainWindow: Render()
 ```
