@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Controls;
-using DICOMViewer.ViewModels;
+using DicomApp.ViewModels;
 
-namespace DICOMViewer.Views
+namespace DicomApp.Views
 {
     public partial class ImageViewer : UserControl
     {

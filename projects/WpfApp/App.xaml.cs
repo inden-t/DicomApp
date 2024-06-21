@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows;
-using DICOMViewer.ViewModels;
-using DICOMViewer.Views;
+using DicomApp.ViewModels;
+using DicomApp.Views;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DICOMViewer
+namespace DicomApp
 {
     public partial class App : Application
     {

@@ -2,9 +2,9 @@
 using System.Windows;
 using Reactive.Bindings;
 using System.Windows.Media.Imaging;
-using DICOMViewer.Views;
+using DicomApp.Views;
 
-namespace DICOMViewer.ViewModels
+namespace DicomApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

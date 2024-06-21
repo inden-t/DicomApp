@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
-namespace DICOMViewer.ViewModels
+namespace DicomApp.ViewModels
 {
     public class ImageViewerViewModel : ViewModelBase
     {
