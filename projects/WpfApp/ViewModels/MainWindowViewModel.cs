@@ -87,9 +87,9 @@ namespace DICOMViewer.ViewModels
             // ファイルダイアログを表示し、ユーザーが選択したファイルのパスを取得する
             // 実装は省略
             return
-                @"C:\develop\DicomViewer\.dcm\series-000001\image-000050.dcm";
+                @"C:\develop\DicomApp\.dcm\series-000001\image-000050.dcm";
             return
-                "C:\\develop\\DicomViewer\\.dcm\\Nodule154images\\JPCLN050.dcm";
+                "C:\\develop\\DicomApp\\.dcm\\Nodule154images\\JPCLN050.dcm";
         }
     }
 }
