@@ -27,31 +27,6 @@ namespace DICOMViewer
             var imageContainer = (ContentControl)FindName("ImageContainer");
             imageContainer.Content = imageViewer;
         }
-
-        private void OpenDICOMFile_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.OpenDICOMFile();
-        }
-
-        private void ZoomIn_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.ZoomIn();
-        }
-
-        private void ZoomOut_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.ZoomOut();
-        }
-
-        private void Pan_Click(object sender, RoutedEventArgs e)
-        {
-            //_viewModel.Pan();
-        }
-
-        private void Rotate_Click(object sender, RoutedEventArgs e)
-        {
-            //_viewModel.Rotate();
-        }
     }
 }
 // ```

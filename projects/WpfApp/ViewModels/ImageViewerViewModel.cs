@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -50,15 +50,6 @@ namespace DICOMViewer.ViewModels
         {
             if (_image == null)
                 return;
-
-            // 画像の変換行列を作成
-            var transform = new MatrixTransform();
-            transform.Matrix = Matrix.Identity;
-            transform.Matrix.ScaleAt(_zoom, _zoom, _image.Width / 2,
-                _image.Height / 2);
-            transform.Matrix.RotateAt(_rotation, _image.Width / 2,
-                _image.Height / 2);
-            transform.Matrix.Translate(_panOffset.X, _panOffset.Y);
 
             // 画像を描画
             _image.Scale = _zoom;
