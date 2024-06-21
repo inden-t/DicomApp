@@ -1,4 +1,4 @@
-# DICOM Viewer デスクトップアプリ要件定義書
+# DICOM App デスクトップアプリ要件定義書
 
 ## ゴール
 本アプリケーションはWPF (Windows Presentation Foundation) を使用して開発します。
@@ -12,7 +12,7 @@
 
 ## 2. ファイル・フォルダ構成
 ```
-DICOM Viewer
+DICOM App
 ├── App.xaml
 ├── App.xaml.cs
 ├── MainWindow.xaml
