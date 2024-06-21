@@ -11,12 +11,16 @@
         mc:Ignorable="d"
         Title="DICOM Viewer" Height="450" Width="800">
   <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <Menu Grid.Row="0">
+    <Menu Grid.ColumnSpan="2" Grid.Row="0">
       <MenuItem Header="_File">
         <MenuItem Header="_Open" Command="{Binding OpenDICOMFileCommand}"/>
         <Separator/>
@@ -32,6 +36,15 @@
       </MenuItem>
     </Menu>
 
-    <ContentControl x:Name="ImageContainer" Grid.Row="1" />
+    <ListView Grid.Column="0" Grid.Row="1"
+              ItemsSource="{Binding DicomFiles}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextBlock Text="{Binding FilePath}"/>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+
+    <ContentControl x:Name="ImageContainer" Grid.Column="1" Grid.Row="1"/>
   </Grid>
 </Window>

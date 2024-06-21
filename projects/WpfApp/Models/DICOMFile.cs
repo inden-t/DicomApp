@@ -10,6 +10,8 @@ namespace DicomApp
         private string _filePath;
         private DicomDataset _dataset;
 
+        public string FilePath => _filePath;
+
         public DICOMFile(string filePath)
         {
             _filePath = filePath;
