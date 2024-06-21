@@ -15,8 +15,6 @@ namespace DicomApp.ViewModels
 
         private ImageViewerViewModel _imageViewerViewModel;
 
-        public ReactiveProperty<BitmapSource> RenderedImage { get; }
-
         public ReactiveCommand OpenDICOMFileCommand { get; } = new();
         public ReactiveCommand ExitCommand { get; } = new();
         public ReactiveCommand ZoomInCommand { get; } = new();
@@ -39,8 +37,6 @@ namespace DicomApp.ViewModels
         {
             _imageViewerViewModel = imageViewerViewModel;
 
-            RenderedImage = _imageViewerViewModel.BitmapSourceImage;
-
             OpenDICOMFileCommand.Subscribe(_ => { OpenDICOMFile(); });
             //ExitCommand          .Subscribe(_ => { OpenDICOMFile(); });
             ZoomInCommand.Subscribe(_ => { ZoomIn(); });
@@ -48,7 +44,8 @@ namespace DicomApp.ViewModels
             //PanCommand           .Subscribe(_ => { Pan(); });
             //RotateCommand        .Subscribe(_ => { Rotate(); });
 
-            _imageViewerViewModel.ChangeImageCommand.Subscribe(delta => ChangeImage(delta));
+            _imageViewerViewModel.ChangeImageCommand.Subscribe(delta =>
+                ChangeImage(delta));
 
             SelectedDicomFile.Subscribe(file =>
             {
@@ -65,7 +62,8 @@ namespace DicomApp.ViewModels
             if (DicomFiles.Count == 0) return;
 
             _currentImageIndex += delta > 0 ? 1 : -1;
-            _currentImageIndex = Math.Max(0, Math.Min(_currentImageIndex, DicomFiles.Count - 1));
+            _currentImageIndex = Math.Max(0,
+                Math.Min(_currentImageIndex, DicomFiles.Count - 1));
 
             UpdateDisplayedImage();
         }
@@ -74,7 +72,6 @@ namespace DicomApp.ViewModels
         {
             var selectedFile = DicomFiles[_currentImageIndex];
             _imageViewerViewModel.SetImage(selectedFile.GetImage());
-            RenderedImage.Value = _imageViewerViewModel.BitmapSourceImage.Value;
             SelectedDicomFile.Value = selectedFile;
         }
 
@@ -106,8 +103,6 @@ namespace DicomApp.ViewModels
                 if (DicomFiles.Count > 0)
                 {
                     _imageViewerViewModel.SetImage(DicomFiles[0].GetImage());
-                    RenderedImage.Value =
-                        _imageViewerViewModel.BitmapSourceImage.Value;
                 }
             }
         }
