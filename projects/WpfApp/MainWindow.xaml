@@ -9,7 +9,9 @@
         xmlns:views="clr-namespace:DicomApp.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="DICOM Viewer" Height="900" Width="1200">
+        Title="DICOM Viewer"
+        Height="900"
+        Width="1200">
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="200"/>
@@ -20,24 +22,32 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <Menu Grid.ColumnSpan="2" Grid.Row="0">
+    <Menu Grid.Column="0"
+          Grid.ColumnSpan="2"
+          Grid.Row="0">
       <MenuItem Header="_File">
-        <MenuItem Header="_Open" Command="{Binding OpenDICOMFileCommand}"/>
+        <MenuItem Header="_Open"
+                  Command="{Binding OpenDICOMFileCommand}"/>
         <Separator/>
-        <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
+        <MenuItem Header="_Exit"
+                  Command="{Binding ExitCommand}"/>
       </MenuItem>
       <MenuItem Header="_View">
-        <MenuItem Header="_Zoom In" Command="{Binding ZoomInCommand}"/>
-        <MenuItem Header="_Zoom Out" Command="{Binding ZoomOutCommand}"/>
+        <MenuItem Header="_Zoom In"
+                  Command="{Binding ZoomInCommand}"/>
+        <MenuItem Header="_Zoom Out"
+                  Command="{Binding ZoomOutCommand}"/>
         <Separator/>
-        <MenuItem Header="_Pan" Command="{Binding PanCommand}"/>
+        <MenuItem Header="_Pan"
+                  Command="{Binding PanCommand}"/>
         <Separator/>
-        <MenuItem Header="_Rotate" Command="{Binding RotateCommand}"/>
+        <MenuItem Header="_Rotate"
+                  Command="{Binding RotateCommand}"/>
       </MenuItem>
     </Menu>
 
     <ListView Grid.Column="0"
-        Grid.Row="1"
+              Grid.Row="1"
               ItemsSource="{Binding DicomFiles}"
               SelectedItem="{Binding SelectedDicomFile.Value, Mode=TwoWay}">
       <ListView.ItemTemplate>
@@ -47,6 +57,8 @@
       </ListView.ItemTemplate>
     </ListView>
 
-    <ContentControl x:Name="ImageContainer" Grid.Column="1" Grid.Row="1"/>
+    <ContentControl x:Name="ImageContainer"
+                    Grid.Column="1"
+                    Grid.Row="1"/>
   </Grid>
 </Window>
