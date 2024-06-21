@@ -7,6 +7,7 @@ using System;
 using System.Windows;
 using Reactive.Bindings;
 using System.Windows.Media.Imaging;
+using DICOMViewer.Views;
 
 namespace DICOMViewer.ViewModels
 {

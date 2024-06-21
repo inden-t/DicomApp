@@ -6,6 +6,7 @@
 using System;
 using System.Windows;
 using DICOMViewer.ViewModels;
+using DICOMViewer.Views;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
 using Microsoft.Extensions.DependencyInjection;
