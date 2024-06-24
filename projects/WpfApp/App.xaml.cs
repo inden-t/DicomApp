@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using DicomApp.Models;
+using DicomApp.UseCases;
 using DicomApp.ViewModels;
 using DicomApp.Views;
 using FellowOakDicom;
@@ -46,9 +48,11 @@ namespace DicomApp
             // クラスの登録
             services.AddScoped<MainWindow>();
             services.AddScoped<MainWindowViewModel>();
+            services.AddScoped<FileManager>();
             services.AddScoped<DICOMFile>();
             services.AddScoped<ImageViewer>();
             services.AddScoped<ImageViewerViewModel>();
+            services.AddScoped<OpenDicomFileUseCase>();
         }
     }
 }
