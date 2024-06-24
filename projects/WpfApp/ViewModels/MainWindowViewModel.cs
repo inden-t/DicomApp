@@ -29,11 +29,8 @@ namespace DicomApp.ViewModels
             {
                 _fileManager.OpenDICOMFile();
             });
-            //ExitCommand          .Subscribe(_ => { OpenDICOMFile(); });
             ZoomInCommand.Subscribe(_ => { ZoomIn(); });
             ZoomOutCommand.Subscribe(_ => { ZoomOut(); });
-            //PanCommand           .Subscribe(_ => { Pan(); });
-            //RotateCommand        .Subscribe(_ => { Rotate(); });
 
             _imageViewerViewModel.ChangeImageCommand.Subscribe(delta =>
                 _fileManager.ChangeImage(delta));
