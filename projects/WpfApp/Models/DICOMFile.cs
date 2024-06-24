@@ -9,6 +9,7 @@ namespace DicomApp
     {
         private string _filePath;
         private DicomDataset _dataset;
+        private DicomImage _image;
 
         public DICOMFile(string filePath)
         {
@@ -30,6 +31,9 @@ namespace DicomApp
                 var file = DicomFile.Open(_filePath);
                 _dataset = file.Dataset;
 
+                // _dataset から DICOM 画像データを取得し、フィールドに保持する
+                _image = new DicomImage(_dataset);
+
                 var transferSyntax = file.Dataset.InternalTransferSyntax;
                 if (transferSyntax == DicomTransferSyntax.RLELossless)
                 {
@@ -46,18 +50,13 @@ namespace DicomApp
 
         public DicomImage GetImage()
         {
-            try
+            if (_image == null)
             {
-                // _dataset から DICOM 画像データを取得する
-                var image = new DicomImage(_dataset);
-                return image;
+                throw new InvalidOperationException(
+                    "DICOM image has not been loaded. Call Load() first.");
             }
-            catch (Exception ex)
-            {
-                // 画像データの取得に失敗した場合の例外処理
-                throw new Exception(
-                    $"Failed to get DICOM image from file: {_filePath}", ex);
-            }
+
+            return _image;
         }
     }
 }
