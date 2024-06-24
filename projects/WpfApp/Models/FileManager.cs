@@ -45,6 +45,11 @@ namespace DicomApp.ViewModels
                             MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
+
+                if (DicomFiles.Count > 0)
+                {
+                    SelectedDicomFile.Value = DicomFiles[0];
+                }
             }
         }
 
