@@ -10,8 +10,6 @@ namespace DicomApp
         private string _filePath;
         private DicomDataset _dataset;
 
-        public string FilePath => _filePath;
-
         public DICOMFile(string filePath)
         {
             _filePath = filePath;
@@ -19,7 +17,9 @@ namespace DicomApp
 
         public override string ToString()
         {
-            return System.IO.Path.GetFileName(FilePath);
+            string text =
+                $"{System.IO.Path.GetFileName(_filePath)} ({_filePath})";
+            return text;
         }
 
         public void Load()
