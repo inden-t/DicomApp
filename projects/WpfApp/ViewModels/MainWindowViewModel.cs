@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
 using Reactive.Bindings;
-using System.Windows.Media.Imaging;
-using DicomApp.Views;
-using Microsoft.Win32;
 
 namespace DicomApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ObservableCollection<DICOMFile> _dicomFiles =
-            new ObservableCollection<DICOMFile>();
-
         private ImageViewerViewModel _imageViewerViewModel;
+        private FileManager _fileManager;
 
         public ReactiveCommand OpenDICOMFileCommand { get; } = new();
         public ReactiveCommand ExitCommand { get; } = new();
@@ -22,22 +15,16 @@ namespace DicomApp.ViewModels
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
 
-        public ObservableCollection<DICOMFile> DicomFiles
-        {
-            get => _dicomFiles;
-            set => SetProperty(ref _dicomFiles, value);
-        }
-
-        public ReactiveProperty<DICOMFile> SelectedDicomFile { get; } =
-            new ReactiveProperty<DICOMFile>();
-
-        private int _currentImageIndex = 0;
-
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
+            FileManager fileManager)
         {
             _imageViewerViewModel = imageViewerViewModel;
+            _fileManager = fileManager;
 
-            OpenDICOMFileCommand.Subscribe(_ => { OpenDICOMFile(); });
+            OpenDICOMFileCommand.Subscribe(_ =>
+            {
+                _fileManager.OpenDICOMFile();
+            });
             //ExitCommand          .Subscribe(_ => { OpenDICOMFile(); });
             ZoomInCommand.Subscribe(_ => { ZoomIn(); });
             ZoomOutCommand.Subscribe(_ => { ZoomOut(); });
@@ -45,66 +32,21 @@ namespace DicomApp.ViewModels
             //RotateCommand        .Subscribe(_ => { Rotate(); });
 
             _imageViewerViewModel.ChangeImageCommand.Subscribe(delta =>
-                ChangeImage(delta));
+                _fileManager.ChangeImage(delta));
 
-            SelectedDicomFile.Subscribe(file =>
+            _fileManager.SelectedDicomFile.Subscribe(file =>
             {
                 if (file != null)
                 {
-                    _currentImageIndex = DicomFiles.IndexOf(file);
                     UpdateDisplayedImage();
                 }
             });
         }
 
-        private void ChangeImage(int delta)
-        {
-            if (DicomFiles.Count == 0) return;
-
-            _currentImageIndex += delta > 0 ? 1 : -1;
-            _currentImageIndex = Math.Max(0,
-                Math.Min(_currentImageIndex, DicomFiles.Count - 1));
-
-            UpdateDisplayedImage();
-        }
-
         private void UpdateDisplayedImage()
         {
-            var selectedFile = DicomFiles[_currentImageIndex];
+            var selectedFile = _fileManager.SelectedDicomFile.Value;
             _imageViewerViewModel.SetImage(selectedFile.GetImage());
-            SelectedDicomFile.Value = selectedFile;
-        }
-
-        public void OpenDICOMFile()
-        {
-            string[] filePaths = GetFilePaths();
-
-            if (filePaths != null && filePaths.Length > 0)
-            {
-                DicomFiles.Clear();
-
-                foreach (string filePath in filePaths)
-                {
-                    try
-                    {
-                        DICOMFile dicomFile = new DICOMFile(filePath);
-                        dicomFile.Load();
-                        DicomFiles.Add(dicomFile);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(
-                            $"Error opening DICOM file: {ex.Message}",
-                            "Error", MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                    }
-                }
-
-                if (DicomFiles.Count > 0)
-                {
-                    _imageViewerViewModel.SetImage(DicomFiles[0].GetImage());
-                }
-            }
         }
 
         public void ZoomIn()
@@ -125,22 +67,6 @@ namespace DicomApp.ViewModels
         public void Rotate(double angle)
         {
             _imageViewerViewModel.Rotate(angle);
-        }
-
-        private string[] GetFilePaths()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter =
-                "DICOM ファイル (*.dcm)|*.dcm|すべてのファイル (*.*)|*.*";
-            openFileDialog.Title = "DICOM ファイルを選択してください";
-            openFileDialog.Multiselect = true;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                return openFileDialog.FileNames;
-            }
-
-            return null;
         }
     }
 }

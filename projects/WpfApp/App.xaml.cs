@@ -46,6 +46,7 @@ namespace DicomApp
             // クラスの登録
             services.AddScoped<MainWindow>();
             services.AddScoped<MainWindowViewModel>();
+            services.AddScoped<FileManager>();
             services.AddScoped<DICOMFile>();
             services.AddScoped<ImageViewer>();
             services.AddScoped<ImageViewerViewModel>();
