@@ -21,13 +21,16 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
         public ReactiveProperty<int> ScrollValue { get; } = new();
 
+        public ReactiveCommand<int> SwitchImageByIndexCommand { get; } =
+            new ReactiveCommand<int>();
+
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } =
             new ReactiveCommand<int>();
 
         public ImageViewerViewModel()
         {
             ScrollValue.Subscribe(value =>
-                SwitchImageByOffset(value - ScrollValue.Value));
+                SwitchImageByIndexCommand.Execute(value));
         }
 
         public void SwitchImageByOffset(int offset)

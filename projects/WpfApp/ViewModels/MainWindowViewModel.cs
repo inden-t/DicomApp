@@ -36,6 +36,9 @@ namespace DicomApp.ViewModels
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
+            _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
+                _fileManager.SetSelectedIndex(index));
+
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
                 _fileManager.SwitchImageByOffset(offset));
 
