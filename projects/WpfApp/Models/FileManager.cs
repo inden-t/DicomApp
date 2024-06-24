@@ -28,7 +28,7 @@ namespace DicomApp.Models
             SelectedDicomFile.Value = file;
         }
 
-        public void ChangeImage(int delta)
+        public void SwitchImageByOffset(int delta)
         {
             if (DicomFiles.Count == 0) return;
 

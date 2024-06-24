@@ -18,12 +18,12 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
-        public ReactiveCommand<int> ChangeImageCommand { get; } = new ReactiveCommand<int>();
+        public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new ReactiveCommand<int>();
 
-        public void ChangeImage(int delta)
+        public void SwitchImageByOffset(int offset)
         {
-            // MainWindowViewModelに画像変更を通知
-            ChangeImageCommand.Execute(delta);
+            // MainWindowViewModelに画像切り替えを通知
+            SwitchImageByOffsetCommand.Execute(offset);
         }
 
         public ImageViewerViewModel()

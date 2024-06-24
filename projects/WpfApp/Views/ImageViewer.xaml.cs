@@ -19,7 +19,7 @@ namespace DicomApp.Views
         private void UserControl_MouseWheel(object sender,
             System.Windows.Input.MouseWheelEventArgs e)
         {
-            _viewModel.ChangeImage(-e.Delta);
+            _viewModel.SwitchImageByOffset(-e.Delta);
         }
     }
 }

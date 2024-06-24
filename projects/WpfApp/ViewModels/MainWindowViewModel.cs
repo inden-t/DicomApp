@@ -36,8 +36,8 @@ namespace DicomApp.ViewModels
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
-            _imageViewerViewModel.ChangeImageCommand.Subscribe(delta =>
-                _fileManager.ChangeImage(delta));
+            _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(delta =>
+                _fileManager.SwitchImageByOffset(delta));
 
             SelectedDicomFile.Subscribe(file => UpdateDisplayedImage(file));
         }
