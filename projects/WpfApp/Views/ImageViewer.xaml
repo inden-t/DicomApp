@@ -10,10 +10,24 @@
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
              MouseWheel="UserControl_MouseWheel">
   <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
     <Image x:Name="DicomImage"
-           Stretch="Uniform"
-           Source="{Binding BitmapSourceImage.Value}"/>
-    <Canvas x:Name="CanvasOverlay"/>
+             Grid.Column="0"
+             Stretch="Uniform"
+             Source="{Binding BitmapSourceImage.Value}"/>
+    <ScrollBar Grid.Column="1"
+               Orientation="Vertical"
+               Minimum="0"
+               Maximum="{Binding MaximumScrollValue.Value}"
+               Value="{Binding ScrollValue.Value, Mode=TwoWay}"
+               ViewportSize="8"
+               SmallChange="1"
+               LargeChange="1"/>
+    <Canvas x:Name="CanvasOverlay"
+            Grid.Column="0"/>
     <b:Interaction.Triggers>
       <b:EventTrigger EventName="MouseMove">
         <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}"/>

@@ -48,6 +48,10 @@ namespace DicomApp.ViewModels
             if (selectedFile != null)
             {
                 _imageViewerViewModel.SetImage(selectedFile.GetImage());
+                _imageViewerViewModel.SetMaximumScrollValue(
+                    _fileManager.DicomFiles.Count - 1);
+                _imageViewerViewModel.ScrollValue.Value =
+                    _fileManager.SelectedIndex.Value;
             }
         }
 

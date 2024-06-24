@@ -18,7 +18,17 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
-        public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new ReactiveCommand<int>();
+        public ReactiveProperty<int> MaximumScrollValue { get; } = new();
+        public ReactiveProperty<int> ScrollValue { get; } = new();
+
+        public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } =
+            new ReactiveCommand<int>();
+
+        public ImageViewerViewModel()
+        {
+            ScrollValue.Subscribe(value =>
+                SwitchImageByOffset(value - ScrollValue.Value));
+        }
 
         public void SwitchImageByOffset(int offset)
         {
@@ -26,14 +36,15 @@ namespace DicomApp.ViewModels
             SwitchImageByOffsetCommand.Execute(offset);
         }
 
-        public ImageViewerViewModel()
-        {
-        }
-
         public void SetImage(DicomImage image)
         {
             _image = image;
             Render();
+        }
+
+        public void SetMaximumScrollValue(int value)
+        {
+            MaximumScrollValue.Value = value;
         }
 
         public void Zoom(double factor)
