@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Windows;
-using Microsoft.Win32;
 using Reactive.Bindings;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.Models
 {
-    public class FileManager : ViewModelBase
+    public class FileManager
     {
         public ReactiveCollection<DICOMFile> DicomFiles { get; } =
             new ReactiveCollection<DICOMFile>();
@@ -15,35 +13,19 @@ namespace DicomApp.ViewModels
 
         private int _currentImageIndex = 0;
 
-        public void OpenDICOMFile()
+        public void ClearFiles()
         {
-            string[] filePaths = GetFilePaths();
+            DicomFiles.Clear();
+        }
 
-            if (filePaths != null && filePaths.Length > 0)
-            {
-                DicomFiles.Clear();
+        public void AddFile(DICOMFile file)
+        {
+            DicomFiles.Add(file);
+        }
 
-                foreach (string filePath in filePaths)
-                {
-                    try
-                    {
-                        DICOMFile dicomFile = new DICOMFile(filePath);
-                        dicomFile.Load();
-                        DicomFiles.Add(dicomFile);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(
-                            $"Error opening DICOM file: {ex.Message}", "Error",
-                            MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-
-                if (DicomFiles.Count > 0)
-                {
-                    SelectedDicomFile.Value = DicomFiles[0];
-                }
-            }
+        public void SetSelectedFile(DICOMFile file)
+        {
+            SelectedDicomFile.Value = file;
         }
 
         public void ChangeImage(int delta)
@@ -60,22 +42,6 @@ namespace DicomApp.ViewModels
         private void UpdateSelectedDicomFile()
         {
             SelectedDicomFile.Value = DicomFiles[_currentImageIndex];
-        }
-
-        private string[] GetFilePaths()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter =
-                "DICOM ファイル (*.dcm)|*.dcm|すべてのファイル (*.*)|*.*";
-            openFileDialog.Title = "DICOM ファイルを選択してください";
-            openFileDialog.Multiselect = true;
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                return openFileDialog.FileNames;
-            }
-
-            return null;
         }
     }
 }

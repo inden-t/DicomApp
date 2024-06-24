@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using DicomApp.Models;
+using DicomApp.UseCases;
 using DicomApp.ViewModels;
 using DicomApp.Views;
 using FellowOakDicom;
@@ -50,6 +52,7 @@ namespace DicomApp
             services.AddScoped<DICOMFile>();
             services.AddScoped<ImageViewer>();
             services.AddScoped<ImageViewerViewModel>();
+            services.AddScoped<OpenDicomFileUseCase>();
         }
     }
 }

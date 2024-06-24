@@ -1,12 +1,15 @@
 ﻿using System;
 using Reactive.Bindings;
+using DicomApp.Models;
+using DicomApp.UseCases;
 
 namespace DicomApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ImageViewerViewModel _imageViewerViewModel;
-        private FileManager _fileManager;
+        private readonly ImageViewerViewModel _imageViewerViewModel;
+        private readonly FileManager _fileManager;
+        private readonly OpenDicomFileUseCase _openDicomFileUseCase;
 
         public ReactiveCommand OpenDICOMFileCommand { get; } = new();
         public ReactiveCommand ExitCommand { get; } = new();
@@ -22,12 +25,14 @@ namespace DicomApp.ViewModels
             _fileManager.SelectedDicomFile;
 
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
-            FileManager fileManager)
+            FileManager fileManager, OpenDicomFileUseCase openDicomFileUseCase)
         {
             _imageViewerViewModel = imageViewerViewModel;
             _fileManager = fileManager;
+            _openDicomFileUseCase = openDicomFileUseCase;
 
-            OpenDICOMFileCommand.Subscribe(_ => _fileManager.OpenDICOMFile());
+            OpenDICOMFileCommand.Subscribe(_ =>
+                _openDicomFileUseCase.Execute());
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
