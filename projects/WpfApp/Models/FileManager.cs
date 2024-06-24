@@ -62,7 +62,10 @@ namespace DicomApp.ViewModels
         private void UpdateSelectedDicomFile()
         {
             SelectedDicomFile.Value = DicomFiles[_currentImageIndex];
+            OnSelectedDicomFileChanged?.Invoke(SelectedDicomFile.Value);
         }
+
+        public event Action<DICOMFile> OnSelectedDicomFileChanged;
 
         private string[] GetFilePaths()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -14,6 +15,9 @@ namespace DicomApp.ViewModels
         public ReactiveCommand ZoomOutCommand { get; } = new();
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
+
+        public ObservableCollection<DICOMFile> DicomFiles => _fileManager.DicomFiles;
+        public ReactiveProperty<DICOMFile> SelectedDicomFile => _fileManager.SelectedDicomFile;
 
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
             FileManager fileManager)
@@ -34,19 +38,15 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel.ChangeImageCommand.Subscribe(delta =>
                 _fileManager.ChangeImage(delta));
 
-            _fileManager.SelectedDicomFile.Subscribe(file =>
-            {
-                if (file != null)
-                {
-                    UpdateDisplayedImage();
-                }
-            });
+            SelectedDicomFile.Subscribe(file => UpdateDisplayedImage(file));
         }
 
-        private void UpdateDisplayedImage()
+        private void UpdateDisplayedImage(DICOMFile file)
         {
-            var selectedFile = _fileManager.SelectedDicomFile.Value;
-            _imageViewerViewModel.SetImage(selectedFile.GetImage());
+            if (file != null)
+            {
+                _imageViewerViewModel.SetImage(file.GetImage());
+            }
         }
 
         public void ZoomIn()
