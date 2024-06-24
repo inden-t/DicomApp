@@ -40,7 +40,7 @@ namespace DicomApp.UseCases
 
                 if (_fileManager.DicomFiles.Count > 0)
                 {
-                    _fileManager.SetSelectedFile(_fileManager.DicomFiles[0]);
+                    _fileManager.SetSelectedIndex(0);
                 }
             }
         }

@@ -21,8 +21,8 @@ namespace DicomApp.ViewModels
         public ReactiveCollection<DICOMFile> DicomFiles =>
             _fileManager.DicomFiles;
 
-        public ReactiveProperty<DICOMFile> SelectedDicomFile =>
-            _fileManager.SelectedDicomFile;
+        public ReactiveProperty<int> SelectedIndex =>
+            _fileManager.SelectedIndex;
 
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
             FileManager fileManager, OpenDicomFileUseCase openDicomFileUseCase)
@@ -39,14 +39,15 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(delta =>
                 _fileManager.SwitchImageByOffset(delta));
 
-            SelectedDicomFile.Subscribe(file => UpdateDisplayedImage(file));
+            SelectedIndex.Subscribe(_ => UpdateDisplayedImage());
         }
 
-        private void UpdateDisplayedImage(DICOMFile file)
+        private void UpdateDisplayedImage()
         {
-            if (file != null)
+            var selectedFile = _fileManager.GetSelectedFile();
+            if (selectedFile != null)
             {
-                _imageViewerViewModel.SetImage(file.GetImage());
+                _imageViewerViewModel.SetImage(selectedFile.GetImage());
             }
         }
 
