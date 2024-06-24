@@ -34,11 +34,11 @@ namespace DicomApp.Models
             }
         }
 
-        public void SwitchImageByOffset(int delta)
+        public void SwitchImageByOffset(int offset)
         {
             if (DicomFiles.Count == 0) return;
 
-            int newIndex = SelectedIndex.Value + (delta > 0 ? 1 : -1);
+            int newIndex = SelectedIndex.Value + offset;
             newIndex = Math.Max(0, Math.Min(newIndex, DicomFiles.Count - 1));
             SelectedIndex.Value = newIndex;
         }
