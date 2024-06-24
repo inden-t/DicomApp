@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows;
 using Microsoft.Win32;
 using Reactive.Bindings;
@@ -8,14 +7,8 @@ namespace DicomApp.ViewModels
 {
     public class FileManager : ViewModelBase
     {
-        private ObservableCollection<DICOMFile> _dicomFiles =
-            new ObservableCollection<DICOMFile>();
-
-        public ObservableCollection<DICOMFile> DicomFiles
-        {
-            get => _dicomFiles;
-            set => SetProperty(ref _dicomFiles, value);
-        }
+        public ReactiveCollection<DICOMFile> DicomFiles { get; } =
+            new ReactiveCollection<DICOMFile>();
 
         public ReactiveProperty<DICOMFile> SelectedDicomFile { get; } =
             new ReactiveProperty<DICOMFile>();
@@ -67,10 +60,7 @@ namespace DicomApp.ViewModels
         private void UpdateSelectedDicomFile()
         {
             SelectedDicomFile.Value = DicomFiles[_currentImageIndex];
-            OnSelectedDicomFileChanged?.Invoke(SelectedDicomFile.Value);
         }
-
-        public event Action<DICOMFile> OnSelectedDicomFileChanged;
 
         private string[] GetFilePaths()
         {
