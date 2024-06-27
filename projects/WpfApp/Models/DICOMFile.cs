@@ -7,17 +7,22 @@ namespace DicomApp
 {
     public class DICOMFile
     {
-        private string _filePath;
+        // 1. Private フィールド
+        private readonly string _filePath;
         private DicomDataset _dataset;
         private DicomImage _image;
 
+        // 2. Public プロパティ
         public string FilePath => _filePath;
 
+        // 3. コンストラクタ
         public DICOMFile(string filePath)
         {
-            _filePath = filePath;
+            _filePath = filePath ??
+                        throw new ArgumentNullException(nameof(filePath));
         }
 
+        // 4. Public メソッド
         public override string ToString()
         {
             string text =
@@ -55,7 +60,7 @@ namespace DicomApp
             if (_image == null)
             {
                 throw new InvalidOperationException(
-                    "DICOM image has not been loaded. Call Load() first.");
+                    "DICOM画像がロードされていません。最初にLoad()を呼び出してください。");
             }
 
             return _image;
