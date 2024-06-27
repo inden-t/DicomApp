@@ -36,10 +36,20 @@ namespace DicomApp.ViewModels
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
+            _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
+                _fileManager.SetSelectedIndex(index));
+
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
                 _fileManager.SwitchImageByOffset(offset));
 
             SelectedIndex.Subscribe(_ => UpdateDisplayedImage());
+
+            // DicomFilesの値が変更されたときにMaximumScrollValueを更新する
+            _fileManager.DicomFiles.CollectionChanged += (sender, e) =>
+            {
+                _imageViewerViewModel.SetMaximumScrollValue(
+                    _fileManager.DicomFiles.Count - 1);
+            };
         }
 
         private void UpdateDisplayedImage()
@@ -48,6 +58,8 @@ namespace DicomApp.ViewModels
             if (selectedFile != null)
             {
                 _imageViewerViewModel.SetImage(selectedFile.GetImage());
+                _imageViewerViewModel.ScrollValue.Value =
+                    _fileManager.SelectedIndex.Value;
             }
         }
 

@@ -49,6 +49,7 @@ namespace DicomApp
             services.AddScoped<MainWindow>();
             services.AddScoped<MainWindowViewModel>();
             services.AddScoped<FileManager>();
+            services.AddScoped<IImageCache, ImageCache>();
             services.AddScoped<DICOMFile>();
             services.AddScoped<ImageViewer>();
             services.AddScoped<ImageViewerViewModel>();
