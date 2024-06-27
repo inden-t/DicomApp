@@ -19,9 +19,6 @@ namespace DicomApp
             // ImageContainer の中に ImageViewer を配置する
             var imageContainer = (ContentControl)FindName("ImageContainer");
             imageContainer.Content = imageViewer;
-
-            // 起動時にファイルを開く
-            _viewModel.OpenDICOMFileCommand.Execute(null);
         }
     }
 }

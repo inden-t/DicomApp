@@ -41,6 +41,11 @@ namespace DicomApp
             // MainWindow の生成
             _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             _mainWindow.Show();
+
+            // 起動時にファイルを開く
+            MainWindowViewModel _viewModel =
+                _serviceProvider.GetRequiredService<MainWindowViewModel>();
+            _viewModel.OpenDICOMFileCommand.Execute(null);
         }
 
         private void ConfigureServices(IServiceCollection services)
