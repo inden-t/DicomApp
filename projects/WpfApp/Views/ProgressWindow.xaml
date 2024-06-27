@@ -1,0 +1,21 @@
+﻿<Window x:Class="DicomApp.Views.ProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ファイルを開いています"
+        Height="150"
+        Width="300"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="10">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <TextBlock Text="{Binding StatusText}"
+               Grid.Row="0"
+               Margin="0,0,0,10"/>
+    <ProgressBar Value="{Binding Progress}"
+                 Maximum="100"
+                 Grid.Row="1"
+                 Height="20"/>
+  </Grid>
+</Window>
