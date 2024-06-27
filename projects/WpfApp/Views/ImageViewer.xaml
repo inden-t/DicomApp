@@ -18,6 +18,8 @@
              Grid.Column="0"
              Stretch="Uniform"
              Source="{Binding BitmapSourceImage.Value}"/>
+    <Canvas x:Name="CanvasOverlay"
+            Grid.Column="0"/>
     <ScrollBar Grid.Column="1"
                Orientation="Vertical"
                Minimum="0"
@@ -26,8 +28,6 @@
                ViewportSize="8"
                SmallChange="1"
                LargeChange="1"/>
-    <Canvas x:Name="CanvasOverlay"
-            Grid.Column="0"/>
     <b:Interaction.Triggers>
       <b:EventTrigger EventName="MouseMove">
         <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}"/>
