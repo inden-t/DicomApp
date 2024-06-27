@@ -7,11 +7,9 @@ namespace DicomApp.Models
     {
         private readonly IImageCache _imageCache;
 
-        public ReactiveCollection<DICOMFile> DicomFiles { get; } =
-            new ReactiveCollection<DICOMFile>();
+        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
-        public ReactiveProperty<int> SelectedIndex { get; } =
-            new ReactiveProperty<int>(-1);
+        public ReactiveProperty<int> SelectedIndex { get; } = new(-1);
 
         public FileManager(IImageCache imageCache)
         {
