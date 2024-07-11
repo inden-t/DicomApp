@@ -42,7 +42,7 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
                 _fileManager.SwitchImageByOffset(offset));
 
-            SelectedIndex.Subscribe(_ => UpdateDisplayedImage());
+            SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
 
             // DicomFilesの値が変更されたときにMaximumScrollValueを更新する
             _fileManager.DicomFiles.CollectionChanged += (sender, e) =>
@@ -52,14 +52,19 @@ namespace DicomApp.ViewModels
             };
         }
 
-        private void UpdateDisplayedImage()
+        private void ChangeDisplayedImage(int index)
         {
-            var selectedFile = _fileManager.GetSelectedFile();
+            if (index < 0 || index >= _fileManager.DicomFiles.Count)
+            {
+                return;
+            }
+
+            var selectedFile = _fileManager.DicomFiles[index];
             if (selectedFile != null)
             {
-                _imageViewerViewModel.SetImage(selectedFile.GetImage());
-                _imageViewerViewModel.ScrollValue.Value =
-                    _fileManager.SelectedIndex.Value;
+                var image = selectedFile.GetImage();
+                _imageViewerViewModel.SetImage(image);
+                _imageViewerViewModel.ScrollValue.Value = index;
             }
         }
 
