@@ -1,6 +1,6 @@
 ﻿namespace DicomApp.Models
 {
-    public interface IImageCache
+    public interface IImageCaches
     {
         void AddFile(DICOMFile file);
         void Clear();

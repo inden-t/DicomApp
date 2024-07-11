@@ -3,7 +3,7 @@ using DicomApp.Models;
 
 namespace DicomApp.ViewModels
 {
-    public class ImageCache : IImageCache
+    public class ImageCaches : IImageCaches
     {
         private Dictionary<string, WriteableBitmap> _cache = new();
 

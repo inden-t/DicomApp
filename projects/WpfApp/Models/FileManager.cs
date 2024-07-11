@@ -5,15 +5,15 @@ namespace DicomApp.Models
 {
     public class FileManager
     {
-        private readonly IImageCache _imageCache;
+        private readonly IImageCaches _imageCaches;
 
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<int> SelectedIndex { get; } = new(-1);
 
-        public FileManager(IImageCache imageCache)
+        public FileManager(IImageCaches imageCaches)
         {
-            _imageCache = imageCache;
+            _imageCaches = imageCaches;
         }
 
         public void ClearFiles()
@@ -30,7 +30,7 @@ namespace DicomApp.Models
                 SelectedIndex.Value = 0;
             }
 
-            _imageCache.AddFile(file);
+            _imageCaches.AddFile(file);
         }
 
         public void SetSelectedIndex(int index)
