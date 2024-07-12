@@ -15,10 +15,13 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    <Image x:Name="DicomImage"
-             Grid.Column="0"
+    <ScrollViewer Grid.Column="0"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+      <Image x:Name="DicomImage"
              Stretch="None"
              Source="{Binding BitmapSourceImage.Value}"/>
+    </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"
             Grid.Column="0"/>
     <ScrollBar Grid.Column="1"
