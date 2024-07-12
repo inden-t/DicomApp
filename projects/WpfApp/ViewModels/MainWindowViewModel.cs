@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -25,6 +26,8 @@ namespace DicomApp.ViewModels
 
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
+
+            ExitCommand.Subscribe(_ => Application.Current.Shutdown());
 
             _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
                 SwitchImageByIndex(index));
