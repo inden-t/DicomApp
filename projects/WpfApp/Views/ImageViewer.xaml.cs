@@ -88,7 +88,23 @@ namespace DicomApp.Views
             {
                 // Ctrlキーが押されている場合は、ズーム処理を行う
                 double zoomFactor = e.Delta > 0 ? 1.1 : 1.0 / 1.1;
+
+                // マウスの位置を取得
+                Point mousePos = e.GetPosition(DicomImage);
+
+                // ズーム前のスクロール位置を保存
+                double horizontalOffset = ImageScrollViewer.HorizontalOffset;
+                double verticalOffset = ImageScrollViewer.VerticalOffset;
+
+                // ズーム処理
                 _viewModel.Zoom(zoomFactor);
+
+                // スクロール位置を調整
+                ImageScrollViewer.ScrollToHorizontalOffset(
+                    mousePos.X * zoomFactor - mousePos.X + horizontalOffset);
+                ImageScrollViewer.ScrollToVerticalOffset(
+                    mousePos.Y * zoomFactor - mousePos.Y + verticalOffset);
+
                 e.Handled = true;
             }
             else
