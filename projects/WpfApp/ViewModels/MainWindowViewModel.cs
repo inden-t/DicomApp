@@ -1,15 +1,11 @@
 ﻿using System;
 using Reactive.Bindings;
-using DicomApp.Models;
-using DicomApp.UseCases;
 
 namespace DicomApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
-        private readonly FileManager _fileManager;
-        private readonly OpenDicomFileUseCase _openDicomFileUseCase;
 
         public ReactiveCommand OpenDICOMFileCommand { get; } = new();
         public ReactiveCommand ExitCommand { get; } = new();
@@ -18,48 +14,64 @@ namespace DicomApp.ViewModels
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
 
-        public ReactiveCollection<DICOMFile> DicomFiles =>
-            _fileManager.DicomFiles;
+        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
-        public ReactiveProperty<int> SelectedIndex =>
-            _fileManager.SelectedIndex;
+        public ReactiveProperty<int> SelectedIndex { get; } = new();
 
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
-            FileManager fileManager, OpenDicomFileUseCase openDicomFileUseCase)
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
-            _fileManager = fileManager;
-            _openDicomFileUseCase = openDicomFileUseCase;
 
-            OpenDICOMFileCommand.Subscribe(_ =>
-                _openDicomFileUseCase.Execute());
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
             _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
-                _fileManager.SetSelectedIndex(index));
+                SwitchImageByIndex(index));
 
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
-                _fileManager.SwitchImageByOffset(offset));
+                SwitchImageByOffset(offset));
 
-            SelectedIndex.Subscribe(_ => UpdateDisplayedImage());
+            SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
 
             // DicomFilesの値が変更されたときにMaximumScrollValueを更新する
-            _fileManager.DicomFiles.CollectionChanged += (sender, e) =>
+            DicomFiles.CollectionChanged += (sender, e) =>
             {
                 _imageViewerViewModel.SetMaximumScrollValue(
-                    _fileManager.DicomFiles.Count - 1);
+                    DicomFiles.Count - 1);
             };
         }
 
-        private void UpdateDisplayedImage()
+        private void SwitchImageByIndex(int index)
         {
-            var selectedFile = _fileManager.GetSelectedFile();
+            if (index >= 0 && index < DicomFiles.Count)
+            {
+                SelectedIndex.Value = index;
+            }
+        }
+
+        private void SwitchImageByOffset(int offset)
+        {
+            if (DicomFiles.Count == 0) return;
+
+            int newIndex = SelectedIndex.Value + offset;
+            newIndex = Math.Max(0,
+                Math.Min(newIndex, DicomFiles.Count - 1));
+            SelectedIndex.Value = newIndex;
+        }
+
+        private void ChangeDisplayedImage(int index)
+        {
+            if (index < 0 || index >= DicomFiles.Count)
+            {
+                return;
+            }
+
+            var selectedFile = DicomFiles[index];
             if (selectedFile != null)
             {
-                _imageViewerViewModel.SetImage(selectedFile.GetImage());
-                _imageViewerViewModel.ScrollValue.Value =
-                    _fileManager.SelectedIndex.Value;
+                var image = selectedFile.GetImage();
+                _imageViewerViewModel.SetImage(image);
+                _imageViewerViewModel.ScrollValue.Value = index;
             }
         }
 
