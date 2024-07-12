@@ -15,9 +15,13 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    <ScrollViewer Grid.Column="0"
+    <ScrollViewer x:Name="ImageScrollViewer"
+                  Grid.Column="0"
                   HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
+                  VerticalScrollBarVisibility="Auto"
+                  MouseDown="ScrollViewer_MouseDown"
+                  MouseMove="ScrollViewer_MouseMove"
+                  MouseUp="ScrollViewer_MouseUp">
       <Image x:Name="DicomImage"
              Stretch="None"
              Source="{Binding BitmapSourceImage.Value}"/>
