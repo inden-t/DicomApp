@@ -9,8 +9,10 @@ namespace DicomApp
         public CommandFactory(MainWindowViewModel mainWindowViewModel,
             OpenDicomFileUseCase openDicomFileUseCase)
         {
-            mainWindowViewModel.OpenDICOMFileCommand.Subscribe(_ =>
+            mainWindowViewModel.OpenDicomFileCommand.Subscribe(_ =>
                 openDicomFileUseCase.Execute());
+            mainWindowViewModel.OpenDicomFolderCommand.Subscribe(_ =>
+                openDicomFileUseCase.ExecuteFolder());
         }
     }
 }
