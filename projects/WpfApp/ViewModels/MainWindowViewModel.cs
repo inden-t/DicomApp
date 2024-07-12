@@ -26,22 +26,10 @@ namespace DicomApp.ViewModels
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
             _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
-            {
-                if (index >= 0 && index < DicomFiles.Count)
-                {
-                    SelectedIndex.Value = index;
-                }
-            });
+                SwitchImageByIndex(index));
 
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
-            {
-                if (DicomFiles.Count == 0) return;
-
-                int newIndex = SelectedIndex.Value + offset;
-                newIndex = Math.Max(0,
-                    Math.Min(newIndex, DicomFiles.Count - 1));
-                SelectedIndex.Value = newIndex;
-            });
+                SwitchImageByOffset(offset));
 
             SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
 
@@ -51,6 +39,24 @@ namespace DicomApp.ViewModels
                 _imageViewerViewModel.SetMaximumScrollValue(
                     DicomFiles.Count - 1);
             };
+        }
+
+        private void SwitchImageByIndex(int index)
+        {
+            if (index >= 0 && index < DicomFiles.Count)
+            {
+                SelectedIndex.Value = index;
+            }
+        }
+
+        private void SwitchImageByOffset(int offset)
+        {
+            if (DicomFiles.Count == 0) return;
+
+            int newIndex = SelectedIndex.Value + offset;
+            newIndex = Math.Max(0,
+                Math.Min(newIndex, DicomFiles.Count - 1));
+            SelectedIndex.Value = newIndex;
         }
 
         private void ChangeDisplayedImage(int index)
