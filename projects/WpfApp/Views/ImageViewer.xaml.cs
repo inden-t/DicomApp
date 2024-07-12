@@ -21,7 +21,7 @@ namespace DicomApp.Views
         }
 
         private void UserControl_MouseWheel(object sender,
-            System.Windows.Input.MouseWheelEventArgs e)
+            MouseWheelEventArgs e)
         {
             int offset = Math.Sign(-e.Delta);
             _viewModel.SwitchImageByOffset(offset);
