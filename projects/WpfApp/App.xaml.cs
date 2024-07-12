@@ -50,7 +50,7 @@ namespace DicomApp
             // 起動時にファイルを開く
             MainWindowViewModel _viewModel =
                 _serviceProvider.GetRequiredService<MainWindowViewModel>();
-            _viewModel.OpenDICOMFileCommand.Execute(null);
+            _viewModel.OpenDicomFileCommand.Execute(null);
         }
 
         private void ConfigureServices(IServiceCollection services)

@@ -27,9 +27,9 @@
           Grid.Row="0">
       <MenuItem Header="_File">
         <MenuItem Header="_Open File"
-                  Command="{Binding OpenDICOMFileCommand}"/>
+                  Command="{Binding OpenDicomFileCommand}"/>
         <MenuItem Header="Open _Folder"
-                  Command="{Binding OpenDICOMFolderCommand}"/>
+                  Command="{Binding OpenDicomFolderCommand}"/>
         <Separator/>
         <MenuItem Header="_Exit"
                   Command="{Binding ExitCommand}"/>
