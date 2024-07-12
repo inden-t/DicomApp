@@ -87,7 +87,7 @@ namespace DicomApp.Views
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
                 // Ctrlキーが押されている場合は、ズーム処理を行う
-                double zoomFactor = e.Delta > 0 ? 1.1 : 0.9;
+                double zoomFactor = e.Delta > 0 ? 1.1 : 1.0 / 1.1;
                 _viewModel.Zoom(zoomFactor);
                 e.Handled = true;
             }
