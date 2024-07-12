@@ -8,16 +8,25 @@
              xmlns:interactivity="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
-             MouseWheel="UserControl_MouseWheel">
+             MouseWheel="UserControl_MouseWheel"
+             SizeChanged="UserControl_SizeChanged">
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    <Image x:Name="DicomImage"
-             Grid.Column="0"
-             Stretch="Uniform"
+    <ScrollViewer x:Name="ImageScrollViewer"
+                  Grid.Column="0"
+                  HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto"
+                  MouseDown="ScrollViewer_MouseDown"
+                  MouseMove="ScrollViewer_MouseMove"
+                  MouseUp="ScrollViewer_MouseUp"
+                  PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+      <Image x:Name="DicomImage"
+             Stretch="None"
              Source="{Binding BitmapSourceImage.Value}"/>
+    </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"
             Grid.Column="0"/>
     <ScrollBar Grid.Column="1"

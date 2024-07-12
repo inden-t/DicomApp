@@ -13,7 +13,6 @@ namespace DicomApp.ViewModels
         private DicomImage _image;
         private double _zoom = 1.0;
         private double _rotation = 0.0;
-        private Point _panOffset = new Point(0, 0);
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
@@ -24,6 +23,9 @@ namespace DicomApp.ViewModels
         public ReactiveCommand<int> SwitchImageByIndexCommand { get; } = new();
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
+
+        public double ViewerWidth { get; private set; }
+        public double ViewerHeight { get; private set; }
 
         public ImageViewerViewModel()
         {
@@ -48,22 +50,38 @@ namespace DicomApp.ViewModels
             MaximumScrollValue.Value = value;
         }
 
-        public void Zoom(double factor)
-        {
-            _zoom *= factor;
-            Render();
-        }
+        public bool Zoom(double factor)
 
-        public void Pan(double x, double y)
         {
-            _panOffset.X += x;
-            _panOffset.Y += y;
+            bool isZoomed = false;
+
+            double newZoom = _zoom * factor;
+            if ((_zoom < 1 && newZoom > 1) || (_zoom > 1 && newZoom < 1))
+            {
+                _zoom = 1;
+                isZoomed = true;
+            }
+            else if (newZoom <= 10)
+            {
+                _zoom = newZoom;
+                isZoomed = true;
+            }
+
             Render();
+
+            return isZoomed;
         }
 
         public void Rotate(double angle)
         {
             _rotation += angle;
+            Render();
+        }
+
+        public void UpdateViewerSize(double width, double height)
+        {
+            ViewerWidth = width;
+            ViewerHeight = height;
             Render();
         }
 
@@ -73,30 +91,24 @@ namespace DicomApp.ViewModels
                 return;
 
             // 画像を描画
-            _image.Scale = _zoom;
             var renderedImage = _image.RenderImage();
-            BitmapSourceImage.Value = renderedImage.As<WriteableBitmap>();
-        }
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
 
-        private void UserControl_MouseLeftButtonDown(object sender,
-            MouseButtonEventArgs e)
-        {
-            //this.CaptureMouse();
-        }
+            // 枠に対するサイズを計算
+            // 枠からはみ出ないように枠サイズの小数を切り捨てる
+            double scaleX = Math.Floor(ViewerWidth) / bitmapImage.PixelWidth;
+            double scaleY = Math.Floor(ViewerHeight) / bitmapImage.PixelHeight;
+            double scale = Math.Min(scaleX, scaleY);
 
-        private void UserControl_MouseLeftButtonUp(object sender,
-            MouseButtonEventArgs e)
-        {
-            //this.ReleaseMouseCapture();
-        }
+            // 拡大倍率を適用
+            var scaledBitmap = new TransformedBitmap(bitmapImage,
+                new ScaleTransform(scale * _zoom, scale * _zoom));
 
-        private void UserControl_MouseMove(object sender, MouseEventArgs e)
-        {
-            //if (this.IsMouseCaptured)
-            //{
-            //    var delta = e.GetPosition(this) - e.GetPosition(ImageHost);
-            //    Pan(delta.X, delta.Y);
-            //}
+            //// 回転を適用
+            //var rotatedBitmap = new TransformedBitmap(scaledBitmap,
+            //    new RotateTransform(_rotation));
+
+            BitmapSourceImage.Value = scaledBitmap;
         }
     }
 }

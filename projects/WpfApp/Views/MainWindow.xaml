@@ -43,6 +43,10 @@
         <MenuItem Header="_Rotate"
                   Command="{Binding RotateCommand}"/>
       </MenuItem>
+      <MenuItem Header="_Zoom In"
+                Command="{Binding ZoomInCommand}"/>
+      <MenuItem Header="_Zoom Out"
+                Command="{Binding ZoomOutCommand}"/>
     </Menu>
 
     <ListView Grid.Column="0"
