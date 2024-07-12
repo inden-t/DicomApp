@@ -11,6 +11,8 @@ namespace DicomApp
         {
             mainWindowViewModel.OpenDICOMFileCommand.Subscribe(_ =>
                 openDicomFileUseCase.Execute());
+            mainWindowViewModel.OpenDICOMFolderCommand.Subscribe(_ =>
+                openDicomFileUseCase.ExecuteFolder());
         }
     }
 }

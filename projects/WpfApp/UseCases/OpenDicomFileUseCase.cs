@@ -2,6 +2,7 @@
 using System.Windows;
 using Microsoft.Win32;
 using DicomApp.Models;
+using System.IO;
 
 namespace DicomApp.UseCases
 {
@@ -24,28 +25,22 @@ namespace DicomApp.UseCases
             if (filePaths != null && filePaths.Length > 0)
             {
                 _fileManager.ClearFiles();
+                OpenFilesFromPaths(filePaths);
+            }
+        }
 
-                foreach (string filePath in filePaths)
-                {
-                    try
-                    {
-                        DICOMFile dicomFile = new DICOMFile(filePath);
-                        dicomFile.Load();
-                        _fileManager.AddFile(dicomFile);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(
-                            $"Error opening DICOM file: {ex.Message}", "Error",
-                            MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
+        public void ExecuteFolder()
+        {
+            string folderPath = GetFolderPath();
 
-                if (_fileManager.DicomFiles.Count > 0)
-                {
-                    _mainWindowPresenter.UpdateDisplayedImage(
-                        _fileManager.DicomFiles);
-                }
+            if (!string.IsNullOrEmpty(folderPath))
+            {
+                _fileManager.ClearFiles();
+
+                string[] filePaths = Directory.GetFiles(folderPath, "*.dcm",
+                    SearchOption.AllDirectories);
+
+                OpenFilesFromPaths(filePaths);
             }
         }
 
@@ -63,6 +58,46 @@ namespace DicomApp.UseCases
             }
 
             return null;
+        }
+
+        private string GetFolderPath()
+        {
+            var folderBrowserDialog =
+                new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowserDialog.Description = "DICOMファイルを含むフォルダを選択してください";
+
+            if (folderBrowserDialog.ShowDialog() ==
+                System.Windows.Forms.DialogResult.OK)
+            {
+                return folderBrowserDialog.SelectedPath;
+            }
+
+            return null;
+        }
+
+        private void OpenFilesFromPaths(string[] filePaths)
+        {
+            foreach (string filePath in filePaths)
+            {
+                try
+                {
+                    DICOMFile dicomFile = new DICOMFile(filePath);
+                    dicomFile.Load();
+                    _fileManager.AddFile(dicomFile);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Error opening DICOM file: {ex.Message}", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            if (_fileManager.DicomFiles.Count > 0)
+            {
+                _mainWindowPresenter.UpdateDisplayedImage(
+                    _fileManager.DicomFiles);
+            }
         }
     }
 }
