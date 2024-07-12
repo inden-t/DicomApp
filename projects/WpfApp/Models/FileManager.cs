@@ -17,12 +17,12 @@ namespace DicomApp.Models
         public void ClearFiles()
         {
             DicomFiles.Clear();
+            _imageCaches.Clear();
         }
 
         public void AddFile(DICOMFile file)
         {
             DicomFiles.Add(file);
-
             _imageCaches.AddFile(file);
         }
     }
