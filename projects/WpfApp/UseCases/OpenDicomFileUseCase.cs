@@ -62,14 +62,14 @@ namespace DicomApp.UseCases
 
         private string GetFolderPath()
         {
-            var folderBrowserDialog =
-                new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = "DICOMファイルを含むフォルダを選択してください";
-
-            if (folderBrowserDialog.ShowDialog() ==
-                System.Windows.Forms.DialogResult.OK)
+            var dialog = new OpenFolderDialog
             {
-                return folderBrowserDialog.SelectedPath;
+                Title = "DICOMファイルを含むフォルダを選択してください"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                return dialog.FolderName;
             }
 
             return null;
