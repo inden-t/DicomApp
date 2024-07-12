@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using DicomApp.ViewModels;
 
@@ -21,6 +22,15 @@ namespace DicomApp.Views
         {
             int offset = Math.Sign(-e.Delta);
             _viewModel.SwitchImageByOffset(offset);
+        }
+
+        private void UserControl_SizeChanged(object sender,
+            SizeChangedEventArgs e)
+        {
+            if (_viewModel != null)
+            {
+                _viewModel.UpdateViewerSize(e.NewSize.Width, e.NewSize.Height);
+            }
         }
     }
 }

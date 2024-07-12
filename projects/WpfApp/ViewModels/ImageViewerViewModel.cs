@@ -25,6 +25,9 @@ namespace DicomApp.ViewModels
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
 
+        public double ViewerWidth { get; private set; }
+        public double ViewerHeight { get; private set; }
+
         public ImageViewerViewModel()
         {
             ScrollValue.Subscribe(value =>
@@ -64,6 +67,13 @@ namespace DicomApp.ViewModels
         public void Rotate(double angle)
         {
             _rotation += angle;
+            Render();
+        }
+
+        public void UpdateViewerSize(double width, double height)
+        {
+            ViewerWidth = width;
+            ViewerHeight = height;
             Render();
         }
 
