@@ -52,7 +52,15 @@ namespace DicomApp.ViewModels
 
         public void Zoom(double factor)
         {
-            _zoom *= factor;
+            double newZoom = _zoom * factor;
+            if ((_zoom < 1 && newZoom > 1) || (_zoom > 1 && newZoom < 1))
+            {
+                _zoom = 1;
+            }
+            else
+            {
+                _zoom = newZoom;
+            }
             Render();
         }
 
