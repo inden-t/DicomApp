@@ -14,6 +14,7 @@ namespace DicomApp
     {
         private readonly IServiceProvider _serviceProvider;
 
+        private CommandFactory _commandFactory;
         private MainWindow _mainWindow;
 
         public App()
@@ -38,6 +39,10 @@ namespace DicomApp
         {
             base.OnStartup(e);
 
+            // コマンド設定
+            _commandFactory =
+                _serviceProvider.GetRequiredService<CommandFactory>();
+
             // MainWindow の生成
             _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             _mainWindow.Show();
@@ -51,7 +56,9 @@ namespace DicomApp
         private void ConfigureServices(IServiceCollection services)
         {
             // クラスの登録
+            services.AddScoped<CommandFactory>();
             services.AddScoped<MainWindow>();
+            services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
             services.AddScoped<MainWindowViewModel>();
             services.AddScoped<FileManager>();
             services.AddScoped<IImageCaches, ImageCaches>();

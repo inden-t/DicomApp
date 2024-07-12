@@ -7,10 +7,13 @@ namespace DicomApp.UseCases
 {
     public class OpenDicomFileUseCase
     {
+        private readonly IMainWindowPresenter _mainWindowPresenter;
         private readonly FileManager _fileManager;
 
-        public OpenDicomFileUseCase(FileManager fileManager)
+        public OpenDicomFileUseCase(IMainWindowPresenter mainWindowPresenter,
+            FileManager fileManager)
         {
+            _mainWindowPresenter = mainWindowPresenter;
             _fileManager = fileManager;
         }
 
@@ -40,7 +43,8 @@ namespace DicomApp.UseCases
 
                 if (_fileManager.DicomFiles.Count > 0)
                 {
-                    _fileManager.SetSelectedIndex(0);
+                    _mainWindowPresenter.UpdateDisplayedImage(
+                        _fileManager.DicomFiles);
                 }
             }
         }
