@@ -1,9 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using DicomApp.ViewModels;
-using DicomApp.Views;
 
-namespace DicomApp
+namespace DicomApp.Views
 {
     public partial class MainWindow : Window
     {
