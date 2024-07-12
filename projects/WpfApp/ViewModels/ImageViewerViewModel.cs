@@ -79,8 +79,9 @@ namespace DicomApp.ViewModels
             var bitmapImage = renderedImage.As<WriteableBitmap>();
 
             // 枠に対するサイズを計算
-            double scaleX = ViewerWidth / bitmapImage.PixelWidth;
-            double scaleY = ViewerHeight / bitmapImage.PixelHeight;
+            // 枠からはみ出ないように枠サイズの小数を切り捨てる
+            double scaleX = Math.Floor(ViewerWidth) / bitmapImage.PixelWidth;
+            double scaleY = Math.Floor(ViewerHeight) / bitmapImage.PixelHeight;
             double scale = Math.Min(scaleX, scaleY);
 
             // 拡大倍率を適用
