@@ -86,9 +86,14 @@ namespace DicomApp.ViewModels
             var renderedImage = _image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
 
+            // 枠に対するサイズを計算
+            double scaleX = ViewerWidth / bitmapImage.PixelWidth;
+            double scaleY = ViewerHeight / bitmapImage.PixelHeight;
+            double scale = Math.Min(scaleX, scaleY);
+
             // 拡大倍率を適用
             var scaledBitmap = new TransformedBitmap(bitmapImage,
-                new ScaleTransform(_zoom, _zoom));
+                new ScaleTransform(scale * _zoom, scale * _zoom));
 
             //// 回転を適用
             //var rotatedBitmap = new TransformedBitmap(scaledBitmap,
