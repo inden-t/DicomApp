@@ -89,11 +89,6 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel.Zoom(0.8);
         }
 
-        public void Pan(double x, double y)
-        {
-            _imageViewerViewModel.Pan(x, y);
-        }
-
         public void Rotate(double angle)
         {
             _imageViewerViewModel.Rotate(angle);

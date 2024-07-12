@@ -13,7 +13,6 @@ namespace DicomApp.ViewModels
         private DicomImage _image;
         private double _zoom = 1.0;
         private double _rotation = 0.0;
-        private Point _panOffset = new Point(0, 0);
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
@@ -57,13 +56,6 @@ namespace DicomApp.ViewModels
             Render();
         }
 
-        public void Pan(double x, double y)
-        {
-            _panOffset.X += x;
-            _panOffset.Y += y;
-            Render();
-        }
-
         public void Rotate(double angle)
         {
             _rotation += angle;
@@ -99,32 +91,7 @@ namespace DicomApp.ViewModels
             //var rotatedBitmap = new TransformedBitmap(scaledBitmap,
             //    new RotateTransform(_rotation));
 
-            //// パンを適用
-            //var translatedBitmap = new TransformedBitmap(rotatedBitmap,
-            //    new TranslateTransform(_panOffset.X, _panOffset.Y));
-
             BitmapSourceImage.Value = scaledBitmap;
-        }
-
-        private void UserControl_MouseLeftButtonDown(object sender,
-            MouseButtonEventArgs e)
-        {
-            //this.CaptureMouse();
-        }
-
-        private void UserControl_MouseLeftButtonUp(object sender,
-            MouseButtonEventArgs e)
-        {
-            //this.ReleaseMouseCapture();
-        }
-
-        private void UserControl_MouseMove(object sender, MouseEventArgs e)
-        {
-            //if (this.IsMouseCaptured)
-            //{
-            //    var delta = e.GetPosition(this) - e.GetPosition(ImageHost);
-            //    Pan(delta.X, delta.Y);
-            //}
         }
     }
 }
