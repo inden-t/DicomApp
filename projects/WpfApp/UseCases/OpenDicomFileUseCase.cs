@@ -79,10 +79,13 @@ namespace DicomApp.UseCases
         private async Task OpenFilesFromPathsAsync(string[] filePaths)
         {
             var progressWindow = new ProgressWindow();
-            progressWindow.Show();
+            progressWindow.Owner = Application.Current.MainWindow;
+            Application.Current.MainWindow.IsEnabled = false;
 
             try
             {
+                progressWindow.Show();
+
                 int totalFiles = filePaths.Length;
                 for (int i = 0; i < totalFiles; i++)
                 {
@@ -115,6 +118,7 @@ namespace DicomApp.UseCases
             finally
             {
                 progressWindow.Close();
+                Application.Current.MainWindow.IsEnabled = true;
             }
         }
     }
