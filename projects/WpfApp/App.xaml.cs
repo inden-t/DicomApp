@@ -45,6 +45,7 @@ namespace DicomApp
 
             // MainWindow の生成
             _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            Current.MainWindow = _mainWindow;
             _mainWindow.Show();
 
             // 起動時にファイルを開く
@@ -60,6 +61,7 @@ namespace DicomApp
             services.AddScoped<MainWindow>();
             services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
             services.AddScoped<MainWindowViewModel>();
+            services.AddScoped<IProgressWindow, ProgressWindow>();
             services.AddScoped<FileManager>();
             services.AddScoped<IImageCaches, ImageCaches>();
             services.AddScoped<DICOMFile>();

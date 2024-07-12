@@ -3,19 +3,21 @@ using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using DicomApp.Models;
-using DicomApp.Views;
 
 namespace DicomApp.UseCases
 {
     public class OpenDicomFileUseCase
     {
         private readonly IMainWindowPresenter _mainWindowPresenter;
+        private readonly IProgressWindow _progressWindow;
         private readonly FileManager _fileManager;
 
         public OpenDicomFileUseCase(IMainWindowPresenter mainWindowPresenter,
+            IProgressWindow progressWindow,
             FileManager fileManager)
         {
             _mainWindowPresenter = mainWindowPresenter;
+            _progressWindow = progressWindow;
             _fileManager = fileManager;
         }
 
@@ -78,13 +80,9 @@ namespace DicomApp.UseCases
 
         private async Task OpenFilesFromPathsAsync(string[] filePaths)
         {
-            var progressWindow = new ProgressWindow();
-            progressWindow.Owner = Application.Current.MainWindow;
-            Application.Current.MainWindow.IsEnabled = false;
-
             try
             {
-                progressWindow.Show();
+                _progressWindow.Start();
 
                 int totalFiles = filePaths.Length;
                 for (int i = 0; i < totalFiles; i++)
@@ -97,9 +95,10 @@ namespace DicomApp.UseCases
                         _fileManager.AddFile(dicomFile);
 
                         double progress = (i + 1) / (double)totalFiles * 100;
-                        progressWindow.ViewModel.Progress.Value = progress;
-                        progressWindow.ViewModel.StatusText.Value =
+                        _progressWindow.SetProgress(progress);
+                        string statusText =
                             $"ファイルを読み込んでいます... ({i + 1}/{totalFiles})";
+                        _progressWindow.SetStatusText(statusText);
                     }
                     catch (Exception ex)
                     {
@@ -117,8 +116,7 @@ namespace DicomApp.UseCases
             }
             finally
             {
-                progressWindow.Close();
-                Application.Current.MainWindow.IsEnabled = true;
+                _progressWindow.End();
             }
         }
     }
