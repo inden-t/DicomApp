@@ -1,8 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using DicomApp.Models;
-using System.IO;
+using DicomApp.Views;
 
 namespace DicomApp.UseCases
 {
@@ -18,18 +19,18 @@ namespace DicomApp.UseCases
             _fileManager = fileManager;
         }
 
-        public void Execute()
+        public async Task ExecuteAsync()
         {
             string[] filePaths = GetFilePaths();
 
             if (filePaths != null && filePaths.Length > 0)
             {
                 _fileManager.ClearFiles();
-                OpenFilesFromPaths(filePaths);
+                await OpenFilesFromPathsAsync(filePaths);
             }
         }
 
-        public void ExecuteFolder()
+        public async Task ExecuteFolderAsync()
         {
             string folderPath = GetFolderPath();
 
@@ -40,7 +41,7 @@ namespace DicomApp.UseCases
                 string[] filePaths = Directory.GetFiles(folderPath, "*.dcm",
                     SearchOption.AllDirectories);
 
-                OpenFilesFromPaths(filePaths);
+                await OpenFilesFromPathsAsync(filePaths);
             }
         }
 
@@ -75,28 +76,45 @@ namespace DicomApp.UseCases
             return null;
         }
 
-        private void OpenFilesFromPaths(string[] filePaths)
+        private async Task OpenFilesFromPathsAsync(string[] filePaths)
         {
-            foreach (string filePath in filePaths)
+            var progressWindow = new ProgressWindow();
+            progressWindow.Show();
+
+            try
             {
-                try
+                int totalFiles = filePaths.Length;
+                for (int i = 0; i < totalFiles; i++)
                 {
-                    DICOMFile dicomFile = new DICOMFile(filePath);
-                    dicomFile.Load();
-                    _fileManager.AddFile(dicomFile);
+                    string filePath = filePaths[i];
+                    try
+                    {
+                        DICOMFile dicomFile = new DICOMFile(filePath);
+                        await Task.Run(() => dicomFile.Load());
+                        _fileManager.AddFile(dicomFile);
+
+                        double progress = (i + 1) / (double)totalFiles * 100;
+                        progressWindow.ViewModel.Progress.Value = progress;
+                        progressWindow.ViewModel.StatusText.Value =
+                            $"ファイルを読み込んでいます... ({i + 1}/{totalFiles})";
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                            $"Error opening DICOM file: {ex.Message}", "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
-                catch (Exception ex)
+
+                if (_fileManager.DicomFiles.Count > 0)
                 {
-                    MessageBox.Show(
-                        $"Error opening DICOM file: {ex.Message}", "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    _mainWindowPresenter.UpdateDisplayedImage(
+                        _fileManager.DicomFiles);
                 }
             }
-
-            if (_fileManager.DicomFiles.Count > 0)
+            finally
             {
-                _mainWindowPresenter.UpdateDisplayedImage(
-                    _fileManager.DicomFiles);
+                progressWindow.Close();
             }
         }
     }
