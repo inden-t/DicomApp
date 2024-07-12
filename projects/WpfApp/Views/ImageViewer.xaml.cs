@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -23,8 +24,12 @@ namespace DicomApp.Views
         private void UserControl_MouseWheel(object sender,
             MouseWheelEventArgs e)
         {
-            int offset = Math.Sign(-e.Delta);
-            _viewModel.SwitchImageByOffset(offset);
+            if (!e.Handled)
+            {
+                int offset = Math.Sign(-e.Delta);
+                _viewModel.SwitchImageByOffset(offset);
+                e.Handled = true;
+            }
         }
 
         private void UserControl_SizeChanged(object sender,
@@ -73,6 +78,35 @@ namespace DicomApp.Views
                 _isScrolling = false;
                 ImageScrollViewer.Cursor = Cursors.Arrow;
                 e.Handled = true;
+            }
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender,
+            MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                // Ctrlキーが押されている場合は、ズーム処理を行う
+                double zoomFactor = e.Delta > 0 ? 1.1 : 0.9;
+                _viewModel.Zoom(zoomFactor);
+                e.Handled = true;
+            }
+            else
+            {
+                // Ctrlキーが押されていない場合は、イベントを親コントロールに渡す
+                if (!e.Handled)
+                {
+                    // ScrollViewerがマウスホイールイベントをキャプチャするのを防ぐ
+                    e.Handled = true;
+
+                    // e は Handled = true で終えるため、新しいArgsオブジェクトでイベントを発行する
+                    var eventArg = new MouseWheelEventArgs(e.MouseDevice,
+                        e.Timestamp, e.Delta);
+                    eventArg.RoutedEvent = UIElement.MouseWheelEvent;
+                    eventArg.Source = sender;
+                    var parent = ((Control)sender).Parent as UIElement;
+                    parent.RaiseEvent(eventArg);
+                }
             }
         }
     }

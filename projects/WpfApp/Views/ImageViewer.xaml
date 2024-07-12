@@ -21,7 +21,8 @@
                   VerticalScrollBarVisibility="Auto"
                   MouseDown="ScrollViewer_MouseDown"
                   MouseMove="ScrollViewer_MouseMove"
-                  MouseUp="ScrollViewer_MouseUp">
+                  MouseUp="ScrollViewer_MouseUp"
+                  PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
       <Image x:Name="DicomImage"
              Stretch="None"
              Source="{Binding BitmapSourceImage.Value}"/>
