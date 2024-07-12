@@ -50,18 +50,26 @@ namespace DicomApp.ViewModels
             MaximumScrollValue.Value = value;
         }
 
-        public void Zoom(double factor)
+        public bool Zoom(double factor)
+
         {
+            bool isZoomed = false;
+
             double newZoom = _zoom * factor;
             if ((_zoom < 1 && newZoom > 1) || (_zoom > 1 && newZoom < 1))
             {
                 _zoom = 1;
+                isZoomed = true;
             }
-            else
+            else if (newZoom <= 10)
             {
                 _zoom = newZoom;
+                isZoomed = true;
             }
+
             Render();
+
+            return isZoomed;
         }
 
         public void Rotate(double angle)

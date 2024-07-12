@@ -97,13 +97,17 @@ namespace DicomApp.Views
                 double verticalOffset = ImageScrollViewer.VerticalOffset;
 
                 // ズーム処理
-                _viewModel.Zoom(zoomFactor);
+                bool isZoomed = _viewModel.Zoom(zoomFactor);
 
-                // スクロール位置を調整
-                ImageScrollViewer.ScrollToHorizontalOffset(
-                    mousePos.X * zoomFactor - mousePos.X + horizontalOffset);
-                ImageScrollViewer.ScrollToVerticalOffset(
-                    mousePos.Y * zoomFactor - mousePos.Y + verticalOffset);
+                if (isZoomed)
+                {
+                    // スクロール位置を調整
+                    ImageScrollViewer.ScrollToHorizontalOffset(
+                        mousePos.X * zoomFactor - mousePos.X +
+                        horizontalOffset);
+                    ImageScrollViewer.ScrollToVerticalOffset(
+                        mousePos.Y * zoomFactor - mousePos.Y + verticalOffset);
+                }
 
                 e.Handled = true;
             }
