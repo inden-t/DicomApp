@@ -73,9 +73,22 @@ namespace DicomApp.ViewModels
                 return;
 
             // 画像を描画
-            _image.Scale = _zoom;
             var renderedImage = _image.RenderImage();
-            BitmapSourceImage.Value = renderedImage.As<WriteableBitmap>();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            // 拡大倍率を適用
+            var scaledBitmap = new TransformedBitmap(bitmapImage,
+                new ScaleTransform(_zoom, _zoom));
+
+            //// 回転を適用
+            //var rotatedBitmap = new TransformedBitmap(scaledBitmap,
+            //    new RotateTransform(_rotation));
+
+            //// パンを適用
+            //var translatedBitmap = new TransformedBitmap(rotatedBitmap,
+            //    new TranslateTransform(_panOffset.X, _panOffset.Y));
+
+            BitmapSourceImage.Value = scaledBitmap;
         }
 
         private void UserControl_MouseLeftButtonDown(object sender,

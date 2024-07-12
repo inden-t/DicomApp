@@ -16,7 +16,7 @@
     </Grid.ColumnDefinitions>
     <Image x:Name="DicomImage"
              Grid.Column="0"
-             Stretch="Uniform"
+             Stretch="None"
              Source="{Binding BitmapSourceImage.Value}"/>
     <Canvas x:Name="CanvasOverlay"
             Grid.Column="0"/>
