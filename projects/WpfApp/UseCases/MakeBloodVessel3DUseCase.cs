@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using DicomApp.Models;
 using FellowOakDicom;
@@ -23,17 +24,19 @@ namespace DicomApp.UseCases
             foreach (var dicomFile in _fileManager.DicomFiles)
             {
                 var image = dicomFile.GetImage();
-                var pixels = image.RenderImage().As<byte[]>();
-                var width = image.Width;
-                var height = image.Height;
+                var renderedImage = image.RenderImage().As<WriteableBitmap>();
+                var width = renderedImage.PixelWidth;
+                var height = renderedImage.PixelHeight;
+                var stride = width * 4; // 4 bytes per pixel (BGRA)
+                var pixels = new byte[height * stride];
+                renderedImage.CopyPixels(pixels, stride, 0);
 
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        int index =
-                            (y * width + x) * 4; // 4 bytes per pixel (RGBA)
-                        byte intensity = pixels[index];
+                        int index = (y * stride) + (x * 4);
+                        byte intensity = pixels[index]; // Blue channel
 
                         if (intensity > 200) // 血管と思われる明るい部分のしきい値
                         {
