@@ -67,7 +67,9 @@ namespace DicomApp
             services.AddScoped<DICOMFile>();
             services.AddScoped<ImageViewer>();
             services.AddScoped<ImageViewerViewModel>();
+
             services.AddScoped<OpenDicomFileUseCase>();
+            services.AddScoped<MakeBloodVessel3DUseCase>();
         }
     }
 }

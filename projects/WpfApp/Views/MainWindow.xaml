@@ -47,6 +47,8 @@
                 Command="{Binding ZoomInCommand}"/>
       <MenuItem Header="_Zoom Out"
                 Command="{Binding ZoomOutCommand}"/>
+      <MenuItem Header="_Make 3D Blood Vessel"
+                  Command="{Binding MakeBloodVessel3DCommand}"/>
     </Menu>
 
     <ListView Grid.Column="0"
