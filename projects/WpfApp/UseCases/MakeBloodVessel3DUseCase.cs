@@ -12,27 +12,38 @@ namespace DicomApp.UseCases
     {
         private readonly FileManager _fileManager;
         private readonly IBloodVessel3DViewer _viewer;
+        private readonly IProgressWindow _progressWindow;
 
         public MakeBloodVessel3DUseCase(FileManager fileManager,
-            IBloodVessel3DViewer viewer)
+            IBloodVessel3DViewer viewer,
+            IProgressWindow progressWindow)
         {
             _fileManager = fileManager;
             _viewer = viewer;
+            _progressWindow = progressWindow;
         }
 
-        public void Execute()
+        public async Task ExecuteAsync()
         {
-            var model3DGroup = CreateBloodVessel3DModel();
+            _progressWindow.Start();
+            _progressWindow.SetStatusText("3Dモデルを生成中...");
+
+            var model3DGroup = await Task.Run(() => CreateBloodVessel3DModel());
+
             _viewer.SetModel(model3DGroup);
+
+            _progressWindow.End();
             _viewer.Show();
         }
 
         private Model3DGroup CreateBloodVessel3DModel()
         {
             var model3DGroup = new Model3DGroup();
+            int totalFiles = _fileManager.DicomFiles.Count;
 
-            foreach (var dicomFile in _fileManager.DicomFiles)
+            for (int i = 0; i < totalFiles; i++)
             {
+                var dicomFile = _fileManager.DicomFiles[i];
                 var image = dicomFile.GetImage();
                 var renderedImage = image.RenderImage().As<WriteableBitmap>();
                 var width = renderedImage.PixelWidth;
@@ -50,14 +61,20 @@ namespace DicomApp.UseCases
 
                         if (intensity > 200) // 血管と思われる明るい部分のしきい値
                         {
-                            var point = new Point3D(x, y,
-                                _fileManager.DicomFiles.IndexOf(dicomFile));
+                            var point = new Point3D(x, y, i);
                             var sphere = CreateSphere(point, 0.5);
                             model3DGroup.Children.Add(sphere);
                         }
                     }
                 }
+
+                double progress = (i + 1) / (double)totalFiles * 100;
+                _progressWindow.SetProgress(progress);
+                _progressWindow.SetStatusText(
+                    $"3Dモデルを生成中... ({i + 1}/{totalFiles})");
             }
+
+            model3DGroup.Freeze();
 
             return model3DGroup;
         }

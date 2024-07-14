@@ -15,8 +15,8 @@ namespace DicomApp
             mainWindowViewModel.OpenDicomFolderCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteFolderAsync());
 
-            mainWindowViewModel.MakeBloodVessel3DCommand.Subscribe(() =>
-                makeBloodVessel3DUseCase.Execute());
+            mainWindowViewModel.MakeBloodVessel3DCommand.Subscribe(async () =>
+                await makeBloodVessel3DUseCase.ExecuteAsync());
         }
     }
 }
