@@ -40,6 +40,7 @@ namespace DicomApp.UseCases
         {
             var model3DGroup = new Model3DGroup();
             int totalFiles = _fileManager.DicomFiles.Count;
+            int totalSpheres = 0; // 追加された球体の総数をカウントする変数
 
             for (int i = 0; i < totalFiles; i++)
             {
@@ -64,6 +65,7 @@ namespace DicomApp.UseCases
                             var point = new Point3D(x, y, i);
                             var sphere = CreateSphere(point, 0.5);
                             model3DGroup.Children.Add(sphere);
+                            totalSpheres++; // 球体が追加されるたびにカウントを増やす
                         }
                     }
                 }
@@ -71,7 +73,7 @@ namespace DicomApp.UseCases
                 double progress = (i + 1) / (double)totalFiles * 100;
                 _progressWindow.SetProgress(progress);
                 _progressWindow.SetStatusText(
-                    $"3Dモデルを生成中... ({i + 1}/{totalFiles})");
+                    $"3Dモデルを生成中... ({i + 1}/{totalFiles} files)\n球体数: {totalSpheres}個");
             }
 
             model3DGroup.Freeze();
