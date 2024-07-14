@@ -5,25 +5,26 @@ using System.Windows.Media.Media3D;
 using DicomApp.Models;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
-using DicomApp.Views;
 
 namespace DicomApp.UseCases
 {
     public class MakeBloodVessel3DUseCase
     {
         private readonly FileManager _fileManager;
+        private readonly IBloodVessel3DViewer _viewer;
 
-        public MakeBloodVessel3DUseCase(FileManager fileManager)
+        public MakeBloodVessel3DUseCase(FileManager fileManager,
+            IBloodVessel3DViewer viewer)
         {
             _fileManager = fileManager;
+            _viewer = viewer;
         }
 
         public void Execute()
         {
             var model3DGroup = CreateBloodVessel3DModel();
-            var viewer = new BloodVessel3DViewer();
-            viewer.SetModel(model3DGroup);
-            viewer.Show();
+            _viewer.SetModel(model3DGroup);
+            _viewer.Show();
         }
 
         private Model3DGroup CreateBloodVessel3DModel()
