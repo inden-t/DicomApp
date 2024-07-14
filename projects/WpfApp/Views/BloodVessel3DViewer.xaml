@@ -7,10 +7,10 @@
   <Grid>
     <Viewport3D x:Name="viewport3D">
       <Viewport3D.Camera>
-        <PerspectiveCamera Position="0,0,100"
-                        LookDirection="0,0,-1"
-                        UpDirection="0,1,0"
-                        FieldOfView="60"/>
+        <PerspectiveCamera Position="255,768,0"
+                           LookDirection="0,-1,0"
+                           UpDirection="0,0,-1"
+                           FieldOfView="60"/>
       </Viewport3D.Camera>
       <ModelVisual3D x:Name="modelVisual">
         <ModelVisual3D.Content>
