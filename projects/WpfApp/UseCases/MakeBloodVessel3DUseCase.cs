@@ -5,6 +5,7 @@ using System.Windows.Media.Media3D;
 using DicomApp.Models;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
+using System.Windows.Input;
 
 namespace DicomApp.UseCases
 {
@@ -25,6 +26,8 @@ namespace DicomApp.UseCases
 
         public async Task ExecuteAsync()
         {
+            Mouse.OverrideCursor = Cursors.Wait;
+
             _progressWindow.Start();
             _progressWindow.SetStatusText("3Dモデルを生成中...");
 
@@ -34,6 +37,8 @@ namespace DicomApp.UseCases
 
             _progressWindow.End();
             _viewer.Show();
+
+            Mouse.OverrideCursor = null;
         }
 
         private Model3DGroup CreateBloodVessel3DModel()
