@@ -93,8 +93,11 @@ namespace DicomApp.UseCases
             sphere.Radius = radius;
             var geometry = sphere.ToMesh();
 
-            var material =
-                new DiffuseMaterial(System.Windows.Media.Brushes.Red);
+            var material = new MaterialGroup();
+            material.Children.Add(
+                new DiffuseMaterial(new SolidColorBrush(Colors.Red)));
+            material.Children.Add(
+                new SpecularMaterial(new SolidColorBrush(Colors.White), 50));
 
             return new GeometryModel3D(geometry, material);
         }
