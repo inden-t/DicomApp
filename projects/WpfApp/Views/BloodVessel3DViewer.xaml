@@ -4,7 +4,7 @@
         Title="3D Blood Vessel Viewer"
         Height="1200"
         Width="1600">
-  <Grid>
+  <Grid Background="#303030">
     <Viewport3D x:Name="viewport3D">
       <Viewport3D.Camera>
         <PerspectiveCamera Position="255,-256,-384"
