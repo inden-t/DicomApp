@@ -67,7 +67,8 @@ namespace DicomApp.UseCases
 
                         if (intensity > 200) // 血管と思われる明るい部分のしきい値
                         {
-                            var point = new Point3D(x, y, i);
+                            // x座標を反転させる
+                            var point = new Point3D(width - 1 - x, y, i);
                             var sphere = CreateSphere(point, 0.5);
                             model3DGroup.Children.Add(sphere);
                             totalSpheres++; // 球体が追加されるたびにカウントを増やす
