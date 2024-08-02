@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using DicomApp.Views;
+using DicomApp.UseCases;
 
-namespace DicomApp.UseCases
+namespace DicomApp.Views
 {
     public class BloodVessel3DViewerFactory : IBloodVessel3DViewerFactory
     {
