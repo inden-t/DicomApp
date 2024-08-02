@@ -27,7 +27,7 @@ namespace DicomApp.Views
 
         public void End()
         {
-            Close();
+            Visibility = Visibility.Hidden;
             Application.Current.MainWindow!.IsEnabled = true;
         }
 

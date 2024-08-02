@@ -61,13 +61,16 @@ namespace DicomApp
             services.AddScoped<MainWindow>();
             services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
             services.AddScoped<MainWindowViewModel>();
+            services.AddScoped<IBloodVessel3DViewer, BloodVessel3DViewer>();
             services.AddScoped<IProgressWindow, ProgressWindow>();
             services.AddScoped<FileManager>();
             services.AddScoped<IImageCaches, ImageCaches>();
             services.AddScoped<DICOMFile>();
             services.AddScoped<ImageViewer>();
             services.AddScoped<ImageViewerViewModel>();
+
             services.AddScoped<OpenDicomFileUseCase>();
+            services.AddScoped<MakeBloodVessel3DUseCase>();
         }
     }
 }
