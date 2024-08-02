@@ -14,11 +14,11 @@ namespace DicomApp.UseCases
         private readonly IProgressWindow _progressWindow;
 
         public MakeBloodVessel3DUseCase(FileManager fileManager,
-            IBloodVessel3DViewer viewer,
+            IBloodVessel3DViewerFactory viewerFactory,
             IProgressWindow progressWindow)
         {
             _fileManager = fileManager;
-            _viewer = viewer;
+            _viewer = viewerFactory.Create();
             _progressWindow = progressWindow;
         }
 
