@@ -10,7 +10,8 @@ namespace DicomApp.UseCases
     public class MakeBloodVessel3DUseCase
     {
         private readonly FileManager _fileManager;
-        private readonly IBloodVessel3DViewer _viewer;
+        private readonly IBloodVessel3DViewerFactory _viewerFactory;
+        private IBloodVessel3DViewer _viewer;
         private readonly IProgressWindow _progressWindow;
 
         public MakeBloodVessel3DUseCase(FileManager fileManager,
@@ -18,7 +19,7 @@ namespace DicomApp.UseCases
             IProgressWindow progressWindow)
         {
             _fileManager = fileManager;
-            _viewer = viewerFactory.Create();
+            _viewerFactory = viewerFactory;
             _progressWindow = progressWindow;
         }
 
@@ -31,6 +32,7 @@ namespace DicomApp.UseCases
 
             var model3DGroup = await Task.Run(() => CreateBloodVessel3DModel());
 
+            _viewer = _viewerFactory.Create();
             _viewer.SetModel(model3DGroup);
 
             _progressWindow.End();

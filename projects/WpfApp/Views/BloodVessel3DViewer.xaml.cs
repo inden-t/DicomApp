@@ -24,8 +24,6 @@ namespace DicomApp.Views
             System.ComponentModel.CancelEventArgs e)
         {
             model3DGroup.Children.Clear(); // モデルをクリア
-            e.Cancel = true; // ウィンドウを閉じる操作をキャンセル
-            this.Hide(); // ウィンドウを非表示にする
         }
     }
 }

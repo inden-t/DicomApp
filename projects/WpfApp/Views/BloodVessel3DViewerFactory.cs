@@ -1,4 +1,4 @@
-using System.Windows.Media.Media3D;
+﻿using System.Windows;
 using DicomApp.Views;
 
 namespace DicomApp.UseCases
@@ -7,7 +7,9 @@ namespace DicomApp.UseCases
     {
         public IBloodVessel3DViewer Create()
         {
-            return new BloodVessel3DViewer();
+            var viewer = new BloodVessel3DViewer();
+            viewer.Owner = Application.Current.MainWindow;
+            return viewer;
         }
     }
 }
