@@ -20,14 +20,13 @@ namespace DicomApp.Views
 
         public void Start()
         {
-            Owner = Application.Current.MainWindow;
             Application.Current.MainWindow!.IsEnabled = false;
             Show();
         }
 
         public void End()
         {
-            Visibility = Visibility.Hidden;
+            Close();
             Application.Current.MainWindow!.IsEnabled = true;
         }
 

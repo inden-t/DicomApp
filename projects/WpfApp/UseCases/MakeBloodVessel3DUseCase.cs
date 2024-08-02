@@ -11,22 +11,25 @@ namespace DicomApp.UseCases
     {
         private readonly FileManager _fileManager;
         private readonly IBloodVessel3DViewerFactory _viewerFactory;
+        private readonly IProgressWindowFactory _progressWindowFactory;
+
         private IBloodVessel3DViewer _viewer;
-        private readonly IProgressWindow _progressWindow;
+        private IProgressWindow _progressWindow;
 
         public MakeBloodVessel3DUseCase(FileManager fileManager,
             IBloodVessel3DViewerFactory viewerFactory,
-            IProgressWindow progressWindow)
+            IProgressWindowFactory progressWindowFactory)
         {
             _fileManager = fileManager;
             _viewerFactory = viewerFactory;
-            _progressWindow = progressWindow;
+            _progressWindowFactory = progressWindowFactory;
         }
 
         public async Task ExecuteAsync()
         {
             Mouse.OverrideCursor = Cursors.Wait;
 
+            _progressWindow = _progressWindowFactory.Create();
             _progressWindow.Start();
             _progressWindow.SetStatusText("3Dモデルを生成中...");
 
