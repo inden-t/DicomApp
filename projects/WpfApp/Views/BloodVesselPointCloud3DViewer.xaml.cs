@@ -172,7 +172,8 @@ namespace DicomApp.Views
         private void UpdateCenterMark()
         {
             Point center =
-                new Point(this.ActualWidth / 2, this.ActualHeight / 2);
+                new Point(CenterMarkCanvas.ActualWidth / 2,
+                    CenterMarkCanvas.ActualHeight / 2);
             Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
             Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
         }
