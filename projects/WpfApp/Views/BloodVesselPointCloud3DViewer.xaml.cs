@@ -11,6 +11,8 @@ namespace DicomApp.Views
         private Point _lastMousePosition;
         private bool _isRotating;
         private PerspectiveCamera _camera;
+        private Point3D _modelCenter;
+        private double _cameraDistance;
 
         public BloodVesselPointCloud3DViewer()
         {
@@ -21,12 +23,25 @@ namespace DicomApp.Views
 
             // カメラの初期化
             _camera = (PerspectiveCamera)viewport3D.Camera;
+            _modelCenter = new Point3D(0, 0, 0);
+            _cameraDistance = 500; // 初期カメラ距離
+            UpdateCameraPosition();
         }
 
         public void SetModel(Model3DGroup model)
         {
             model3DGroup.Children.Clear();
             model3DGroup.Children.Add(model);
+
+            // モデルの中心を計算
+            Rect3D bounds = model.Bounds;
+            _modelCenter = new Point3D(
+                (bounds.X + bounds.SizeX / 2),
+                (bounds.Y + bounds.SizeY / 2),
+                (bounds.Z + bounds.SizeZ / 2));
+
+            // カメラ位置を更新
+            UpdateCameraPosition();
         }
 
         private void BloodVesselPointCloud3DViewer_Closing(object sender,
@@ -91,13 +106,25 @@ namespace DicomApp.Views
                 rotationY.Transform(rotationX.Transform(lookDirection));
             _camera.UpDirection =
                 rotationY.Transform(rotationX.Transform(upDirection));
+
+            // カメラ位置を更新
+            UpdateCameraPosition();
         }
 
         private void ZoomCamera(double delta)
         {
-            double zoomSpeed = 0.001;
-            Vector3D lookDirection = _camera.LookDirection;
-            _camera.Position += lookDirection * delta * zoomSpeed;
+            double zoomSpeed = 0.1;
+            _cameraDistance -= delta * zoomSpeed;
+            _cameraDistance =
+                Math.Max(10, Math.Min(1000, _cameraDistance)); // カメラ距離の制限
+
+            UpdateCameraPosition();
+        }
+
+        private void UpdateCameraPosition()
+        {
+            _camera.Position =
+                _modelCenter - _camera.LookDirection * _cameraDistance;
         }
     }
 }
