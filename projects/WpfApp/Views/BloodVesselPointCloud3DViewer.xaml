@@ -12,8 +12,8 @@
                 MouseWheel="Viewport3D_MouseWheel">
       <Viewport3D.Camera>
         <PerspectiveCamera Position="255,-256,-384"
-                           LookDirection="0,10,10"
-                           UpDirection="0,10,-10"
+                           LookDirection="0,1,1"
+                           UpDirection="0,1,-1"
                            FieldOfView="60"/>
       </Viewport3D.Camera>
       <ModelVisual3D x:Name="modelVisual">
