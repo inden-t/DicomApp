@@ -9,15 +9,17 @@ namespace DicomApp.UseCases
     public class OpenDicomFileUseCase
     {
         private readonly IMainWindowPresenter _mainWindowPresenter;
-        private readonly IProgressWindow _progressWindow;
+        private readonly IProgressWindowFactory _progressWindowFactory;
         private readonly FileManager _fileManager;
 
+        private IProgressWindow _progressWindow;
+
         public OpenDicomFileUseCase(IMainWindowPresenter mainWindowPresenter,
-            IProgressWindow progressWindow,
+            IProgressWindowFactory progressWindowFactory,
             FileManager fileManager)
         {
             _mainWindowPresenter = mainWindowPresenter;
-            _progressWindow = progressWindow;
+            _progressWindowFactory = progressWindowFactory;
             _fileManager = fileManager;
         }
 
@@ -82,6 +84,7 @@ namespace DicomApp.UseCases
         {
             try
             {
+                _progressWindow = _progressWindowFactory.Create();
                 _progressWindow.Start();
 
                 int totalFiles = filePaths.Length;

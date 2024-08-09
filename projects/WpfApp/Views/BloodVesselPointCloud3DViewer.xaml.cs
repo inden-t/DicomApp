@@ -4,14 +4,15 @@ using DicomApp.UseCases;
 
 namespace DicomApp.Views
 {
-    public partial class BloodVessel3DViewer : Window, IBloodVessel3DViewer
+    public partial class BloodVesselPointCloud3DViewer : Window,
+        IBloodVesselPointCloud3DViewer
     {
-        public BloodVessel3DViewer()
+        public BloodVesselPointCloud3DViewer()
         {
             InitializeComponent();
 
             // ウィンドウのCloseイベントをハンドリング
-            this.Closing += BloodVessel3DViewer_Closing;
+            this.Closing += BloodVesselPointCloud3DViewer_Closing;
         }
 
         public void SetModel(Model3DGroup model)
@@ -20,12 +21,10 @@ namespace DicomApp.Views
             model3DGroup.Children.Add(model);
         }
 
-        private void BloodVessel3DViewer_Closing(object sender,
+        private void BloodVesselPointCloud3DViewer_Closing(object sender,
             System.ComponentModel.CancelEventArgs e)
         {
             model3DGroup.Children.Clear(); // モデルをクリア
-            e.Cancel = true; // ウィンドウを閉じる操作をキャンセル
-            this.Hide(); // ウィンドウを非表示にする
         }
     }
 }
