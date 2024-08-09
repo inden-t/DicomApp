@@ -15,7 +15,9 @@ namespace DicomApp.ViewModels
         public ReactiveCommand ZoomOutCommand { get; } = new();
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
-        public ReactiveCommand MakeBloodVessel3DCommand { get; } = new();
+
+        public ReactiveCommand MakeBloodVesselPointCloud3DCommand { get; } =
+            new();
 
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
