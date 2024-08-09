@@ -166,6 +166,8 @@ namespace DicomApp.UseCases
                                 var v1 =
                                     MarchingCubesLookupTable.GetVertexPosition(
                                         edge, x, y, z);
+                                // X座標を反転
+                                v1.X = width - 1 - v1.X;
                                 mesh.Positions.Add(v1);
                                 mesh.TriangleIndices.Add(mesh.Positions.Count -
                                     1);
