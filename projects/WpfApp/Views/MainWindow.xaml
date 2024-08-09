@@ -47,7 +47,7 @@
                 Command="{Binding ZoomInCommand}"/>
       <MenuItem Header="_Zoom Out"
                 Command="{Binding ZoomOutCommand}"/>
-      <MenuItem Header="_Make 3D Blood Vessel"
+      <MenuItem Header="_Make Blood Vessel Point Cloud 3D"
                 Command="{Binding MakeBloodVesselPointCloud3DCommand}"/>
     </Menu>
 
