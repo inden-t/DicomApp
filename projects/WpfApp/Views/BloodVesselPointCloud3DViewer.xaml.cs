@@ -93,8 +93,12 @@ namespace DicomApp.Views
 
             // 現在の表示方向を基準にした回転
             Matrix3D rotation = Matrix3D.Identity;
-            rotation.Rotate(
-                new Quaternion(upDirection, -deltaX * rotationSpeed));
+
+            // Z軸周りの回転（マウスの横方向の動き）
+            rotation.Rotate(new Quaternion(new Vector3D(0, 0, 1),
+                deltaX * rotationSpeed));
+
+            // 右方向ベクトル周りの回転（マウスの縦方向の動き）
             rotation.Rotate(new Quaternion(rightDirection,
                 -deltaY * rotationSpeed));
 
