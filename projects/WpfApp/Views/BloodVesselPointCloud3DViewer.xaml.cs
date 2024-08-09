@@ -50,22 +50,22 @@ namespace DicomApp.Views
             model3DGroup.Children.Clear(); // モデルをクリア
         }
 
-        private void Viewport3D_MouseLeftButtonDown(object sender,
+        private void Grid_MouseLeftButtonDown(object sender,
             MouseButtonEventArgs e)
         {
             _isRotating = true;
             _lastMousePosition = e.GetPosition(this);
-            viewport3D.CaptureMouse();
+            Mouse.Capture((IInputElement)sender);
         }
 
-        private void Viewport3D_MouseLeftButtonUp(object sender,
+        private void Grid_MouseLeftButtonUp(object sender,
             MouseButtonEventArgs e)
         {
             _isRotating = false;
-            viewport3D.ReleaseMouseCapture();
+            Mouse.Capture(null);
         }
 
-        private void Viewport3D_MouseMove(object sender, MouseEventArgs e)
+        private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             if (_isRotating)
             {
@@ -78,7 +78,7 @@ namespace DicomApp.Views
             }
         }
 
-        private void Viewport3D_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             ZoomCamera(e.Delta);
         }

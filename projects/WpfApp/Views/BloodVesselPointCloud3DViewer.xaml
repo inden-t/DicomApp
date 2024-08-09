@@ -4,12 +4,13 @@
         Title="Blood Vessel Point Cloud 3D Viewer"
         Height="1200"
         Width="1600">
-  <Grid Background="#303030">
+  <Grid Background="#303030"
+        MouseLeftButtonDown="Grid_MouseLeftButtonDown"
+        MouseLeftButtonUp="Grid_MouseLeftButtonUp"
+        MouseMove="Grid_MouseMove"
+        MouseWheel="Grid_MouseWheel">
     <Viewport3D x:Name="viewport3D"
-                MouseLeftButtonDown="Viewport3D_MouseLeftButtonDown"
-                MouseLeftButtonUp="Viewport3D_MouseLeftButtonUp"
-                MouseMove="Viewport3D_MouseMove"
-                MouseWheel="Viewport3D_MouseWheel">
+                IsHitTestVisible="False">
       <Viewport3D.Camera>
         <PerspectiveCamera Position="255,-256,-384"
                            LookDirection="0,1,1"
