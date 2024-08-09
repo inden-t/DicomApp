@@ -64,16 +64,17 @@ namespace DicomApp.UseCases
             var model3DGroup = new Model3DGroup();
             int totalFiles = _fileManager.DicomFiles.Count;
 
-            var points = new List<Point3D>();
+            // 3次元ボクセルグリッドを作成
+            int width = _fileManager.DicomFiles[0].GetImage().Width;
+            int height = _fileManager.DicomFiles[0].GetImage().Height;
+            var voxelGrid = new bool[width, height, totalFiles];
 
-            for (int i = 0; i < totalFiles; i++)
+            for (int z = 0; z < totalFiles; z++)
             {
-                var dicomFile = _fileManager.DicomFiles[i];
+                var dicomFile = _fileManager.DicomFiles[z];
                 var image = dicomFile.GetImage();
                 var renderedImage = image.RenderImage()
                     .As<System.Windows.Media.Imaging.WriteableBitmap>();
-                var width = renderedImage.PixelWidth;
-                var height = renderedImage.PixelHeight;
                 var stride = width * 4; // 4 bytes per pixel (BGRA)
                 var pixels = new byte[height * stride];
                 renderedImage.CopyPixels(pixels, stride, 0);
@@ -85,21 +86,19 @@ namespace DicomApp.UseCases
                         int index = (y * stride) + (x * 4);
                         byte intensity = pixels[index]; // Blue channel
 
-                        if (intensity > 200) // 血管と思われる明るい部分のしきい値
-                        {
-                            points.Add(new Point3D(width - 1 - x, y, i));
-                        }
+                        voxelGrid[x, y, z] =
+                            intensity > 200; // 血管と思われる明るい部分のしきい値
                     }
                 }
 
-                double progress = (i + 1) / (double)totalFiles * 100;
+                double progress = (z + 1) / (double)totalFiles * 100;
                 _progressWindow.SetProgress(progress);
                 _progressWindow.SetStatusText(
-                    $"血管のサーフェスモデルを生成中... ({i + 1}/{totalFiles} files)");
+                    $"血管のサーフェスモデルを生成中... ({z + 1}/{totalFiles} files)");
             }
 
-            // ポイントクラウドからサーフェスモデルを生成
-            var surfaceGeometry = CreateSurfaceFromPoints(points);
+            // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
+            var surfaceGeometry = CreateSurfaceFromVoxels(voxelGrid);
             var material = new DiffuseMaterial(new SolidColorBrush(Colors.Red));
             var surfaceModel = new GeometryModel3D(surfaceGeometry, material);
 
@@ -109,51 +108,50 @@ namespace DicomApp.UseCases
             return model3DGroup;
         }
 
-        private MeshGeometry3D CreateSurfaceFromPoints(List<Point3D> points)
+        private MeshGeometry3D CreateSurfaceFromVoxels(bool[,,] voxelGrid)
         {
             var mesh = new MeshGeometry3D();
-            int gridSize = 10; // グリッドのサイズを調整して、パフォーマンスと品質のバランスを取る
+            int width = voxelGrid.GetLength(0);
+            int height = voxelGrid.GetLength(1);
+            int depth = voxelGrid.GetLength(2);
 
-            // 点群をグリッドに分割
-            var grid = new Dictionary<(int, int, int), List<Point3D>>();
-            foreach (var point in points)
+            for (int x = 0; x < width - 1; x++)
             {
-                var key = ((int)(point.X / gridSize), (int)(point.Y / gridSize),
-                    (int)(point.Z / gridSize));
-                if (!grid.ContainsKey(key))
-                    grid[key] = new List<Point3D>();
-                grid[key].Add(point);
-            }
-
-            // 各グリッドセルの中心点を計算
-            var cellCenters = new List<Point3D>();
-            foreach (var cell in grid.Values)
-            {
-                var center = new Point3D(
-                    cell.Average(p => p.X),
-                    cell.Average(p => p.Y),
-                    cell.Average(p => p.Z)
-                );
-                cellCenters.Add(center);
-                mesh.Positions.Add(center);
-            }
-
-            // 隣接するセル間に三角形を作成
-            for (int i = 0; i < cellCenters.Count - 1; i++)
-            {
-                for (int j = i + 1; j < cellCenters.Count; j++)
+                for (int y = 0; y < height - 1; y++)
                 {
-                    var distance = (cellCenters[i] - cellCenters[j]).Length;
-                    if (distance < gridSize * 1.5) // 近接しているセル同士を接続
+                    for (int z = 0; z < depth - 1; z++)
                     {
-                        mesh.TriangleIndices.Add(i);
-                        mesh.TriangleIndices.Add(j);
-                        mesh.TriangleIndices.Add((i + j) / 2); // 簡易的な第三の点
+                        // Marching Cubesアルゴリズムの実装
+                        int cubeIndex = 0;
+                        if (voxelGrid[x, y, z]) cubeIndex |= 1;
+                        if (voxelGrid[x + 1, y, z]) cubeIndex |= 2;
+                        if (voxelGrid[x + 1, y, z + 1]) cubeIndex |= 4;
+                        if (voxelGrid[x, y, z + 1]) cubeIndex |= 8;
+                        if (voxelGrid[x, y + 1, z]) cubeIndex |= 16;
+                        if (voxelGrid[x + 1, y + 1, z]) cubeIndex |= 32;
+                        if (voxelGrid[x + 1, y + 1, z + 1]) cubeIndex |= 64;
+                        if (voxelGrid[x, y + 1, z + 1]) cubeIndex |= 128;
 
-                        _progressWindow.SetStatusText(
-                            $"血管のサーフェスモデルを生成中...\n生成されたポイント数: {mesh.Positions.Count}\n生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
+                        // ルックアップテーブルを使用して三角形を生成
+                        var triangles =
+                            MarchingCubesLookupTable.GetTriangles(cubeIndex);
+                        foreach (var triangle in triangles)
+                        {
+                            foreach (var edge in triangle)
+                            {
+                                var v1 =
+                                    MarchingCubesLookupTable.GetVertexPosition(
+                                        edge, x, y, z);
+                                mesh.Positions.Add(v1);
+                                mesh.TriangleIndices.Add(mesh.Positions.Count -
+                                    1);
+                            }
+                        }
                     }
                 }
+
+                _progressWindow.SetStatusText(
+                    $"血管のサーフェスモデルを生成中...\n生成されたポイント数: {mesh.Positions.Count}\n生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
             }
 
             return mesh;
