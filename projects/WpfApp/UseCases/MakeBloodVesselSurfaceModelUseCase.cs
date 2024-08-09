@@ -111,22 +111,49 @@ namespace DicomApp.UseCases
 
         private MeshGeometry3D CreateSurfaceFromPoints(List<Point3D> points)
         {
-            // ここでは簡単な実装例として、点群を直接結んでサーフェスを作成します
-            // 実際のアプリケーションでは、より高度なアルゴリズム（例：Marching Cubes）を使用することをお勧めします
-
             var mesh = new MeshGeometry3D();
+            int gridSize = 10; // グリッドのサイズを調整して、パフォーマンスと品質のバランスを取る
 
-            for (int i = 0; i < points.Count - 1; i++)
+            // 点群をグリッドに分割
+            var grid = new Dictionary<(int, int, int), List<Point3D>>();
+            foreach (var point in points)
             {
-                mesh.Positions.Add(points[i]);
-                mesh.Positions.Add(points[i + 1]);
+                var key = ((int)(point.X / gridSize), (int)(point.Y / gridSize),
+                    (int)(point.Z / gridSize));
+                if (!grid.ContainsKey(key))
+                    grid[key] = new List<Point3D>();
+                grid[key].Add(point);
+            }
 
-                mesh.TriangleIndices.Add(i * 2);
-                mesh.TriangleIndices.Add(i * 2 + 1);
-                mesh.TriangleIndices.Add(i * 2 + 2);
+            // 各グリッドセルの中心点を計算
+            var cellCenters = new List<Point3D>();
+            foreach (var cell in grid.Values)
+            {
+                var center = new Point3D(
+                    cell.Average(p => p.X),
+                    cell.Average(p => p.Y),
+                    cell.Average(p => p.Z)
+                );
+                cellCenters.Add(center);
+                mesh.Positions.Add(center);
+            }
 
-                _progressWindow.SetStatusText(
-                    $"血管のサーフェスモデルを生成中... ()\n生成されたポイント数: {points.Count}\n生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
+            // 隣接するセル間に三角形を作成
+            for (int i = 0; i < cellCenters.Count - 1; i++)
+            {
+                for (int j = i + 1; j < cellCenters.Count; j++)
+                {
+                    var distance = (cellCenters[i] - cellCenters[j]).Length;
+                    if (distance < gridSize * 1.5) // 近接しているセル同士を接続
+                    {
+                        mesh.TriangleIndices.Add(i);
+                        mesh.TriangleIndices.Add(j);
+                        mesh.TriangleIndices.Add((i + j) / 2); // 簡易的な第三の点
+
+                        _progressWindow.SetStatusText(
+                            $"血管のサーフェスモデルを生成中...\n生成されたポイント数: {mesh.Positions.Count}\n生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
+                    }
+                }
             }
 
             return mesh;
