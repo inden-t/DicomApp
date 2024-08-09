@@ -100,17 +100,27 @@ namespace DicomApp.UseCases
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
             var surfaceGeometry = CreateSurfaceFromVoxels(voxelGrid);
 
-            // 両面マテリアルを作成
-            var material = new MaterialGroup();
-            material.Children.Add(
-                new DiffuseMaterial(new SolidColorBrush(Colors.Red)));
-            material.Children.Add(
-                new EmissiveMaterial(new SolidColorBrush(Colors.Red)));
+            // 陰影のあるマテリアルを作成
+            var materialGroup = new MaterialGroup();
 
-            var surfaceModel = new GeometryModel3D(surfaceGeometry, material);
-            surfaceModel.BackMaterial = material; // 裏面にも同じマテリアルを適用
+            // 拡散反射（基本的な色と陰影）
+            materialGroup.Children.Add(
+                new DiffuseMaterial(new SolidColorBrush(Colors.Red)));
+
+            // 鏡面反射（ハイライト）
+            materialGroup.Children.Add(
+                new SpecularMaterial(new SolidColorBrush(Colors.White), 50));
+
+            var surfaceModel =
+                new GeometryModel3D(surfaceGeometry, materialGroup);
+            surfaceModel.BackMaterial = materialGroup; // 裏面にも同じマテリアルを適用
+
+            // 光源を追加
+            var directionalLight =
+                new DirectionalLight(Colors.White, new Vector3D(-1, -1, -1));
 
             model3DGroup.Children.Add(surfaceModel);
+            model3DGroup.Children.Add(directionalLight);
             model3DGroup.Freeze();
 
             return model3DGroup;
