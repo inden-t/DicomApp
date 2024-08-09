@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Media;
 using DicomApp.Models;
@@ -25,23 +26,37 @@ namespace DicomApp.UseCases
 
         public async Task ExecuteAsync()
         {
-            System.Windows.Input.Mouse.OverrideCursor =
-                System.Windows.Input.Cursors.Wait;
+            try
+            {
+                System.Windows.Input.Mouse.OverrideCursor =
+                    System.Windows.Input.Cursors.Wait;
 
-            _progressWindow = _progressWindowFactory.Create();
-            _progressWindow.Start();
-            _progressWindow.SetStatusText("血管のサーフェスモデルを生成中...");
+                _progressWindow = _progressWindowFactory.Create();
+                _progressWindow.Start();
+                _progressWindow.SetStatusText("血管のサーフェスモデルを生成中...");
 
-            var model3DGroup =
-                await Task.Run(() => CreateBloodVesselSurfaceModel());
+                var model3DGroup =
+                    await Task.Run(() => CreateBloodVesselSurfaceModel());
 
-            _viewer = _viewerFactory.Create();
-            _viewer.SetModel(model3DGroup);
+                _viewer = _viewerFactory.Create();
+                _viewer.SetModel(model3DGroup);
 
-            _progressWindow.End();
-            _viewer.Show();
+                _progressWindow.End();
+                _viewer.Show();
 
-            System.Windows.Input.Mouse.OverrideCursor = null;
+                System.Windows.Input.Mouse.OverrideCursor = null;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"サーフェスモデルの生成中にエラーが発生しました: {ex.Message}", "エラー",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine($"詳細なエラー情報: {ex}");
+            }
+            finally
+            {
+                _progressWindow.End();
+                System.Windows.Input.Mouse.OverrideCursor = null;
+            }
         }
 
         private Model3DGroup CreateBloodVesselSurfaceModel()
@@ -109,6 +124,9 @@ namespace DicomApp.UseCases
                 mesh.TriangleIndices.Add(i * 2);
                 mesh.TriangleIndices.Add(i * 2 + 1);
                 mesh.TriangleIndices.Add(i * 2 + 2);
+
+                _progressWindow.SetStatusText(
+                    $"血管のサーフェスモデルを生成中... ()\n生成されたポイント数: {points.Count}\n生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
             }
 
             return mesh;
