@@ -4,9 +4,10 @@ using DicomApp.UseCases;
 
 namespace DicomApp.Views
 {
-    public partial class BloodVessel3DViewer : Window, IBloodVessel3DViewer
+    public partial class BloodVesselPointCloud3DViewer : Window,
+        IBloodVesselPointCloud3DViewer
     {
-        public BloodVessel3DViewer()
+        public BloodVesselPointCloud3DViewer()
         {
             InitializeComponent();
 

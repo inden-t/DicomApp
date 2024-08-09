@@ -13,7 +13,7 @@ namespace DicomApp.UseCases
         private readonly IBloodVessel3DViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
 
-        private IBloodVessel3DViewer _viewer;
+        private IBloodVesselPointCloud3DViewer _viewer;
         private IProgressWindow _progressWindow;
 
         public MakeBloodVesselPointCloud3DUseCase(FileManager fileManager,
