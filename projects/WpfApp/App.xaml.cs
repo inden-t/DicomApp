@@ -74,8 +74,8 @@ namespace DicomApp
             services.AddScoped<OpenDicomFileUseCase>();
             services.AddScoped<MakeBloodVesselPointCloud3DUseCase>();
             services
-                .AddScoped<IBloodVessel3DViewerFactory,
-                    BloodVessel3DViewerFactory>();
+                .AddScoped<IBloodVesselPointCloud3DViewerFactory,
+                    BloodVesselPointCloud3DViewerFactory>();
             services.AddScoped<IProgressWindowFactory, ProgressWindowFactory>();
         }
     }

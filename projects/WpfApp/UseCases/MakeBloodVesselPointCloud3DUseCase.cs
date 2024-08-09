@@ -10,14 +10,14 @@ namespace DicomApp.UseCases
     public class MakeBloodVesselPointCloud3DUseCase
     {
         private readonly FileManager _fileManager;
-        private readonly IBloodVessel3DViewerFactory _viewerFactory;
+        private readonly IBloodVesselPointCloud3DViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
 
         private IBloodVesselPointCloud3DViewer _viewer;
         private IProgressWindow _progressWindow;
 
         public MakeBloodVesselPointCloud3DUseCase(FileManager fileManager,
-            IBloodVessel3DViewerFactory viewerFactory,
+            IBloodVesselPointCloud3DViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
             _fileManager = fileManager;
