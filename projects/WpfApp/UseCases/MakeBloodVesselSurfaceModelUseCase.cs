@@ -135,6 +135,9 @@ namespace DicomApp.UseCases
             int height = voxelGrid.GetLength(1);
             int depth = voxelGrid.GetLength(2);
 
+            int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
+            int processedVoxels = 0;
+
             for (int x = 0; x < width - 1; x++)
             {
                 for (int y = 0; y < height - 1; y++)
@@ -169,11 +172,22 @@ namespace DicomApp.UseCases
                                     1);
                             }
                         }
+
+                        processedVoxels++;
+                        if (processedVoxels % 1000 == 0 ||
+                            processedVoxels == totalVoxels)
+                        {
+                            double progress = (double)processedVoxels /
+                                totalVoxels * 100;
+                            _progressWindow.SetProgress(progress);
+                            _progressWindow.SetStatusText(
+                                $"血管のサーフェスモデルを生成中...\n" +
+                                $"処理済みボクセル数: {processedVoxels}/{totalVoxels}\n" +
+                                $"生成されたポイント数: {mesh.Positions.Count}\n" +
+                                $"生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
+                        }
                     }
                 }
-
-                _progressWindow.SetStatusText(
-                    $"血管のサーフェスモデルを生成中...\n生成されたポイント数: {mesh.Positions.Count}\n生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
             }
 
             return mesh;
