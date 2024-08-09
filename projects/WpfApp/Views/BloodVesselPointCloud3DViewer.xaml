@@ -5,10 +5,8 @@
         Height="1200"
         Width="1600">
   <Grid Background="#303030"
-        MouseLeftButtonDown="Grid_MouseLeftButtonDown"
-        MouseLeftButtonUp="Grid_MouseLeftButtonUp"
-        MouseRightButtonDown="Grid_MouseRightButtonDown"
-        MouseRightButtonUp="Grid_MouseRightButtonUp"
+        MouseDown="Grid_MouseDown"
+        MouseUp="Grid_MouseUp"
         MouseMove="Grid_MouseMove"
         MouseWheel="Grid_MouseWheel">
     <Viewport3D x:Name="viewport3D"

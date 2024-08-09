@@ -10,7 +10,7 @@ namespace DicomApp.Views
     {
         private Point _lastMousePosition;
         private bool _isRotating;
-        private bool _isPanning;
+        private bool _isMiddleButtonDown;
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
@@ -51,33 +51,34 @@ namespace DicomApp.Views
             model3DGroup.Children.Clear(); // モデルをクリア
         }
 
-        private void Grid_MouseLeftButtonDown(object sender,
-            MouseButtonEventArgs e)
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            _isRotating = true;
-            _lastMousePosition = e.GetPosition(this);
-            Mouse.Capture((IInputElement)sender);
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                _isRotating = true;
+                _lastMousePosition = e.GetPosition(this);
+                Mouse.Capture((IInputElement)sender);
+            }
+            else if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                _isMiddleButtonDown = true;
+                _lastMousePosition = e.GetPosition(this);
+                Mouse.Capture((IInputElement)sender);
+            }
         }
 
-        private void Grid_MouseLeftButtonUp(object sender,
-            MouseButtonEventArgs e)
+        private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            _isRotating = false;
-            Mouse.Capture(null);
-        }
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                _isRotating = false;
+            }
 
-        private void Grid_MouseRightButtonDown(object sender,
-            MouseButtonEventArgs e)
-        {
-            _isPanning = true;
-            _lastMousePosition = e.GetPosition(this);
-            Mouse.Capture((IInputElement)sender);
-        }
+            if (e.MiddleButton == MouseButtonState.Released)
+            {
+                _isMiddleButtonDown = false;
+            }
 
-        private void Grid_MouseRightButtonUp(object sender,
-            MouseButtonEventArgs e)
-        {
-            _isPanning = false;
             Mouse.Capture(null);
         }
 
@@ -92,7 +93,7 @@ namespace DicomApp.Views
 
                 _lastMousePosition = currentPosition;
             }
-            else if (_isPanning)
+            else if (_isMiddleButtonDown)
             {
                 Point currentPosition = e.GetPosition(this);
                 Vector delta = currentPosition - _lastMousePosition;
