@@ -19,6 +19,9 @@ namespace DicomApp.ViewModels
         public ReactiveCommand MakeBloodVesselPointCloud3DCommand { get; } =
             new();
 
+        public ReactiveCommand MakeBloodVesselSurfaceModelCommand { get; } =
+            new();
+
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<int> SelectedIndex { get; } = new();
