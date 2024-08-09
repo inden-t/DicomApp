@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using DicomApp.UseCases;
@@ -10,6 +11,7 @@ namespace DicomApp.Views
     {
         private Point _lastMousePosition;
         private bool _isRotating;
+        private bool _isMiddleButtonDown;
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
@@ -26,6 +28,8 @@ namespace DicomApp.Views
             _modelCenter = new Point3D(0, 0, 0);
             _cameraDistance = 700; // 初期カメラ距離
             UpdateCameraPosition();
+
+            this.SizeChanged += (sender, e) => UpdateCenterMark();
         }
 
         public void SetModel(Model3DGroup model)
@@ -50,18 +54,34 @@ namespace DicomApp.Views
             model3DGroup.Children.Clear(); // モデルをクリア
         }
 
-        private void Grid_MouseLeftButtonDown(object sender,
-            MouseButtonEventArgs e)
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            _isRotating = true;
-            _lastMousePosition = e.GetPosition(this);
-            Mouse.Capture((IInputElement)sender);
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                _isRotating = true;
+                _lastMousePosition = e.GetPosition(this);
+                Mouse.Capture((IInputElement)sender);
+            }
+            else if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                _isMiddleButtonDown = true;
+                _lastMousePosition = e.GetPosition(this);
+                Mouse.Capture((IInputElement)sender);
+            }
         }
 
-        private void Grid_MouseLeftButtonUp(object sender,
-            MouseButtonEventArgs e)
+        private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            _isRotating = false;
+            if (e.LeftButton == MouseButtonState.Released)
+            {
+                _isRotating = false;
+            }
+
+            if (e.MiddleButton == MouseButtonState.Released)
+            {
+                _isMiddleButtonDown = false;
+            }
+
             Mouse.Capture(null);
         }
 
@@ -73,6 +93,15 @@ namespace DicomApp.Views
                 Vector delta = currentPosition - _lastMousePosition;
 
                 RotateCamera(delta.X, delta.Y);
+
+                _lastMousePosition = currentPosition;
+            }
+            else if (_isMiddleButtonDown)
+            {
+                Point currentPosition = e.GetPosition(this);
+                Vector delta = currentPosition - _lastMousePosition;
+
+                PanCamera(delta.X, delta.Y);
 
                 _lastMousePosition = currentPosition;
             }
@@ -110,12 +139,25 @@ namespace DicomApp.Views
             UpdateCameraPosition();
         }
 
+        private void PanCamera(double deltaX, double deltaY)
+        {
+            double panSpeed = 0.5;
+            Vector3D right = Vector3D.CrossProduct(_camera.LookDirection,
+                _camera.UpDirection);
+            Vector3D up = _camera.UpDirection;
+
+            _camera.Position += (right * -deltaX + up * deltaY) * panSpeed;
+            _modelCenter += (right * -deltaX + up * deltaY) * panSpeed;
+
+            UpdateCameraPosition();
+        }
+
         private void ZoomCamera(double delta)
         {
             double zoomSpeed = 0.1;
             _cameraDistance -= delta * zoomSpeed;
             _cameraDistance =
-                Math.Max(10, Math.Min(1000, _cameraDistance)); // カメラ距離の制限
+                Math.Max(-1000, Math.Min(1000, _cameraDistance)); // カメラ距離の制限
 
             UpdateCameraPosition();
         }
@@ -125,6 +167,15 @@ namespace DicomApp.Views
             _camera.Position =
                 _modelCenter - _camera.LookDirection * _cameraDistance /
                 _camera.LookDirection.Length;
+        }
+
+        private void UpdateCenterMark()
+        {
+            Point center =
+                new Point(CenterMarkCanvas.ActualWidth / 2,
+                    CenterMarkCanvas.ActualHeight / 2);
+            Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
+            Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
         }
     }
 }

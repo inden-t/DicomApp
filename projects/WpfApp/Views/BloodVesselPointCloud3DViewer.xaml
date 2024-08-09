@@ -5,8 +5,8 @@
         Height="1200"
         Width="1600">
   <Grid Background="#303030"
-        MouseLeftButtonDown="Grid_MouseLeftButtonDown"
-        MouseLeftButtonUp="Grid_MouseLeftButtonUp"
+        MouseDown="Grid_MouseDown"
+        MouseUp="Grid_MouseUp"
         MouseMove="Grid_MouseMove"
         MouseWheel="Grid_MouseWheel">
     <Viewport3D x:Name="viewport3D"
@@ -32,5 +32,13 @@
         </ModelVisual3D.Content>
       </ModelVisual3D>
     </Viewport3D>
+    <Canvas x:Name="CenterMarkCanvas"
+            Grid.Row="0"
+            Grid.Column="0">
+      <Ellipse x:Name="CenterMark"
+               Width="4"
+               Height="4"
+               Fill="Yellow"/>
+    </Canvas>
   </Grid>
 </Window>
