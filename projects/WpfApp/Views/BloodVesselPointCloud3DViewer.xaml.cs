@@ -88,24 +88,19 @@ namespace DicomApp.Views
             double rotationSpeed = 0.5;
             Vector3D lookDirection = _camera.LookDirection;
             Vector3D upDirection = _camera.UpDirection;
-
-            // Y軸周りの回転
-            Matrix3D rotationY = new Matrix3D();
-            rotationY.Rotate(new Quaternion(upDirection,
-                -deltaX * rotationSpeed));
-
-            // X軸周りの回転
             Vector3D rightDirection =
                 Vector3D.CrossProduct(lookDirection, upDirection);
-            Matrix3D rotationX = new Matrix3D();
-            rotationX.Rotate(new Quaternion(rightDirection,
-                deltaY * rotationSpeed));
+
+            // 現在の表示方向を基準にした回転
+            Matrix3D rotation = Matrix3D.Identity;
+            rotation.Rotate(
+                new Quaternion(upDirection, -deltaX * rotationSpeed));
+            rotation.Rotate(new Quaternion(rightDirection,
+                -deltaY * rotationSpeed));
 
             // 回転を適用
-            _camera.LookDirection =
-                rotationY.Transform(rotationX.Transform(lookDirection));
-            _camera.UpDirection =
-                rotationY.Transform(rotationX.Transform(upDirection));
+            _camera.LookDirection = rotation.Transform(lookDirection);
+            _camera.UpDirection = rotation.Transform(upDirection);
 
             // カメラ位置を更新
             UpdateCameraPosition();
