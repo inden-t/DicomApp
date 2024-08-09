@@ -24,7 +24,7 @@ namespace DicomApp.Views
             // カメラの初期化
             _camera = (PerspectiveCamera)viewport3D.Camera;
             _modelCenter = new Point3D(0, 0, 0);
-            _cameraDistance = 500; // 初期カメラ距離
+            _cameraDistance = 50; // 初期カメラ距離
             UpdateCameraPosition();
         }
 
