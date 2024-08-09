@@ -12,7 +12,7 @@ namespace DicomApp.Views
             InitializeComponent();
 
             // ウィンドウのCloseイベントをハンドリング
-            this.Closing += BloodVessel3DViewer_Closing;
+            this.Closing += BloodVesselPointCloud3DViewer_Closing;
         }
 
         public void SetModel(Model3DGroup model)
@@ -21,7 +21,7 @@ namespace DicomApp.Views
             model3DGroup.Children.Add(model);
         }
 
-        private void BloodVessel3DViewer_Closing(object sender,
+        private void BloodVesselPointCloud3DViewer_Closing(object sender,
             System.ComponentModel.CancelEventArgs e)
         {
             model3DGroup.Children.Clear(); // モデルをクリア
