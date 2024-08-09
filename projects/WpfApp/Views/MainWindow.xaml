@@ -49,6 +49,8 @@
                 Command="{Binding ZoomOutCommand}"/>
       <MenuItem Header="_Make Blood Vessel Point Cloud 3D"
                 Command="{Binding MakeBloodVesselPointCloud3DCommand}"/>
+      <MenuItem Header="_Make Blood Vessel Surface Model"
+                Command="{Binding MakeBloodVesselSurfaceModelCommand}"/>
     </Menu>
 
     <ListView Grid.Column="0"
