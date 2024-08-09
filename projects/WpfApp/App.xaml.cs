@@ -70,8 +70,10 @@ namespace DicomApp
             services.AddScoped<ImageViewerViewModel>();
 
             services.AddScoped<OpenDicomFileUseCase>();
-            services.AddScoped<MakeBloodVessel3DUseCase>();
-            services.AddScoped<IBloodVessel3DViewerFactory, BloodVessel3DViewerFactory>();
+            services.AddScoped<MakeBloodVesselPointCloud3DUseCase>();
+            services
+                .AddScoped<IBloodVessel3DViewerFactory,
+                    BloodVessel3DViewerFactory>();
             services.AddScoped<IProgressWindowFactory, ProgressWindowFactory>();
         }
     }

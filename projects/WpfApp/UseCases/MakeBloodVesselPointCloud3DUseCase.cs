@@ -7,7 +7,7 @@ using DicomApp.Models;
 
 namespace DicomApp.UseCases
 {
-    public class MakeBloodVessel3DUseCase
+    public class MakeBloodVesselPointCloud3DUseCase
     {
         private readonly FileManager _fileManager;
         private readonly IBloodVessel3DViewerFactory _viewerFactory;
@@ -16,7 +16,7 @@ namespace DicomApp.UseCases
         private IBloodVessel3DViewer _viewer;
         private IProgressWindow _progressWindow;
 
-        public MakeBloodVessel3DUseCase(FileManager fileManager,
+        public MakeBloodVesselPointCloud3DUseCase(FileManager fileManager,
             IBloodVessel3DViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
