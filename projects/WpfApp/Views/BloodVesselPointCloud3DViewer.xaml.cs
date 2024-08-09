@@ -40,12 +40,14 @@ namespace DicomApp.Views
         {
             _isRotating = true;
             _lastMousePosition = e.GetPosition(this);
+            viewport3D.CaptureMouse();
         }
 
         private void Viewport3D_MouseLeftButtonUp(object sender,
             MouseButtonEventArgs e)
         {
             _isRotating = false;
+            viewport3D.ReleaseMouseCapture();
         }
 
         private void Viewport3D_MouseMove(object sender, MouseEventArgs e)
