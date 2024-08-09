@@ -5,7 +5,11 @@
         Height="1200"
         Width="1600">
   <Grid Background="#303030">
-    <Viewport3D x:Name="viewport3D">
+    <Viewport3D x:Name="viewport3D"
+                MouseLeftButtonDown="Viewport3D_MouseLeftButtonDown"
+                MouseLeftButtonUp="Viewport3D_MouseLeftButtonUp"
+                MouseMove="Viewport3D_MouseMove"
+                MouseWheel="Viewport3D_MouseWheel">
       <Viewport3D.Camera>
         <PerspectiveCamera Position="255,-256,-384"
                            LookDirection="0,10,10"
