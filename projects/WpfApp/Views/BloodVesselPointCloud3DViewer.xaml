@@ -7,6 +7,8 @@
   <Grid Background="#303030"
         MouseLeftButtonDown="Grid_MouseLeftButtonDown"
         MouseLeftButtonUp="Grid_MouseLeftButtonUp"
+        MouseRightButtonDown="Grid_MouseRightButtonDown"
+        MouseRightButtonUp="Grid_MouseRightButtonUp"
         MouseMove="Grid_MouseMove"
         MouseWheel="Grid_MouseWheel">
     <Viewport3D x:Name="viewport3D"

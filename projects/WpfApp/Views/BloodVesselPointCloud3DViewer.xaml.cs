@@ -10,6 +10,7 @@ namespace DicomApp.Views
     {
         private Point _lastMousePosition;
         private bool _isRotating;
+        private bool _isPanning;
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
@@ -65,6 +66,21 @@ namespace DicomApp.Views
             Mouse.Capture(null);
         }
 
+        private void Grid_MouseRightButtonDown(object sender,
+            MouseButtonEventArgs e)
+        {
+            _isPanning = true;
+            _lastMousePosition = e.GetPosition(this);
+            Mouse.Capture((IInputElement)sender);
+        }
+
+        private void Grid_MouseRightButtonUp(object sender,
+            MouseButtonEventArgs e)
+        {
+            _isPanning = false;
+            Mouse.Capture(null);
+        }
+
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             if (_isRotating)
@@ -73,6 +89,15 @@ namespace DicomApp.Views
                 Vector delta = currentPosition - _lastMousePosition;
 
                 RotateCamera(delta.X, delta.Y);
+
+                _lastMousePosition = currentPosition;
+            }
+            else if (_isPanning)
+            {
+                Point currentPosition = e.GetPosition(this);
+                Vector delta = currentPosition - _lastMousePosition;
+
+                PanCamera(delta.X, delta.Y);
 
                 _lastMousePosition = currentPosition;
             }
@@ -107,6 +132,19 @@ namespace DicomApp.Views
             _camera.UpDirection = rotation.Transform(upDirection);
 
             // カメラ位置を更新
+            UpdateCameraPosition();
+        }
+
+        private void PanCamera(double deltaX, double deltaY)
+        {
+            double panSpeed = 0.5;
+            Vector3D right = Vector3D.CrossProduct(_camera.LookDirection,
+                _camera.UpDirection);
+            Vector3D up = _camera.UpDirection;
+
+            _camera.Position += (right * -deltaX + up * deltaY) * panSpeed;
+            _modelCenter += (right * -deltaX + up * deltaY) * panSpeed;
+
             UpdateCameraPosition();
         }
 
