@@ -32,5 +32,16 @@
         </ModelVisual3D.Content>
       </ModelVisual3D>
     </Viewport3D>
+    <Canvas Grid.Row="0"
+        Grid.Column="0"
+        Grid.RowSpan="2"
+        Grid.ColumnSpan="2">
+      <Ellipse x:Name="CenterMark"
+          Width="10"
+          Height="10"
+          Fill="Yellow"
+          Stroke="Black"
+          StrokeThickness="1"/>
+    </Canvas>
   </Grid>
 </Window>

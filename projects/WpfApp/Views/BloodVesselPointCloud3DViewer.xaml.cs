@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using DicomApp.UseCases;
@@ -27,6 +28,8 @@ namespace DicomApp.Views
             _modelCenter = new Point3D(0, 0, 0);
             _cameraDistance = 700; // 初期カメラ距離
             UpdateCameraPosition();
+
+            this.SizeChanged += (sender, e) => UpdateCenterMark();
         }
 
         public void SetModel(Model3DGroup model)
@@ -164,6 +167,14 @@ namespace DicomApp.Views
             _camera.Position =
                 _modelCenter - _camera.LookDirection * _cameraDistance /
                 _camera.LookDirection.Length;
+        }
+
+        private void UpdateCenterMark()
+        {
+            Point center =
+                new Point(this.ActualWidth / 2, this.ActualHeight / 2);
+            Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
+            Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
         }
     }
 }
