@@ -16,10 +16,10 @@ namespace DicomApp.ViewModels
         public ReactiveCommand PanCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();
 
-        public ReactiveCommand MakeBloodVesselPointCloud3DCommand { get; } =
+        public ReactiveCommand DisplayPointCloud3dCommand { get; } =
             new();
 
-        public ReactiveCommand MakeBloodVesselSurfaceModelCommand { get; } =
+        public ReactiveCommand DisplaySurfaceModelCommand { get; } =
             new();
 
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();

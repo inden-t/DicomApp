@@ -18,11 +18,11 @@ namespace DicomApp
             mainWindowViewModel.OpenDicomFolderCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteFolderAsync());
 
-            mainWindowViewModel.MakeBloodVesselPointCloud3DCommand.Subscribe(
+            mainWindowViewModel.DisplayPointCloud3dCommand.Subscribe(
                 async () =>
                     await displayPointCloud3dUseCase.ExecuteAsync());
 
-            mainWindowViewModel.MakeBloodVesselSurfaceModelCommand.Subscribe(
+            mainWindowViewModel.DisplaySurfaceModelCommand.Subscribe(
                 async () =>
                     await displaySurfaceModelUseCase.ExecuteAsync());
         }

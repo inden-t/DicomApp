@@ -47,10 +47,10 @@
                 Command="{Binding ZoomInCommand}"/>
       <MenuItem Header="_Zoom Out"
                 Command="{Binding ZoomOutCommand}"/>
-      <MenuItem Header="_Make Blood Vessel Point Cloud 3D"
-                Command="{Binding MakeBloodVesselPointCloud3DCommand}"/>
-      <MenuItem Header="_Make Blood Vessel Surface Model"
-                Command="{Binding MakeBloodVesselSurfaceModelCommand}"/>
+      <MenuItem Header="_Display Point Cloud 3D"
+                Command="{Binding DisplayPointCloud3dCommand}"/>
+      <MenuItem Header="_Display Surface Model"
+                Command="{Binding DisplaySurfaceModelCommand}"/>
     </Menu>
 
     <ListView Grid.Column="0"
