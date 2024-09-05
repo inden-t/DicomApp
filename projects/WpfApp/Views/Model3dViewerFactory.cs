@@ -3,9 +3,7 @@ using DicomApp.UseCases;
 
 namespace DicomApp.Views
 {
-    public class
-        Model3dViewerFactory :
-        IBloodVesselPointCloud3DViewerFactory
+    public class Model3dViewerFactory : IModel3dViewerFactory
     {
         public IModel3dViewer Create()
         {

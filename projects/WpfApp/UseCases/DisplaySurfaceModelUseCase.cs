@@ -9,14 +9,14 @@ namespace DicomApp.UseCases
     public class DisplaySurfaceModelUseCase
     {
         private readonly FileManager _fileManager;
-        private readonly IBloodVesselPointCloud3DViewerFactory _viewerFactory;
+        private readonly IModel3dViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
 
         private IModel3dViewer _viewer;
         private IProgressWindow _progressWindow;
 
         public DisplaySurfaceModelUseCase(FileManager fileManager,
-            IBloodVesselPointCloud3DViewerFactory viewerFactory,
+            IModel3dViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
             _fileManager = fileManager;

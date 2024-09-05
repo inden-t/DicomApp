@@ -2,7 +2,7 @@
 
 namespace DicomApp.UseCases
 {
-    public interface IBloodVesselPointCloud3DViewerFactory
+    public interface IModel3dViewerFactory
     {
         IModel3dViewer Create();
     }
