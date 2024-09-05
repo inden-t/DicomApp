@@ -33,7 +33,7 @@ namespace DicomApp.UseCases
             _progressWindow.Start();
             _progressWindow.SetStatusText("3Dモデルを生成中...");
 
-            var model3DGroup = await Task.Run(() => CreateBloodVessel3DModel());
+            var model3DGroup = await Task.Run(() => CreatePointCloud3dModel());
 
             _viewer = _viewerFactory.Create();
             _viewer.SetModel(model3DGroup);
@@ -44,7 +44,7 @@ namespace DicomApp.UseCases
             Mouse.OverrideCursor = null;
         }
 
-        private Model3DGroup CreateBloodVessel3DModel()
+        private Model3DGroup CreatePointCloud3dModel()
         {
             var model3DGroup = new Model3DGroup();
             int totalFiles = _fileManager.DicomFiles.Count;

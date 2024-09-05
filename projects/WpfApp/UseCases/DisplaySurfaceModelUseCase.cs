@@ -36,7 +36,7 @@ namespace DicomApp.UseCases
                 _progressWindow.SetStatusText("血管のサーフェスモデルを生成中...");
 
                 var model3DGroup =
-                    await Task.Run(() => CreateBloodVesselSurfaceModel());
+                    await Task.Run(() => CreateSurfaceModel());
 
                 _viewer = _viewerFactory.Create();
                 _viewer.SetModel(model3DGroup);
@@ -59,7 +59,7 @@ namespace DicomApp.UseCases
             }
         }
 
-        private Model3DGroup CreateBloodVesselSurfaceModel()
+        private Model3DGroup CreateSurfaceModel()
         {
             var model3DGroup = new Model3DGroup();
             int totalFiles = _fileManager.DicomFiles.Count;

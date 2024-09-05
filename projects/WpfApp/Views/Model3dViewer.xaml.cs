@@ -20,7 +20,7 @@ namespace DicomApp.Views
             InitializeComponent();
 
             // ウィンドウのCloseイベントをハンドリング
-            this.Closing += BloodVesselPointCloud3DViewer_Closing;
+            this.Closing += Model3dViewer_Closing;
 
             // カメラの初期化
             _camera = (PerspectiveCamera)viewport3D.Camera;
@@ -47,7 +47,7 @@ namespace DicomApp.Views
             UpdateCameraPosition();
         }
 
-        private void BloodVesselPointCloud3DViewer_Closing(object sender,
+        private void Model3dViewer_Closing(object sender,
             System.ComponentModel.CancelEventArgs e)
         {
             model3DGroup.Children.Clear(); // モデルをクリア
