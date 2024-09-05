@@ -406,12 +406,12 @@ namespace DicomApp.Models
             {
                 case 0: return new Point3D(x + ipf, y, z);
                 case 1: return new Point3D(x + 1, y + ipf, z);
-                case 2: return new Point3D(x + ipf, y + 1, z);
-                case 3: return new Point3D(x, y + ipf, z);
+                case 2: return new Point3D(x + 1 - ipf, y + 1, z);
+                case 3: return new Point3D(x, y + 1 - ipf, z);
                 case 4: return new Point3D(x + ipf, y, z + 1);
                 case 5: return new Point3D(x + 1, y + ipf, z + 1);
-                case 6: return new Point3D(x + ipf, y + 1, z + 1);
-                case 7: return new Point3D(x, y + ipf, z + 1);
+                case 6: return new Point3D(x + 1 - ipf, y + 1, z + 1);
+                case 7: return new Point3D(x, y + 1 - ipf, z + 1);
                 case 8: return new Point3D(x, y, z + ipf);
                 case 9: return new Point3D(x + 1, y, z + ipf);
                 case 10: return new Point3D(x + 1, y + 1, z + ipf);
