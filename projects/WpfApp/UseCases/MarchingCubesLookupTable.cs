@@ -291,6 +291,113 @@ namespace DicomApp.Models
             return result;
         }
 
+        public static void GetEdgeEndpoints(int edge, int x, int y, int z,
+            out int x1, out int y1, out int z1, out int x2, out int y2,
+            out int z2)
+        {
+            switch (edge)
+            {
+                case 0:
+                    x1 = x;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y;
+                    z2 = z;
+                    break;
+                case 1:
+                    x1 = x + 1;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y + 1;
+                    z2 = z;
+                    break;
+                case 2:
+                    x1 = x + 1;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y + 1;
+                    z2 = z;
+                    break;
+                case 3:
+                    x1 = x;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y;
+                    z2 = z;
+                    break;
+                case 4:
+                    x1 = x;
+                    y1 = y;
+                    z1 = z + 1;
+                    x2 = x + 1;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 5:
+                    x1 = x + 1;
+                    y1 = y;
+                    z1 = z + 1;
+                    x2 = x + 1;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                case 6:
+                    x1 = x + 1;
+                    y1 = y + 1;
+                    z1 = z + 1;
+                    x2 = x;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                case 7:
+                    x1 = x;
+                    y1 = y + 1;
+                    z1 = z + 1;
+                    x2 = x;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 8:
+                    x1 = x;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 9:
+                    x1 = x + 1;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 10:
+                    x1 = x + 1;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                case 11:
+                    x1 = x;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(edge));
+            }
+        }
+
         public static Point3D GetVertexPosition(int edge, int x, int y, int z,
             double interpolationFactor = 0.5)
         {

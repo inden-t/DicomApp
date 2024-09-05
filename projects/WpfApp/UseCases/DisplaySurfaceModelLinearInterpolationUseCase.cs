@@ -214,93 +214,15 @@ namespace DicomApp.UseCases
         private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
             int z, double[,,] voxelGrid, double isoValue)
         {
-            var v1 = MarchingCubesLookupTable.GetVertexPosition(edge, x, y, z);
-            var v2 = new Point3D();
+            int x1, y1, z1, x2, y2, z2;
+            MarchingCubesLookupTable.GetEdgeEndpoints(edge, x, y, z, out x1,
+                out y1, out z1, out x2, out y2, out z2);
+            double mu = InterpolateEdgeMu(voxelGrid[x1, y1, z1],
+                voxelGrid[x2, y2, z2], isoValue);
+            var v = new Point3D(x1 + mu * (x2 - x1), y1 + mu * (y2 - y1),
+                z1 + mu * (z2 - z1));
 
-            double mu = 0.5;
-
-            switch (edge)
-            {
-                case 0:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y, z],
-                        voxelGrid[x + 1, y, z], isoValue);
-                    v2 = new Point3D(x + mu, y, z);
-                    break;
-                case 1:
-                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y, z],
-                        voxelGrid[x + 1, y + 1, z], isoValue);
-                    v2 = new Point3D(x + 1, y + mu, z);
-                    break;
-                case 2:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y + 1, z],
-                        voxelGrid[x + 1, y + 1, z], isoValue);
-                    v2 = new Point3D(x + mu, y + 1, z);
-                    break;
-                case 3:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y, z],
-                        voxelGrid[x, y + 1, z], isoValue);
-                    v2 = new Point3D(x, y + mu, z);
-                    break;
-                case 4:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y, z + 1],
-                        voxelGrid[x + 1, y, z + 1], isoValue);
-                    v2 = new Point3D(x + mu, y, z + 1);
-                    break;
-                case 5:
-                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y, z + 1],
-                        voxelGrid[x + 1, y + 1, z + 1], isoValue);
-                    v2 = new Point3D(x + 1, y + mu, z + 1);
-                    break;
-                case 6:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y + 1, z + 1],
-                        voxelGrid[x + 1, y + 1, z + 1], isoValue);
-                    v2 = new Point3D(x + mu, y + 1, z + 1);
-                    break;
-                case 7:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y, z + 1],
-                        voxelGrid[x, y + 1, z + 1], isoValue);
-                    v2 = new Point3D(x, y + mu, z + 1);
-                    break;
-                case 8:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y, z],
-                        voxelGrid[x, y, z + 1], isoValue);
-                    v2 = new Point3D(x, y, z + mu);
-                    break;
-                case 9:
-                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y, z],
-                        voxelGrid[x + 1, y, z + 1], isoValue);
-                    v2 = new Point3D(x + 1, y, z + mu);
-                    break;
-                case 10:
-                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y + 1, z],
-                        voxelGrid[x + 1, y + 1, z + 1], isoValue);
-                    v2 = new Point3D(x + 1, y + 1, z + mu);
-                    break;
-                case 11:
-                    mu = InterpolateEdgeMu(voxelGrid[x, y + 1, z],
-                        voxelGrid[x, y + 1, z + 1], isoValue);
-                    v2 = new Point3D(x, y + 1, z + mu);
-                    break;
-            }
-
-            return v2;
-        }
-
-        private Point3D InterpolateEdge(Point3D p1, Point3D p2, double v1,
-            double v2, double isoValue)
-        {
-            if (Math.Abs(isoValue - v1) < 0.00001)
-                return p1;
-            if (Math.Abs(isoValue - v2) < 0.00001)
-                return p2;
-            if (Math.Abs(v1 - v2) < 0.00001)
-                return p1;
-
-            double mu = (isoValue - v1) / (v2 - v1);
-            return new Point3D(
-                p1.X + mu * (p2.X - p1.X),
-                p1.Y + mu * (p2.Y - p1.Y),
-                p1.Z + mu * (p2.Z - p1.Z));
+            return v;
         }
 
         private double InterpolateEdgeMu(double v1, double v2, double isoValue)
