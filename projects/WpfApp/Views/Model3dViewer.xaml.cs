@@ -6,8 +6,7 @@ using DicomApp.UseCases;
 
 namespace DicomApp.Views
 {
-    public partial class BloodVesselPointCloud3DViewer : Window,
-        IBloodVesselPointCloud3DViewer
+    public partial class Model3dViewer : Window, IModel3dViewer
     {
         private Point _lastMousePosition;
         private bool _isRotating;
@@ -16,12 +15,12 @@ namespace DicomApp.Views
         private Point3D _modelCenter;
         private double _cameraDistance;
 
-        public BloodVesselPointCloud3DViewer()
+        public Model3dViewer()
         {
             InitializeComponent();
 
             // ウィンドウのCloseイベントをハンドリング
-            this.Closing += BloodVesselPointCloud3DViewer_Closing;
+            this.Closing += Model3dViewer_Closing;
 
             // カメラの初期化
             _camera = (PerspectiveCamera)viewport3D.Camera;
@@ -48,7 +47,7 @@ namespace DicomApp.Views
             UpdateCameraPosition();
         }
 
-        private void BloodVesselPointCloud3DViewer_Closing(object sender,
+        private void Model3dViewer_Closing(object sender,
             System.ComponentModel.CancelEventArgs e)
         {
             model3DGroup.Children.Clear(); // モデルをクリア

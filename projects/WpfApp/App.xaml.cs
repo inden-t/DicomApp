@@ -61,9 +61,7 @@ namespace DicomApp
             services.AddScoped<MainWindow>();
             services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
             services.AddScoped<MainWindowViewModel>();
-            services
-                .AddScoped<IBloodVesselPointCloud3DViewer,
-                    BloodVesselPointCloud3DViewer>();
+            services.AddScoped<IModel3dViewer, Model3dViewer>();
             services.AddScoped<IProgressWindow, ProgressWindow>();
             services.AddScoped<FileManager>();
             services.AddScoped<IImageCaches, ImageCaches>();
@@ -72,11 +70,9 @@ namespace DicomApp
             services.AddScoped<ImageViewerViewModel>();
 
             services.AddScoped<OpenDicomFileUseCase>();
-            services.AddScoped<MakeBloodVesselPointCloud3DUseCase>();
-            services.AddScoped<MakeBloodVesselSurfaceModelUseCase>();
-            services
-                .AddScoped<IBloodVesselPointCloud3DViewerFactory,
-                    BloodVesselPointCloud3DViewerFactory>();
+            services.AddScoped<DisplayPointCloud3dUseCase>();
+            services.AddScoped<DisplaySurfaceModelUseCase>();
+            services.AddScoped<IModel3dViewerFactory, Model3dViewerFactory>();
             services.AddScoped<IProgressWindowFactory, ProgressWindowFactory>();
         }
     }

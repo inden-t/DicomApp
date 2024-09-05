@@ -7,17 +7,17 @@ using DicomApp.Models;
 
 namespace DicomApp.UseCases
 {
-    public class MakeBloodVesselPointCloud3DUseCase
+    public class DisplayPointCloud3dUseCase
     {
         private readonly FileManager _fileManager;
-        private readonly IBloodVesselPointCloud3DViewerFactory _viewerFactory;
+        private readonly IModel3dViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
 
-        private IBloodVesselPointCloud3DViewer _viewer;
+        private IModel3dViewer _viewer;
         private IProgressWindow _progressWindow;
 
-        public MakeBloodVesselPointCloud3DUseCase(FileManager fileManager,
-            IBloodVesselPointCloud3DViewerFactory viewerFactory,
+        public DisplayPointCloud3dUseCase(FileManager fileManager,
+            IModel3dViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
             _fileManager = fileManager;
@@ -33,7 +33,7 @@ namespace DicomApp.UseCases
             _progressWindow.Start();
             _progressWindow.SetStatusText("3Dモデルを生成中...");
 
-            var model3DGroup = await Task.Run(() => CreateBloodVessel3DModel());
+            var model3DGroup = await Task.Run(() => CreatePointCloud3dModel());
 
             _viewer = _viewerFactory.Create();
             _viewer.SetModel(model3DGroup);
@@ -44,7 +44,7 @@ namespace DicomApp.UseCases
             Mouse.OverrideCursor = null;
         }
 
-        private Model3DGroup CreateBloodVessel3DModel()
+        private Model3DGroup CreatePointCloud3dModel()
         {
             var model3DGroup = new Model3DGroup();
             int totalFiles = _fileManager.DicomFiles.Count;
