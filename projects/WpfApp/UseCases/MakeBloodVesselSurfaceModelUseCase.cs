@@ -148,10 +148,10 @@ namespace DicomApp.UseCases
                         int cubeIndex = 0;
                         if (voxelGrid[x, y, z]) cubeIndex |= 1;
                         if (voxelGrid[x + 1, y, z]) cubeIndex |= 2;
-                        if (voxelGrid[x + 1, y, z + 1]) cubeIndex |= 4;
-                        if (voxelGrid[x, y, z + 1]) cubeIndex |= 8;
-                        if (voxelGrid[x, y + 1, z]) cubeIndex |= 16;
-                        if (voxelGrid[x + 1, y + 1, z]) cubeIndex |= 32;
+                        if (voxelGrid[x + 1, y + 1, z]) cubeIndex |= 4;
+                        if (voxelGrid[x, y + 1, z]) cubeIndex |= 8;
+                        if (voxelGrid[x, y, z + 1]) cubeIndex |= 16;
+                        if (voxelGrid[x + 1, y, z + 1]) cubeIndex |= 32;
                         if (voxelGrid[x + 1, y + 1, z + 1]) cubeIndex |= 64;
                         if (voxelGrid[x, y + 1, z + 1]) cubeIndex |= 128;
 
