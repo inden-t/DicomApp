@@ -11,6 +11,7 @@ namespace DicomApp.Views
         private Point _lastMousePosition;
         private bool _isRotating;
         private bool _isMiddleButtonDown;
+        private bool _isMovingForwardBackward;
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
@@ -57,7 +58,15 @@ namespace DicomApp.Views
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                _isRotating = true;
+                if (Keyboard.Modifiers == ModifierKeys.Shift)
+                {
+                    _isMovingForwardBackward = true;
+                }
+                else
+                {
+                    _isRotating = true;
+                }
+
                 _lastMousePosition = e.GetPosition(this);
                 Mouse.Capture((IInputElement)sender);
             }
@@ -74,6 +83,7 @@ namespace DicomApp.Views
             if (e.LeftButton == MouseButtonState.Released)
             {
                 _isRotating = false;
+                _isMovingForwardBackward = false;
             }
 
             if (e.MiddleButton == MouseButtonState.Released)
@@ -101,6 +111,15 @@ namespace DicomApp.Views
                 Vector delta = currentPosition - _lastMousePosition;
 
                 PanCamera(delta.X, delta.Y);
+
+                _lastMousePosition = currentPosition;
+            }
+            else if (_isMovingForwardBackward)
+            {
+                Point currentPosition = e.GetPosition(this);
+                Vector delta = currentPosition - _lastMousePosition;
+
+                MoveForwardBackward(delta.Y);
 
                 _lastMousePosition = currentPosition;
             }
@@ -157,6 +176,18 @@ namespace DicomApp.Views
             _cameraDistance -= delta * zoomSpeed;
             _cameraDistance =
                 Math.Max(0, Math.Min(1000, _cameraDistance)); // カメラ距離の制限
+
+            UpdateCameraPosition();
+        }
+
+        private void MoveForwardBackward(double deltaY)
+        {
+            double moveSpeed = 0.5;
+            Vector3D moveDirection = _camera.LookDirection;
+            moveDirection.Normalize();
+
+            _camera.Position += moveDirection * deltaY * moveSpeed;
+            _modelCenter += moveDirection * deltaY * moveSpeed;
 
             UpdateCameraPosition();
         }
