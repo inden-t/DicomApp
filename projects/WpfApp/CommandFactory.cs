@@ -10,8 +10,8 @@ namespace DicomApp
             OpenDicomFileUseCase openDicomFileUseCase,
             DisplayPointCloud3dUseCase
                 displayPointCloud3dUseCase,
-            MakeBloodVesselSurfaceModelUseCase
-                makeBloodVesselSurfaceModelUseCase)
+            DisplaySurfaceModelUseCase
+                displaySurfaceModelUseCase)
         {
             mainWindowViewModel.OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
@@ -24,7 +24,7 @@ namespace DicomApp
 
             mainWindowViewModel.MakeBloodVesselSurfaceModelCommand.Subscribe(
                 async () =>
-                    await makeBloodVesselSurfaceModelUseCase.ExecuteAsync());
+                    await displaySurfaceModelUseCase.ExecuteAsync());
         }
     }
 }
