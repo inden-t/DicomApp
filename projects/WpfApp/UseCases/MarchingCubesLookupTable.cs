@@ -291,22 +291,24 @@ namespace DicomApp.Models
             return result;
         }
 
-        public static Point3D GetVertexPosition(int edge, int x, int y, int z)
+        public static Point3D GetVertexPosition(int edge, int x, int y, int z,
+            double interpolationFactor = 0.5)
         {
+            double ipf = interpolationFactor;
             switch (edge)
             {
-                case 0: return new Point3D(x + 0.5, y, z);
-                case 1: return new Point3D(x + 1, y + 0.5, z);
-                case 2: return new Point3D(x + 0.5, y + 1, z);
-                case 3: return new Point3D(x, y + 0.5, z);
-                case 4: return new Point3D(x + 0.5, y, z + 1);
-                case 5: return new Point3D(x + 1, y + 0.5, z + 1);
-                case 6: return new Point3D(x + 0.5, y + 1, z + 1);
-                case 7: return new Point3D(x, y + 0.5, z + 1);
-                case 8: return new Point3D(x, y, z + 0.5);
-                case 9: return new Point3D(x + 1, y, z + 0.5);
-                case 10: return new Point3D(x + 1, y + 1, z + 0.5);
-                case 11: return new Point3D(x, y + 1, z + 0.5);
+                case 0: return new Point3D(x + ipf, y, z);
+                case 1: return new Point3D(x + 1, y + ipf, z);
+                case 2: return new Point3D(x + ipf, y + 1, z);
+                case 3: return new Point3D(x, y + ipf, z);
+                case 4: return new Point3D(x + ipf, y, z + 1);
+                case 5: return new Point3D(x + 1, y + ipf, z + 1);
+                case 6: return new Point3D(x + ipf, y + 1, z + 1);
+                case 7: return new Point3D(x, y + ipf, z + 1);
+                case 8: return new Point3D(x, y, z + ipf);
+                case 9: return new Point3D(x + 1, y, z + ipf);
+                case 10: return new Point3D(x + 1, y + 1, z + ipf);
+                case 11: return new Point3D(x, y + 1, z + ipf);
                 default: throw new ArgumentOutOfRangeException(nameof(edge));
             }
         }
