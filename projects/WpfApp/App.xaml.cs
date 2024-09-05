@@ -74,7 +74,7 @@ namespace DicomApp
             services.AddScoped<DisplaySurfaceModelUseCase>();
             services
                 .AddScoped<IBloodVesselPointCloud3DViewerFactory,
-                    BloodVesselPointCloud3DViewerFactory>();
+                    Model3dViewerFactory>();
             services.AddScoped<IProgressWindowFactory, ProgressWindowFactory>();
         }
     }
