@@ -118,11 +118,11 @@ namespace DicomApp.UseCases
             // 拡散反射（基本的な色と陰影）
             materialGroup.Children.Add(
                 new DiffuseMaterial(
-                    new SolidColorBrush(Color.FromRgb(200, 0, 0))));
+                    new SolidColorBrush(Color.FromRgb(200, 200, 200))));
 
             // 鏡面反射（ハイライト）- 反射を弱く、広く
             materialGroup.Children.Add(new SpecularMaterial(
-                new SolidColorBrush(Color.FromArgb(100, 255, 100, 100)), 10));
+                new SolidColorBrush(Color.FromArgb(100, 100, 100, 255)), 10));
 
             var surfaceModel =
                 new GeometryModel3D(surfaceGeometry, materialGroup);
