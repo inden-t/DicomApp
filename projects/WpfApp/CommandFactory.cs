@@ -11,7 +11,9 @@ namespace DicomApp
             DisplayPointCloud3dUseCase
                 displayPointCloud3dUseCase,
             DisplaySurfaceModelUseCase
-                displaySurfaceModelUseCase)
+                displaySurfaceModelUseCase,
+            DisplaySurfaceModelLinearInterpolationUseCase
+                displaySurfaceModelLinearInterpolationUseCase)
         {
             mainWindowViewModel.OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
@@ -25,6 +27,11 @@ namespace DicomApp
             mainWindowViewModel.DisplaySurfaceModelCommand.Subscribe(
                 async () =>
                     await displaySurfaceModelUseCase.ExecuteAsync());
+
+            mainWindowViewModel.DisplaySurfaceModelLinearInterpolationCommand
+                .Subscribe(async () =>
+                    await displaySurfaceModelLinearInterpolationUseCase
+                        .ExecuteAsync());
         }
     }
 }
