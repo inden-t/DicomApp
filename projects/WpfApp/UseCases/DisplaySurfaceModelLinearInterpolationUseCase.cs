@@ -217,7 +217,7 @@ namespace DicomApp.UseCases
             int x1, y1, z1, x2, y2, z2;
             MarchingCubesLookupTable.GetEdgeEndpoints(edge, x, y, z, out x1,
                 out y1, out z1, out x2, out y2, out z2);
-            double mu = InterpolateEdgeMu(voxelGrid[x1, y1, z1],
+            double mu = GetInterpolationFactor(voxelGrid[x1, y1, z1],
                 voxelGrid[x2, y2, z2], isoValue);
             var v = new Point3D(x1 + mu * (x2 - x1), y1 + mu * (y2 - y1),
                 z1 + mu * (z2 - z1));
@@ -225,7 +225,8 @@ namespace DicomApp.UseCases
             return v;
         }
 
-        private double InterpolateEdgeMu(double v1, double v2, double isoValue)
+        private double GetInterpolationFactor(double v1, double v2,
+            double isoValue)
         {
             if (Math.Abs(v1 - v2) < 0.00001)
                 return 0.5;
