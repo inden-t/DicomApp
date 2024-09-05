@@ -36,9 +36,11 @@
             Grid.Row="0"
             Grid.Column="0">
       <Ellipse x:Name="CenterMark"
-               Width="4"
-               Height="4"
-               Fill="Yellow"/>
+               Width="6"
+               Height="6"
+               Fill="Yellow"
+               Stroke="DarkBlue"
+               StrokeThickness="1"/>
     </Canvas>
   </Grid>
 </Window>
