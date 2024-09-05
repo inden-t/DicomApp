@@ -291,22 +291,131 @@ namespace DicomApp.Models
             return result;
         }
 
-        public static Point3D GetVertexPosition(int edge, int x, int y, int z)
+        public static void GetEdgeEndpoints(int edge, int x, int y, int z,
+            out int x1, out int y1, out int z1, out int x2, out int y2,
+            out int z2)
         {
             switch (edge)
             {
-                case 0: return new Point3D(x + 0.5, y, z);
-                case 1: return new Point3D(x + 1, y + 0.5, z);
-                case 2: return new Point3D(x + 0.5, y + 1, z);
-                case 3: return new Point3D(x, y + 0.5, z);
-                case 4: return new Point3D(x + 0.5, y, z + 1);
-                case 5: return new Point3D(x + 1, y + 0.5, z + 1);
-                case 6: return new Point3D(x + 0.5, y + 1, z + 1);
-                case 7: return new Point3D(x, y + 0.5, z + 1);
-                case 8: return new Point3D(x, y, z + 0.5);
-                case 9: return new Point3D(x + 1, y, z + 0.5);
-                case 10: return new Point3D(x + 1, y + 1, z + 0.5);
-                case 11: return new Point3D(x, y + 1, z + 0.5);
+                case 0:
+                    x1 = x;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y;
+                    z2 = z;
+                    break;
+                case 1:
+                    x1 = x + 1;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y + 1;
+                    z2 = z;
+                    break;
+                case 2:
+                    x1 = x + 1;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y + 1;
+                    z2 = z;
+                    break;
+                case 3:
+                    x1 = x;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y;
+                    z2 = z;
+                    break;
+                case 4:
+                    x1 = x;
+                    y1 = y;
+                    z1 = z + 1;
+                    x2 = x + 1;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 5:
+                    x1 = x + 1;
+                    y1 = y;
+                    z1 = z + 1;
+                    x2 = x + 1;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                case 6:
+                    x1 = x + 1;
+                    y1 = y + 1;
+                    z1 = z + 1;
+                    x2 = x;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                case 7:
+                    x1 = x;
+                    y1 = y + 1;
+                    z1 = z + 1;
+                    x2 = x;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 8:
+                    x1 = x;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 9:
+                    x1 = x + 1;
+                    y1 = y;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y;
+                    z2 = z + 1;
+                    break;
+                case 10:
+                    x1 = x + 1;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x + 1;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                case 11:
+                    x1 = x;
+                    y1 = y + 1;
+                    z1 = z;
+                    x2 = x;
+                    y2 = y + 1;
+                    z2 = z + 1;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(edge));
+            }
+        }
+
+        public static Point3D GetVertexPosition(int edge, int x, int y, int z,
+            double interpolationFactor = 0.5)
+        {
+            double ipf = interpolationFactor;
+            switch (edge)
+            {
+                case 0: return new Point3D(x + ipf, y, z);
+                case 1: return new Point3D(x + 1, y + ipf, z);
+                case 2: return new Point3D(x + 1 - ipf, y + 1, z);
+                case 3: return new Point3D(x, y + 1 - ipf, z);
+                case 4: return new Point3D(x + ipf, y, z + 1);
+                case 5: return new Point3D(x + 1, y + ipf, z + 1);
+                case 6: return new Point3D(x + 1 - ipf, y + 1, z + 1);
+                case 7: return new Point3D(x, y + 1 - ipf, z + 1);
+                case 8: return new Point3D(x, y, z + ipf);
+                case 9: return new Point3D(x + 1, y, z + ipf);
+                case 10: return new Point3D(x + 1, y + 1, z + ipf);
+                case 11: return new Point3D(x, y + 1, z + ipf);
                 default: throw new ArgumentOutOfRangeException(nameof(edge));
             }
         }

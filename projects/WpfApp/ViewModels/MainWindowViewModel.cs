@@ -22,6 +22,11 @@ namespace DicomApp.ViewModels
         public ReactiveCommand DisplaySurfaceModelCommand { get; } =
             new();
 
+        public ReactiveCommand DisplaySurfaceModelLinearInterpolationCommand
+        {
+            get;
+        } = new();
+
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<int> SelectedIndex { get; } = new();
