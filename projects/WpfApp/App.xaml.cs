@@ -72,7 +72,7 @@ namespace DicomApp
             services.AddScoped<ImageViewerViewModel>();
 
             services.AddScoped<OpenDicomFileUseCase>();
-            services.AddScoped<MakeBloodVesselPointCloud3DUseCase>();
+            services.AddScoped<DisplayPointCloud3dUseCase>();
             services.AddScoped<MakeBloodVesselSurfaceModelUseCase>();
             services
                 .AddScoped<IBloodVesselPointCloud3DViewerFactory,

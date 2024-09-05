@@ -8,8 +8,8 @@ namespace DicomApp
     {
         public CommandFactory(MainWindowViewModel mainWindowViewModel,
             OpenDicomFileUseCase openDicomFileUseCase,
-            MakeBloodVesselPointCloud3DUseCase
-                makeBloodVesselPointCloud3DUseCase,
+            DisplayPointCloud3dUseCase
+                displayPointCloud3dUseCase,
             MakeBloodVesselSurfaceModelUseCase
                 makeBloodVesselSurfaceModelUseCase)
         {
@@ -20,7 +20,7 @@ namespace DicomApp
 
             mainWindowViewModel.MakeBloodVesselPointCloud3DCommand.Subscribe(
                 async () =>
-                    await makeBloodVesselPointCloud3DUseCase.ExecuteAsync());
+                    await displayPointCloud3dUseCase.ExecuteAsync());
 
             mainWindowViewModel.MakeBloodVesselSurfaceModelCommand.Subscribe(
                 async () =>
