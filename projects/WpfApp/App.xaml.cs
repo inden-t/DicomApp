@@ -61,9 +61,7 @@ namespace DicomApp
             services.AddScoped<MainWindow>();
             services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
             services.AddScoped<MainWindowViewModel>();
-            services
-                .AddScoped<IBloodVesselPointCloud3DViewer,
-                    Model3dViewer>();
+            services.AddScoped<IModel3dViewer, Model3dViewer>();
             services.AddScoped<IProgressWindow, ProgressWindow>();
             services.AddScoped<FileManager>();
             services.AddScoped<IImageCaches, ImageCaches>();

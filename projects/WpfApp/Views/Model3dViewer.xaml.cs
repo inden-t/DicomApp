@@ -6,8 +6,7 @@ using DicomApp.UseCases;
 
 namespace DicomApp.Views
 {
-    public partial class Model3dViewer : Window,
-        IBloodVesselPointCloud3DViewer
+    public partial class Model3dViewer : Window, IModel3dViewer
     {
         private Point _lastMousePosition;
         private bool _isRotating;

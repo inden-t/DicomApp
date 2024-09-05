@@ -7,7 +7,7 @@ namespace DicomApp.Views
         BloodVesselPointCloud3DViewerFactory :
         IBloodVesselPointCloud3DViewerFactory
     {
-        public IBloodVesselPointCloud3DViewer Create()
+        public IModel3dViewer Create()
         {
             var viewer = new Model3dViewer();
             viewer.Owner = Application.Current.MainWindow;
