@@ -156,7 +156,7 @@ namespace DicomApp.Views
             double zoomSpeed = 0.1;
             _cameraDistance -= delta * zoomSpeed;
             _cameraDistance =
-                Math.Max(-1000, Math.Min(1000, _cameraDistance)); // カメラ距離の制限
+                Math.Max(0, Math.Min(1000, _cameraDistance)); // カメラ距離の制限
 
             UpdateCameraPosition();
         }
