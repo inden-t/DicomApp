@@ -312,3 +312,30 @@ namespace DicomApp.Models
         }
     }
 }
+
+/*
+triangleTable 対応図
+
+頂点の数値は cubeIndex のビット値
+辺の数値は対応する edge の番号
+  triangleTable[cubeIndex][index] = edge
+という関係
+
+   128----6---64
+   /|         /|
+  7 |        5 |
+ /  11      /  10
+16----4---32   |
+|   |      |   |
+|   8 ---2-|- -4
+8  /       9  /
+| 3        | 1
+|/         |/
+1 ---0---- 2
+
+z
+| y
+|/
+O --- x
+
+*/
