@@ -147,13 +147,16 @@ namespace DicomApp.Views
 
         private void PanCamera(double deltaX, double deltaY)
         {
-            double panSpeed = 0.5;
+            // ズーム距離に基づいて感度を調整
+            double panSpeed = 0.5 * (_cameraDistance / 700);
+            panSpeed = panSpeed == 0 ? 0.05 : panSpeed;
             Vector3D right = Vector3D.CrossProduct(_camera.LookDirection,
                 _camera.UpDirection);
             Vector3D up = _camera.UpDirection;
 
-            _camera.Position += (right * -deltaX + up * deltaY) * panSpeed;
-            _modelCenter += (right * -deltaX + up * deltaY) * panSpeed;
+            Vector3D panVector = (right * -deltaX + up * deltaY) * panSpeed;
+            _camera.Position += panVector;
+            _modelCenter += panVector;
 
             UpdateCameraPosition();
         }
