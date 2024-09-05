@@ -51,7 +51,7 @@
                 Command="{Binding DisplayPointCloud3dCommand}"/>
       <MenuItem Header="_Display Surface Model"
                 Command="{Binding DisplaySurfaceModelCommand}"/>
-      <MenuItem Header="_Display Surface Model (Linear Interpolation)"
+      <MenuItem Header="_(線形補間)"
                 Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
     </Menu>
 
