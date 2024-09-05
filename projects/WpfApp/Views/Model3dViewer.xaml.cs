@@ -6,7 +6,7 @@ using DicomApp.UseCases;
 
 namespace DicomApp.Views
 {
-    public partial class BloodVesselPointCloud3DViewer : Window,
+    public partial class Model3dViewer : Window,
         IBloodVesselPointCloud3DViewer
     {
         private Point _lastMousePosition;
@@ -16,7 +16,7 @@ namespace DicomApp.Views
         private Point3D _modelCenter;
         private double _cameraDistance;
 
-        public BloodVesselPointCloud3DViewer()
+        public Model3dViewer()
         {
             InitializeComponent();
 

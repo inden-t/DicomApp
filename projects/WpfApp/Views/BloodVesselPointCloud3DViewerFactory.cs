@@ -9,7 +9,7 @@ namespace DicomApp.Views
     {
         public IBloodVesselPointCloud3DViewer Create()
         {
-            var viewer = new BloodVesselPointCloud3DViewer();
+            var viewer = new Model3dViewer();
             viewer.Owner = Application.Current.MainWindow;
             return viewer;
         }
