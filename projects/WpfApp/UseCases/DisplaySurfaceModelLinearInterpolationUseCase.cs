@@ -8,6 +8,10 @@ namespace DicomApp.UseCases
 {
     public class DisplaySurfaceModelLinearInterpolationUseCase
     {
+        private const byte _intensityIso = 200;
+        private const byte _intensityMax = 255;
+        private const byte _intensityMin = 0;
+
         private readonly FileManager _fileManager;
         private readonly IModel3dViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
@@ -68,7 +72,7 @@ namespace DicomApp.UseCases
             // 3次元ボクセルグリッドを作成
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
-            var voxelGrid = new bool[width, height, totalFiles];
+            var voxelGrid = new double[width, height, totalFiles];
 
             for (int z = 0; z < totalFiles; z++)
             {
@@ -86,9 +90,16 @@ namespace DicomApp.UseCases
                     {
                         int index = (y * stride) + (x * 4);
                         byte intensity = pixels[index]; // Blue channel
-
-                        voxelGrid[x, y, z] =
-                            intensity > 200; // 血管と思われる明るい部分のしきい値
+                        intensity = intensity > _intensityMax
+                            ? _intensityMax
+                            : intensity;
+                        intensity = intensity < _intensityMin
+                            ? _intensityMin
+                            : intensity;
+                        voxelGrid[x, y, z] = (intensity - _intensityMin) /
+                                             (double)(_intensityMax -
+                                                 _intensityMin);
+                        // 0.0～1.0の範囲に正規化
                     }
                 }
 
@@ -129,7 +140,7 @@ namespace DicomApp.UseCases
             return model3DGroup;
         }
 
-        private MeshGeometry3D CreateSurfaceFromVoxels(bool[,,] voxelGrid)
+        private MeshGeometry3D CreateSurfaceFromVoxels(double[,,] voxelGrid)
         {
             var mesh = new MeshGeometry3D();
             int width = voxelGrid.GetLength(0);
@@ -139,6 +150,9 @@ namespace DicomApp.UseCases
             int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
             int processedVoxels = 0;
 
+            double isoValue = (_intensityIso - _intensityMin) /
+                              (double)(_intensityMax - _intensityMin); // 等値面の閾値
+
             for (int x = 0; x < width - 1; x++)
             {
                 for (int y = 0; y < height - 1; y++)
@@ -147,14 +161,18 @@ namespace DicomApp.UseCases
                     {
                         // Marching Cubesアルゴリズムの実装
                         int cubeIndex = 0;
-                        if (voxelGrid[x, y, z]) cubeIndex |= 1;
-                        if (voxelGrid[x + 1, y, z]) cubeIndex |= 2;
-                        if (voxelGrid[x + 1, y + 1, z]) cubeIndex |= 4;
-                        if (voxelGrid[x, y + 1, z]) cubeIndex |= 8;
-                        if (voxelGrid[x, y, z + 1]) cubeIndex |= 16;
-                        if (voxelGrid[x + 1, y, z + 1]) cubeIndex |= 32;
-                        if (voxelGrid[x + 1, y + 1, z + 1]) cubeIndex |= 64;
-                        if (voxelGrid[x, y + 1, z + 1]) cubeIndex |= 128;
+                        if (voxelGrid[x, y, z] > isoValue) cubeIndex |= 1;
+                        if (voxelGrid[x + 1, y, z] > isoValue) cubeIndex |= 2;
+                        if (voxelGrid[x + 1, y + 1, z] > isoValue)
+                            cubeIndex |= 4;
+                        if (voxelGrid[x, y + 1, z] > isoValue) cubeIndex |= 8;
+                        if (voxelGrid[x, y, z + 1] > isoValue) cubeIndex |= 16;
+                        if (voxelGrid[x + 1, y, z + 1] > isoValue)
+                            cubeIndex |= 32;
+                        if (voxelGrid[x + 1, y + 1, z + 1] > isoValue)
+                            cubeIndex |= 64;
+                        if (voxelGrid[x, y + 1, z + 1] > isoValue)
+                            cubeIndex |= 128;
 
                         // ルックアップテーブルを使用して三角形を生成
                         var triangles =
@@ -163,12 +181,11 @@ namespace DicomApp.UseCases
                         {
                             foreach (var edge in triangle)
                             {
-                                var v1 =
-                                    MarchingCubesLookupTable.GetVertexPosition(
-                                        edge, x, y, z);
+                                var v = GetInterpolatedVertexPosition(edge, x,
+                                    y, z, voxelGrid, isoValue);
                                 // X座標を反転
-                                v1.X = width - 1 - v1.X;
-                                mesh.Positions.Add(v1);
+                                v.X = width - 1 - v.X;
+                                mesh.Positions.Add(v);
                                 mesh.TriangleIndices.Add(mesh.Positions.Count -
                                     1);
                             }
@@ -192,6 +209,108 @@ namespace DicomApp.UseCases
             }
 
             return mesh;
+        }
+
+        private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
+            int z, double[,,] voxelGrid, double isoValue)
+        {
+            var v1 = MarchingCubesLookupTable.GetVertexPosition(edge, x, y, z);
+            var v2 = new Point3D();
+
+            double mu = 0.5;
+
+            switch (edge)
+            {
+                case 0:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y, z],
+                        voxelGrid[x + 1, y, z], isoValue);
+                    v2 = new Point3D(x + mu, y, z);
+                    break;
+                case 1:
+                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y, z],
+                        voxelGrid[x + 1, y + 1, z], isoValue);
+                    v2 = new Point3D(x + 1, y + mu, z);
+                    break;
+                case 2:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y + 1, z],
+                        voxelGrid[x + 1, y + 1, z], isoValue);
+                    v2 = new Point3D(x + mu, y + 1, z);
+                    break;
+                case 3:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y, z],
+                        voxelGrid[x, y + 1, z], isoValue);
+                    v2 = new Point3D(x, y + mu, z);
+                    break;
+                case 4:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y, z + 1],
+                        voxelGrid[x + 1, y, z + 1], isoValue);
+                    v2 = new Point3D(x + mu, y, z + 1);
+                    break;
+                case 5:
+                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y, z + 1],
+                        voxelGrid[x + 1, y + 1, z + 1], isoValue);
+                    v2 = new Point3D(x + 1, y + mu, z + 1);
+                    break;
+                case 6:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y + 1, z + 1],
+                        voxelGrid[x + 1, y + 1, z + 1], isoValue);
+                    v2 = new Point3D(x + mu, y + 1, z + 1);
+                    break;
+                case 7:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y, z + 1],
+                        voxelGrid[x, y + 1, z + 1], isoValue);
+                    v2 = new Point3D(x, y + mu, z + 1);
+                    break;
+                case 8:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y, z],
+                        voxelGrid[x, y, z + 1], isoValue);
+                    v2 = new Point3D(x, y, z + mu);
+                    break;
+                case 9:
+                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y, z],
+                        voxelGrid[x + 1, y, z + 1], isoValue);
+                    v2 = new Point3D(x + 1, y, z + mu);
+                    break;
+                case 10:
+                    mu = InterpolateEdgeMu(voxelGrid[x + 1, y + 1, z],
+                        voxelGrid[x + 1, y + 1, z + 1], isoValue);
+                    v2 = new Point3D(x + 1, y + 1, z + mu);
+                    break;
+                case 11:
+                    mu = InterpolateEdgeMu(voxelGrid[x, y + 1, z],
+                        voxelGrid[x, y + 1, z + 1], isoValue);
+                    v2 = new Point3D(x, y + 1, z + mu);
+                    break;
+            }
+
+            return v2;
+        }
+
+        private Point3D InterpolateEdge(Point3D p1, Point3D p2, double v1,
+            double v2, double isoValue)
+        {
+            if (Math.Abs(isoValue - v1) < 0.00001)
+                return p1;
+            if (Math.Abs(isoValue - v2) < 0.00001)
+                return p2;
+            if (Math.Abs(v1 - v2) < 0.00001)
+                return p1;
+
+            double mu = (isoValue - v1) / (v2 - v1);
+            return new Point3D(
+                p1.X + mu * (p2.X - p1.X),
+                p1.Y + mu * (p2.Y - p1.Y),
+                p1.Z + mu * (p2.Z - p1.Z));
+        }
+
+        private double InterpolateEdgeMu(double v1, double v2, double isoValue)
+        {
+            if (Math.Abs(v1 - v2) < 0.00001)
+                return 0.5;
+
+            double mu = (isoValue - v1) / (v2 - v1);
+
+            return mu;
         }
     }
 }
