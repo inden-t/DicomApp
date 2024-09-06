@@ -6,7 +6,7 @@
         xmlns:viewmodels="clr-namespace:DicomApp.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="DICOM Viewer"
+        Title="DICOM App"
         Height="900"
         Width="1200">
   <Grid>
