@@ -30,6 +30,7 @@ namespace DicomApp.UseCases
             Mouse.OverrideCursor = Cursors.Wait;
 
             _progressWindow = _progressWindowFactory.Create();
+            _progressWindow.SetWindowTitle("モデル生成中");
             _progressWindow.Start();
             _progressWindow.SetStatusText("3Dモデルを生成中...");
 

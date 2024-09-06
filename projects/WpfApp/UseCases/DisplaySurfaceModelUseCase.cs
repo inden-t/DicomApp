@@ -32,6 +32,7 @@ namespace DicomApp.UseCases
                     System.Windows.Input.Cursors.Wait;
 
                 _progressWindow = _progressWindowFactory.Create();
+                _progressWindow.SetWindowTitle("モデル生成中");
                 _progressWindow.Start();
                 _progressWindow.SetStatusText("血管のサーフェスモデルを生成中...");
 
