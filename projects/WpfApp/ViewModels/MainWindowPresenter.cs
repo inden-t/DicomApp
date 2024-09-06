@@ -7,13 +7,10 @@ namespace DicomApp.ViewModels
     class MainWindowPresenter : IMainWindowPresenter
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly ImageViewerViewModel _imageViewerViewModel;
 
-        public MainWindowPresenter(MainWindowViewModel mainWindowViewModel,
-            ImageViewerViewModel imageViewerViewModel)
+        public MainWindowPresenter(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
-            _imageViewerViewModel = imageViewerViewModel;
         }
 
         public void UpdateDisplayedImage(IEnumerable<DICOMFile> dicomFiles)

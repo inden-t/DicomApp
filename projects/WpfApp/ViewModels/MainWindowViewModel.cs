@@ -13,8 +13,6 @@ namespace DicomApp.ViewModels
         public ReactiveCommand ExitCommand { get; } = new();
         public ReactiveCommand ZoomInCommand { get; } = new();
         public ReactiveCommand ZoomOutCommand { get; } = new();
-        public ReactiveCommand PanCommand { get; } = new();
-        public ReactiveCommand RotateCommand { get; } = new();
 
         public ReactiveCommand DisplayPointCloud3dCommand { get; } =
             new();
@@ -98,11 +96,6 @@ namespace DicomApp.ViewModels
         public void ZoomOut()
         {
             _imageViewerViewModel.Zoom(0.8);
-        }
-
-        public void Rotate(double angle)
-        {
-            _imageViewerViewModel.Rotate(angle);
         }
     }
 }

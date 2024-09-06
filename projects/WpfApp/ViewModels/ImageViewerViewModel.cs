@@ -12,7 +12,6 @@ namespace DicomApp.ViewModels
     {
         private DicomImage _image;
         private double _zoom = 1.0;
-        private double _rotation = 0.0;
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
@@ -72,12 +71,6 @@ namespace DicomApp.ViewModels
             return isZoomed;
         }
 
-        public void Rotate(double angle)
-        {
-            _rotation += angle;
-            Render();
-        }
-
         public void UpdateViewerSize(double width, double height)
         {
             ViewerWidth = width;
@@ -103,10 +96,6 @@ namespace DicomApp.ViewModels
             // 拡大倍率を適用
             var scaledBitmap = new TransformedBitmap(bitmapImage,
                 new ScaleTransform(scale * _zoom, scale * _zoom));
-
-            //// 回転を適用
-            //var rotatedBitmap = new TransformedBitmap(scaledBitmap,
-            //    new RotateTransform(_rotation));
 
             BitmapSourceImage.Value = scaledBitmap;
         }
