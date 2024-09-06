@@ -1,7 +1,7 @@
 
 root = true
 
-[*.{cc,cpp,h,cxx,hxx,cs}]
+[*.{cc,cpp,h,cs}]
 
 # EditorConfigの共通設定
 # Widely Supported by Editors (https://github.com/editorconfig/editorconfig/wiki/EditorConfig-Properties)
