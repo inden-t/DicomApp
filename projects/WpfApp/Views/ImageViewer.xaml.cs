@@ -50,6 +50,9 @@ namespace DicomApp.Views
                 _lastMousePosition = e.GetPosition(ImageScrollViewer);
                 ImageScrollViewer.Cursor = Cursors.SizeAll;
                 e.Handled = true;
+
+                // マウスキャプチャを設定
+                Mouse.Capture((IInputElement)sender);
             }
         }
 
@@ -75,8 +78,13 @@ namespace DicomApp.Views
         {
             if (e.MiddleButton == MouseButtonState.Released)
             {
-                _isScrolling = false;
-                ImageScrollViewer.Cursor = Cursors.Arrow;
+                if (_isScrolling)
+                {
+                    _isScrolling = false;
+                    ImageScrollViewer.Cursor = Cursors.Arrow;
+                    Mouse.Capture(null); // マウスキャプチャを解放
+                }
+
                 e.Handled = true;
             }
         }
