@@ -96,7 +96,7 @@ namespace DicomApp.UseCases
             var sphere = new SphereBuilder();
             sphere.Center = center;
             sphere.Radius = radius;
-            var geometry = sphere.ToMesh();
+            var geometry = sphere.ToMesh(4, 4);
 
             var material = new MaterialGroup();
             material.Children.Add(
