@@ -427,7 +427,8 @@ triangleTable 対応図
 
 頂点の数値は cubeIndex のビット値
 辺の数値は対応する edge の番号
-  triangleTable[cubeIndex][index] = edge
+  triangleTable[cubeIndex] = 三角メッシュの頂点が位置する edge の配列
+  triangleTable[cubeIndex][頂点のindex] = edge
 という関係
 
    128----6---64
