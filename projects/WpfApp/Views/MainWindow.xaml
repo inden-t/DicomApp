@@ -22,13 +22,13 @@
     <Menu Grid.Column="0"
           Grid.ColumnSpan="2"
           Grid.Row="0">
-      <MenuItem Header="_File">
-        <MenuItem Header="_Open File"
+      <MenuItem Header="ファイル">
+        <MenuItem Header="ファイルを開く..."
                   Command="{Binding OpenDicomFileCommand}"/>
-        <MenuItem Header="Open _Folder"
+        <MenuItem Header="フォルダーを開く..."
                   Command="{Binding OpenDicomFolderCommand}"/>
         <Separator/>
-        <MenuItem Header="_Exit"
+        <MenuItem Header="終了"
                   Command="{Binding ExitCommand}"/>
       </MenuItem>
       <!--<MenuItem Header="_View">
@@ -43,15 +43,15 @@
         <MenuItem Header="_Rotate"
                   Command="{Binding RotateCommand}"/>
       </MenuItem>-->
-      <MenuItem Header="_Zoom In"
+      <MenuItem Header="ズームイン"
                 Command="{Binding ZoomInCommand}"/>
-      <MenuItem Header="_Zoom Out"
+      <MenuItem Header="ズームアウト"
                 Command="{Binding ZoomOutCommand}"/>
-      <MenuItem Header="_Display Point Cloud 3D"
+      <MenuItem Header="点群表示"
                 Command="{Binding DisplayPointCloud3dCommand}"/>
-      <MenuItem Header="_Display Surface Model"
+      <MenuItem Header="サーフェスモデル表示"
                 Command="{Binding DisplaySurfaceModelCommand}"/>
-      <MenuItem Header="_(線形補間)"
+      <MenuItem Header="サーフェスモデル表示(線形補間)"
                 Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
     </Menu>
 
