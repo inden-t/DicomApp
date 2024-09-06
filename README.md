@@ -2,7 +2,7 @@
 
 （このアプリケーションは開発者の学習と技術向上を目的として作成されました。実際の医療診断や臨床使用を意図したものではありません。）
 
-DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式の医療画像ファイルを閲覧・操作するためのデスクトップアプリケーションです。
+DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式の医療画像ファイルを閲覧・操作するためのWindowsデスクトップアプリケーションです。
 
 ## 機能
 
@@ -14,7 +14,7 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 
 ### 3Dモデル表示機能
 - 高輝度領域の3D再構成
-  - 主に造影剤で強調された血管構造や骨構造が3次元的に表示されます
+  - 主に骨構造や造影剤で強調された血管構造が3次元的に表示されます
 - 表示方法
   - 点群表示
   - サーフェスモデル表示
@@ -84,10 +84,9 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 - `App.xaml.cs`: アプリケーションのエントリーポイントとDI（依存性注入）の設定
 - `MainWindowViewModel.cs`: メインウィンドウの主要なロジックを管理
 - `ImageViewerViewModel.cs`: 画像表示に関するロジックを管理
+- `Model3dViewer.xaml.cs`: 3Dモデルの表示と操作に関するロジックを実装
 - `DisplayPointCloud3dUseCase.cs`: 点群モデル生成のロジックを実装
 - `DisplaySurfaceModelUseCase.cs`: サーフェスモデル生成のロジックを実装
-- `Model3dViewer.xaml.cs`: 3Dモデルの表示と操作に関するロジックを実装
-- `ProgressWindow.xaml.cs`: プログレスウィンドウの表示と管理を実装
 
 ## 注意事項
 
