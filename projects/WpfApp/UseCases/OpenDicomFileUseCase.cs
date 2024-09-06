@@ -85,6 +85,7 @@ namespace DicomApp.UseCases
             try
             {
                 _progressWindow = _progressWindowFactory.Create();
+                _progressWindow.SetWindowTitle("ファイルを開いています");
                 _progressWindow.Start();
 
                 int totalFiles = filePaths.Length;

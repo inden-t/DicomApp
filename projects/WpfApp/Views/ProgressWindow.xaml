@@ -6,7 +6,7 @@
         xmlns:viewModels="clr-namespace:DicomApp.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewModels:ProgressWindowViewModel}"
         mc:Ignorable="d"
-        Title="ファイルを開いています"
+        Title="{Binding WindowTitle.Value}"
         Height="150"
         Width="300"
         WindowStartupLocation="CenterScreen">

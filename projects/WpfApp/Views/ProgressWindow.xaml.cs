@@ -30,6 +30,11 @@ namespace DicomApp.Views
             Application.Current.MainWindow!.IsEnabled = true;
         }
 
+        public void SetWindowTitle(string text)
+        {
+            ViewModel.WindowTitle.Value = text;
+        }
+
         public void SetProgress(double progress)
         {
             ViewModel.Progress.Value = progress;
