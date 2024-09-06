@@ -1,5 +1,7 @@
 # DICOM App
 
+（このアプリケーションは開発者の学習と技術向上を目的として作成されました。実際の医療診断や臨床使用を意図したものではありません。）
+
 DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式の医療画像ファイルを閲覧・操作するためのデスクトップアプリケーションです。
 
 ## 機能
