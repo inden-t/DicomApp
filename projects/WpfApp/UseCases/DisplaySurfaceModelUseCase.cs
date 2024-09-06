@@ -34,7 +34,7 @@ namespace DicomApp.UseCases
                 _progressWindow = _progressWindowFactory.Create();
                 _progressWindow.SetWindowTitle("モデル生成中");
                 _progressWindow.Start();
-                _progressWindow.SetStatusText("血管のサーフェスモデルを生成中...");
+                _progressWindow.SetStatusText("サーフェスモデルを生成中...");
 
                 var model3DGroup =
                     await Task.Run(() => CreateSurfaceModel());
@@ -95,7 +95,7 @@ namespace DicomApp.UseCases
                 double progress = (z + 1) / (double)totalFiles * 100;
                 _progressWindow.SetProgress(progress);
                 _progressWindow.SetStatusText(
-                    $"血管のサーフェスモデルを生成中... ({z + 1}/{totalFiles} files)");
+                    $"サーフェスモデルを生成中...\n{z + 1}/{totalFiles} files");
             }
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
@@ -182,7 +182,7 @@ namespace DicomApp.UseCases
                                 totalVoxels * 100;
                             _progressWindow.SetProgress(progress);
                             _progressWindow.SetStatusText(
-                                $"血管のサーフェスモデルを生成中...\n" +
+                                $"サーフェスモデルを生成中...\n" +
                                 $"処理済みボクセル数: {processedVoxels}/{totalVoxels}\n" +
                                 $"生成されたポイント数: {mesh.Positions.Count}\n" +
                                 $"生成された三角形の数: {mesh.TriangleIndices.Count / 3}");

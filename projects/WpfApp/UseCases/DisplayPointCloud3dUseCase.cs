@@ -32,7 +32,7 @@ namespace DicomApp.UseCases
             _progressWindow = _progressWindowFactory.Create();
             _progressWindow.SetWindowTitle("モデル生成中");
             _progressWindow.Start();
-            _progressWindow.SetStatusText("3Dモデルを生成中...");
+            _progressWindow.SetStatusText("点群モデルを生成中...");
 
             var model3DGroup = await Task.Run(() => CreatePointCloud3dModel());
 
@@ -83,7 +83,7 @@ namespace DicomApp.UseCases
                 double progress = (i + 1) / (double)totalFiles * 100;
                 _progressWindow.SetProgress(progress);
                 _progressWindow.SetStatusText(
-                    $"3Dモデルを生成中... ({i + 1}/{totalFiles} files)\n球体数: {totalSpheres}個");
+                    $"点群モデルを生成中... ({i + 1}/{totalFiles} files)\n球体数: {totalSpheres}個");
             }
 
             model3DGroup.Freeze();
