@@ -6,8 +6,11 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 
 - DICOM画像ファイルの読み込みと表示
 - 画像のズームイン/ズームアウト
+- 画像のパン（移動）
 - 3Dポイントクラウドの表示
 - サーフェスモデルの表示（通常版と線形補間版）
+- 3Dモデル（ポイントクラウド、サーフェスモデル）の回転・ズーム
+- 処理進捗状況の表示（プログレスウィンドウ）
 
 ## 技術スタック
 
@@ -41,7 +44,12 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 4. 画像表示エリアで以下の操作が可能です：
    - マウスホイール: ズームイン/ズームアウト
    - Ctrlキー + マウスホイール: 画像の切り替え
+   - マウス中ボタンドラッグ: 画像のパン（移動）
 5. メニューから "Display Point Cloud 3D" または "Display Surface Model" を選択すると、3Dモデルが表示されます。
+6. 3Dモデル表示ウィンドウでは以下の操作が可能です：
+   - マウスドラッグ: モデルの回転
+   - マウスホイール: ズームイン/ズームアウト
+7. 3Dモデルの生成中はプログレスウィンドウが表示され、処理の進捗状況を確認できます。
 
 ## 開発者向け情報
 
@@ -49,3 +57,5 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 - `MainWindowViewModel.cs`: メインウィンドウの主要なロジックを管理
 - `ImageViewerViewModel.cs`: 画像表示に関するロジックを管理
 - `DisplayPointCloud3dUseCase.cs`と`DisplaySurfaceModelUseCase.cs`: 3Dモデル生成のロジックを実装
+- `Model3dViewer.xaml.cs`: 3Dモデルの表示と操作に関するロジックを実装
+- `ProgressWindow.xaml.cs`: プログレスウィンドウの表示と管理を実装
