@@ -16,9 +16,6 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
   - 線形補間あり/なしの選択可能
 - 3Dモデル（点群、サーフェスモデル）の回転・ズーム
 
-### その他の機能
-- 処理進捗状況の表示（プログレスウィンドウ）
-
 ## 技術スタック
 
 - 言語: C#
@@ -28,13 +25,6 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
   - fo-dicom: DICOMファイルの読み込みと操作
   - ReactiveProperty: リアクティブプログラミングのサポート
   - Prism.Wpf: MVVMパターンの実装サポート
-
-## プロジェクト構成
-
-- `Models`: データモデルとビジネスロジック
-- `ViewModels`: ビューとモデルを橋渡しするビューモデル
-- `Views`: ユーザーインターフェース
-- `UseCases`: アプリケーションの主要な機能を実装するユースケース
 
 ## セットアップ
 
@@ -67,12 +57,24 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 
 ## 開発者向け情報
 
+### 主要なクラスとファイル
 - `App.xaml.cs`: アプリケーションのエントリーポイントとDI（依存性注入）の設定
 - `MainWindowViewModel.cs`: メインウィンドウの主要なロジックを管理
 - `ImageViewerViewModel.cs`: 画像表示に関するロジックを管理
-- `DisplayPointCloud3dUseCase.cs`と`DisplaySurfaceModelUseCase.cs`: 3Dモデル生成のロジックを実装
+- `DisplayPointCloud3dUseCase.cs`: 3D点群モデル生成のロジックを実装
+- `DisplaySurfaceModelUseCase.cs`: サーフェスモデル生成のロジックを実装
 - `Model3dViewer.xaml.cs`: 3Dモデルの表示と操作に関するロジックを実装
 - `ProgressWindow.xaml.cs`: プログレスウィンドウの表示と管理を実装
+
+### プロジェクト構成
+- `Models`: データモデルとビジネスロジック
+  - 例: `DICOMFile.cs`
+- `ViewModels`: ビューとモデルを橋渡しするビューモデル
+  - 例: `MainWindowViewModel.cs`, `ImageViewerViewModel.cs`
+- `Views`: ユーザーインターフェース
+  - 例: `MainWindow.xaml`, `ImageViewer.xaml`, `Model3dViewer.xaml`
+- `UseCases`: アプリケーションの主要な機能を実装するユースケース
+  - 例: `OpenDicomFileUseCase.cs`, `DisplayPointCloud3dUseCase.cs`, `DisplaySurfaceModelUseCase.cs`
 
 ## 注意事項
 
