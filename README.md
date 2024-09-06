@@ -59,3 +59,9 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 - `DisplayPointCloud3dUseCase.cs`と`DisplaySurfaceModelUseCase.cs`: 3Dモデル生成のロジックを実装
 - `Model3dViewer.xaml.cs`: 3Dモデルの表示と操作に関するロジックを実装
 - `ProgressWindow.xaml.cs`: プログレスウィンドウの表示と管理を実装
+
+## 免責事項
+
+このアプリケーションは学習目的で開発されたものであり、実際の医療診断や臨床使用を意図したものではありません。医療目的での使用は推奨されません。開発者は、このアプリケーションの使用によって生じるいかなる損害や問題に対しても責任を負いません。
+
+使用者は、このアプリケーションを使用する前に、適用される法律、規制、およびプライバシーポリシーを確認し、遵守する責任があります。また、DICOMファイルに含まれる個人情報やセンシティブな医療情報の取り扱いには十分注意してください。
