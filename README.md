@@ -26,16 +26,6 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
   - パン（上下左右の移動）
   - ドリー（前後の移動）
 
-## 技術スタック
-
-- 言語: C#
-- フレームワーク: WPF (Windows Presentation Foundation)
-- .NET バージョン: .NET 8.0
-- 主要ライブラリ:
-  - fo-dicom: DICOMファイルの読み込みと操作
-  - ReactiveProperty: リアクティブプログラミングのサポート
-  - Prism.Wpf: MVVMパターンの実装サポート
-
 ## セットアップ
 
 1. リポジトリをクローンします。
@@ -66,6 +56,16 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 3. 3Dビューワーの中央には黄色い点が表示され、回転の中心を示します。
 
 ## 開発者向け情報
+
+### 技術スタック
+
+- 言語: C#
+- フレームワーク: WPF (Windows Presentation Foundation)
+- .NET バージョン: .NET 8.0
+- 主要ライブラリ:
+  - fo-dicom: DICOMファイルの読み込みと操作
+  - ReactiveProperty: リアクティブプログラミングのサポート
+  - Prism.Wpf: MVVMパターンの実装サポート
 
 ### 主要なクラスとファイル
 - `App.xaml.cs`: アプリケーションのエントリーポイントとDI（依存性注入）の設定
