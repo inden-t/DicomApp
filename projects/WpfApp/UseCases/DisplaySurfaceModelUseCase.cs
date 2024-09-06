@@ -109,7 +109,7 @@ namespace DicomApp.UseCases
                 new DiffuseMaterial(
                     new SolidColorBrush(Color.FromRgb(200, 0, 0))));
 
-            // 鏡面反射（ハイライト）- 反射を弱く、広く
+            // 鏡面反射（ハイライト）
             materialGroup.Children.Add(new SpecularMaterial(
                 new SolidColorBrush(Color.FromArgb(100, 255, 100, 100)), 10));
 

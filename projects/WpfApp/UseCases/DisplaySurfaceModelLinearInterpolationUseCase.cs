@@ -97,10 +97,10 @@ namespace DicomApp.UseCases
                         intensity = intensity < _intensityMin
                             ? _intensityMin
                             : intensity;
+                        // 0.0～1.0の範囲に正規化
                         voxelGrid[x, y, z] = (intensity - _intensityMin) /
                                              (double)(_intensityMax -
                                                  _intensityMin);
-                        // 0.0～1.0の範囲に正規化
                     }
                 }
 
@@ -121,7 +121,7 @@ namespace DicomApp.UseCases
                 new DiffuseMaterial(
                     new SolidColorBrush(Color.FromRgb(200, 200, 200))));
 
-            // 鏡面反射（ハイライト）- 反射を弱く、広く
+            // 鏡面反射（ハイライト）
             materialGroup.Children.Add(new SpecularMaterial(
                 new SolidColorBrush(Color.FromArgb(100, 100, 100, 255)), 10));
 

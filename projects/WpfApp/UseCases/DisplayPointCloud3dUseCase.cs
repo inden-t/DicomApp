@@ -69,7 +69,7 @@ namespace DicomApp.UseCases
                         int index = (y * stride) + (x * 4);
                         byte intensity = pixels[index]; // Blue channel
 
-                        if (intensity > 200) // 血管と思われる明るい部分のしきい値
+                        if (intensity > 200) // 高輝度のしきい値
                         {
                             // x座標を反転させる
                             var point = new Point3D(width - 1 - x, y, i);

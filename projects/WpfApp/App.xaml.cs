@@ -43,7 +43,7 @@ namespace DicomApp
             _commandFactory =
                 _serviceProvider.GetRequiredService<CommandFactory>();
 
-            // MainWindow の生成
+            // MainWindow の設定と表示
             _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             Current.MainWindow = _mainWindow;
             _mainWindow.Show();

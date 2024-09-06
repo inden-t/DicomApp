@@ -7,22 +7,18 @@ namespace DicomApp
 {
     public class DICOMFile
     {
-        // 1. Private フィールド
         private readonly string _filePath;
         private DicomDataset _dataset;
         private DicomImage _image;
 
-        // 2. Public プロパティ
         public string FilePath => _filePath;
 
-        // 3. コンストラクタ
         public DICOMFile(string filePath)
         {
             _filePath = filePath ??
                         throw new ArgumentNullException(nameof(filePath));
         }
 
-        // 4. Public メソッド
         public override string ToString()
         {
             string text =
@@ -44,7 +40,7 @@ namespace DicomApp
                 var transferSyntax = file.Dataset.InternalTransferSyntax;
                 if (transferSyntax == DicomTransferSyntax.RLELossless)
                 {
-                    // RLE圧縮されている
+                    // RLE圧縮されている場合の処理
                 }
             }
             catch (Exception ex)
