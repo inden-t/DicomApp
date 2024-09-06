@@ -35,14 +35,14 @@ namespace DicomApp.Views
             ViewModel.WindowTitle.Value = text;
         }
 
-        public void SetProgress(double progress)
-        {
-            ViewModel.Progress.Value = progress;
-        }
-
         public void SetStatusText(string text)
         {
             ViewModel.StatusText.Value = text;
+        }
+
+        public void SetProgress(double progress)
+        {
+            ViewModel.Progress.Value = progress;
         }
     }
 }

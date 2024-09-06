@@ -8,7 +8,7 @@ namespace DicomApp.UseCases
         void Start();
         void End();
         void SetWindowTitle(string text);
-        void SetProgress(double progress);
         void SetStatusText(string text);
+        void SetProgress(double progress);
     }
 }
