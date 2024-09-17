@@ -9,6 +9,7 @@ namespace DicomApp.ViewModels
             new();
 
         public ReactiveCommand EndBloodVesselSelectionCommand { get; } = new();
+        public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
         public ReactiveCommand CancelExtractionCommand { get; } = new();
         public ReactiveCommand SaveModelCommand { get; } = new();
