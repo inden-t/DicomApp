@@ -32,6 +32,8 @@ namespace DicomApp.ViewModels
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
 
+        public bool IsSelectionModeActive { get; set; }
+
         private readonly BloodVessel3DRegionSelector _regionSelector;
         private readonly IProgressWindowFactory _progressWindowFactory;
 
@@ -123,6 +125,8 @@ namespace DicomApp.ViewModels
 
         public async Task Select3DRegion(double relativeX, double relativeY)
         {
+            if (!IsSelectionModeActive) return;
+
             var renderedImage = _image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
 
@@ -139,8 +143,6 @@ namespace DicomApp.ViewModels
             {
                 progressWindow.SetStatusText(data.text);
                 progressWindow.SetProgress(data.value);
-
-                // ここでUIの更新などを行うことができます
             });
 
             int threshold = 220; // しきい値は適切な値に変更してください
@@ -151,6 +153,8 @@ namespace DicomApp.ViewModels
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
+
+            IsSelectionModeActive = false;
         }
 
         private void UpdateSelectedRegion()

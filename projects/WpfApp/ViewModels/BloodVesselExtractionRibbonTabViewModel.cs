@@ -5,6 +5,8 @@ namespace DicomApp.ViewModels
 {
     public class BloodVesselExtractionRibbonTabViewModel : ViewModelBase
     {
+        private readonly ImageViewerViewModel _imageViewerViewModel;
+
         public ReactiveCommand StartBloodVesselSelectionCommand { get; } =
             new();
 
@@ -19,12 +21,18 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<bool> IsSelectionModeActive { get; } =
             new(false);
 
-        public BloodVesselExtractionRibbonTabViewModel()
+        public BloodVesselExtractionRibbonTabViewModel(
+            ImageViewerViewModel imageViewerViewModel)
         {
+            _imageViewerViewModel = imageViewerViewModel;
+
             StartBloodVesselSelectionCommand.Subscribe(() =>
                 IsSelectionModeActive.Value = true);
             EndBloodVesselSelectionCommand.Subscribe(() =>
                 IsSelectionModeActive.Value = false);
+
+            Execute3DFillSelectionCommand.Subscribe(() =>
+                _imageViewerViewModel.IsSelectionModeActive = true);
 
             BloodVesselExtractionCommand.Subscribe(
                 ExecuteBloodVesselExtraction);
