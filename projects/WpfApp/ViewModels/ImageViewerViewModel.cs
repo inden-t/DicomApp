@@ -110,7 +110,8 @@ namespace DicomApp.ViewModels
 
         public void Select3DRegion(Point3D seedPoint, int threshold)
         {
-            _regionSelector.Select3DRegion(seedPoint, threshold);
+            MessageBox.Show(seedPoint.ToString());
+            //_regionSelector.Select3DRegion(seedPoint, threshold);
             // 選択領域の表示を更新
             UpdateSelectedRegion();
         }
