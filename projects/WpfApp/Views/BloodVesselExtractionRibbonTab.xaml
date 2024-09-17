@@ -1,6 +1,9 @@
 ﻿<RibbonTab x:Class="DicomApp.Views.BloodVesselExtractionRibbonTab"
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:viewmodels="clr-namespace:DicomApp.ViewModels"
+           d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">
   <RibbonGroup Header="血管領域選択">
     <RibbonButton Label="血管領域選択"
@@ -21,7 +24,7 @@
 
   <RibbonGroup Header="血管抽出">
     <RibbonButton Label="血管抽出"
-                      Command="{Binding ExtractBloodVesselCommand}"/>
+                      Command="{Binding BloodVesselExtractionCommand}"/>
     <RibbonButton Label="モデル保存"
                       Command="{Binding SaveModelCommand}"/>
   </RibbonGroup>

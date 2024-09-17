@@ -13,7 +13,11 @@ namespace DicomApp
             GenerateSurfaceModelUseCase
                 generateSurfaceModelUseCase,
             GenerateSurfaceModelLinearInterpolationUseCase
-                generateSurfaceModelLinearInterpolationUseCase)
+                generateSurfaceModelLinearInterpolationUseCase,
+            BloodVesselExtractionRibbonTabViewModel
+                bloodVesselExtractionRibbonTabViewModel,
+            BloodVesselExtractionUseCase bloodVesselExtractionUseCase
+        )
         {
             mainWindowViewModel.OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
@@ -32,6 +36,11 @@ namespace DicomApp
                 .Subscribe(async () =>
                     await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());
+
+            bloodVesselExtractionRibbonTabViewModel.BloodVesselExtractionCommand
+                .Subscribe(async () =>
+                    await bloodVesselExtractionUseCase
+                        .ExtractBloodVesselAsync());
         }
     }
 }

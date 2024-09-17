@@ -74,6 +74,12 @@ namespace DicomApp
             services.AddScoped<GenerateSurfaceModelUseCase>();
             services
                 .AddScoped<GenerateSurfaceModelLinearInterpolationUseCase>();
+
+            //services.AddScoped<BloodVesselExtractionUseCase>();
+            //services.AddScoped<BloodVessel3DRegionSelector>();
+            //services.AddScoped<BloodVesselSurfaceModelGenerator>();
+            services.AddScoped<BloodVesselExtractionRibbonTabViewModel>();
+
             services.AddScoped<IModel3dViewerFactory, Model3dViewerFactory>();
             services.AddScoped<IProgressWindowFactory, ProgressWindowFactory>();
         }
