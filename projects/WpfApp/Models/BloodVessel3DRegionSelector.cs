@@ -46,7 +46,7 @@ namespace DicomApp.Models
 
                 int progressValue = index / _fileManager.DicomFiles.Count;
                 string progressText = $"3次元塗りつぶし選択を実行中...\n" +
-                                      $"プリレンダリング中... ({index * 100} / {_fileManager.DicomFiles.Count})\n";
+                                      $"プリレンダリング中... ({index} / {_fileManager.DicomFiles.Count})\n";
 
                 progress.Report((progressValue, progressText));
             }
