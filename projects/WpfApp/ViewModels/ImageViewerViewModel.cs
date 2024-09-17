@@ -19,6 +19,9 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
+        public ReactiveProperty<BitmapSource> OverlayImageSource { get; } =
+            new();
+
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
         public ReactiveProperty<int> ScrollValue { get; } = new();
 
