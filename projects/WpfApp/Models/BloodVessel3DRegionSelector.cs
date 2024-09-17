@@ -1,5 +1,4 @@
 ﻿using System.Windows.Media.Media3D;
-using DicomApp.Models;
 
 namespace DicomApp.Models
 {
@@ -51,36 +50,48 @@ namespace DicomApp.Models
                     _selectedRegion.AddVoxel(current);
 
                     // 6方向の隣接ボクセルをチェック
-                    CheckAndEnqueueNeighbor(x + 1, y, z, width, height, depth, visited, queue);
-                    CheckAndEnqueueNeighbor(x - 1, y, z, width, height, depth, visited, queue);
-                    CheckAndEnqueueNeighbor(x, y + 1, z, width, height, depth, visited, queue);
-                    CheckAndEnqueueNeighbor(x, y - 1, z, width, height, depth, visited, queue);
-                    CheckAndEnqueueNeighbor(x, y, z + 1, width, height, depth, visited, queue);
-                    CheckAndEnqueueNeighbor(x, y, z - 1, width, height, depth, visited, queue);
+                    CheckAndEnqueueNeighbor(x + 1, y, z, width, height, depth,
+                        visited, queue);
+                    CheckAndEnqueueNeighbor(x - 1, y, z, width, height, depth,
+                        visited, queue);
+                    CheckAndEnqueueNeighbor(x, y + 1, z, width, height, depth,
+                        visited, queue);
+                    CheckAndEnqueueNeighbor(x, y - 1, z, width, height, depth,
+                        visited, queue);
+                    CheckAndEnqueueNeighbor(x, y, z + 1, width, height, depth,
+                        visited, queue);
+                    CheckAndEnqueueNeighbor(x, y, z - 1, width, height, depth,
+                        visited, queue);
                 }
             }
         }
 
-        private void CheckAndEnqueueNeighbor(int x, int y, int z, int width, int height, int depth, bool[,,] visited, Queue<Point3D> queue)
+        private void CheckAndEnqueueNeighbor(int x, int y, int z, int width,
+            int height, int depth, bool[,,] visited, Queue<Point3D> queue)
         {
-            if (IsValidPoint(x, y, z, width, height, depth) && !visited[x, y, z])
+            if (IsValidPoint(x, y, z, width, height, depth) &&
+                !visited[x, y, z])
             {
                 queue.Enqueue(new Point3D(x, y, z));
                 visited[x, y, z] = true;
             }
         }
 
-        private bool IsValidPoint(int x, int y, int z, int width, int height, int depth)
+        private bool IsValidPoint(int x, int y, int z, int width, int height,
+            int depth)
         {
-            return x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth;
+            return x >= 0 && x < width && y >= 0 && y < height && z >= 0 &&
+                   z < depth;
         }
 
         private byte GetVoxelIntensity(int x, int y, int z)
         {
             var dicomFile = _fileManager.DicomFiles[z];
             var image = dicomFile.GetImage();
-            var renderedImage = image.RenderImage().As<System.Windows.Media.Imaging.WriteableBitmap>();
-            var stride = renderedImage.PixelWidth * 4; // 4 bytes per pixel (BGRA)
+            var renderedImage = image.RenderImage()
+                .As<System.Windows.Media.Imaging.WriteableBitmap>();
+            var stride =
+                renderedImage.PixelWidth * 4; // 4 bytes per pixel (BGRA)
             var pixels = new byte[renderedImage.PixelHeight * stride];
             renderedImage.CopyPixels(pixels, stride, 0);
 
@@ -98,7 +109,7 @@ namespace DicomApp.Models
         public BloodVessel3DRegion GetSelectedRegion()
         {
             // 選択された領域を返す
-            return null;
+            return _selectedRegion;
         }
     }
 }
