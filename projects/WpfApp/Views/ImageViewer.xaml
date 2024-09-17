@@ -31,7 +31,8 @@
         <Image x:Name="OverlayImage"
                Stretch="None"
                Source="{Binding OverlayImageSource.Value}"
-               Opacity="0.5"/>
+               Opacity="0.5"
+               IsHitTestVisible="False"/>
       </Grid>
     </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"
