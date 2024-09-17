@@ -146,7 +146,7 @@ namespace DicomApp.ViewModels
                 // ここでUIの更新などを行うことができます
             });
 
-            int threshold = 200; // しきい値は適切な値に変更してください
+            int threshold = 220; // しきい値は適切な値に変更してください
             await Task.Run(() =>
                 _regionSelector.Select3DRegion(seedPoint, threshold, progress));
 
