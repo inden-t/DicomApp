@@ -155,8 +155,48 @@ namespace DicomApp.ViewModels
 
         private void UpdateSelectedRegion()
         {
-            // 選択された3D領域を表示するための処理を実装
-            // 例えば、CanvasOverlayにグラフィックを描画するなど
+            if (_image == null || _regionSelector == null)
+                return;
+
+            var renderedImage = _image.RenderImage();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            // 新しいWriteableBitmapを作成し、透明な背景で初期化
+            var overlayBitmap = new WriteableBitmap(bitmapImage.PixelWidth,
+                bitmapImage.PixelHeight, bitmapImage.DpiX, bitmapImage.DpiY,
+                PixelFormats.Bgra32, null);
+            var stride = overlayBitmap.PixelWidth * 4;
+            var pixels = new byte[overlayBitmap.PixelHeight * stride];
+
+            // 選択された領域を取得
+            var selectedRegion = _regionSelector.GetSelectedRegion();
+
+            // 選択された領域を描画
+            foreach (var point in selectedRegion.SelectedVoxels)
+            {
+                if (point.Z == ScrollValue.Value) // 現在のスライスのみ描画
+                {
+                    int x = (int)point.X;
+                    int y = (int)point.Y;
+                    if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
+                        y < overlayBitmap.PixelHeight)
+                    {
+                        int index = y * stride + x * 4;
+                        pixels[index] = 0; // Blue
+                        pixels[index + 1] = 0; // Green
+                        pixels[index + 2] = 255; // Red
+                        pixels[index + 3] = 128; // Alpha (半透明)
+                    }
+                }
+            }
+
+            // ピクセルデータをWriteableBitmapに書き込む
+            overlayBitmap.WritePixels(
+                new Int32Rect(0, 0, overlayBitmap.PixelWidth,
+                    overlayBitmap.PixelHeight), pixels, stride, 0);
+
+            // OverlayImageSourceを更新
+            OverlayImageSource.Value = overlayBitmap;
         }
 
         public void EditRegion(Point3D point, bool isAdd)
