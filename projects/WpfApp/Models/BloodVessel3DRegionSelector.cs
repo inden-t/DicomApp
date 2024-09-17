@@ -5,7 +5,7 @@ namespace DicomApp.Models
     public class BloodVessel3DRegionSelector
     {
         private readonly FileManager _fileManager;
-        private BloodVessel3DRegion _selectedRegion;
+        private readonly BloodVessel3DRegion _selectedRegion;
 
         private int _visitedCount;
         int _visitedXMax = 0;
@@ -15,11 +15,31 @@ namespace DicomApp.Models
         int _visitedZMax = 0;
         int _visitedZMin = 0;
 
+        private List<byte[]> _renderedImages;
+        private int _imageWidth;
+        private int _imageHeight;
 
         public BloodVessel3DRegionSelector(FileManager fileManager)
         {
             _fileManager = fileManager;
             _selectedRegion = new BloodVessel3DRegion();
+        }
+
+        private void PreRenderImages()
+        {
+            _renderedImages = new List<byte[]>();
+            foreach (var dicomFile in _fileManager.DicomFiles)
+            {
+                var image = dicomFile.GetImage();
+                var renderedImage = image.RenderImage()
+                    .As<System.Windows.Media.Imaging.WriteableBitmap>();
+                _imageWidth = renderedImage.PixelWidth;
+                _imageHeight = renderedImage.PixelHeight;
+                var stride = _imageWidth * 4; // 4 bytes per pixel (BGRA)
+                var pixels = new byte[_imageHeight * stride];
+                renderedImage.CopyPixels(pixels, stride, 0);
+                _renderedImages.Add(pixels);
+            }
         }
 
         // 3D塗りつぶし選択の実装
@@ -30,6 +50,8 @@ namespace DicomApp.Models
             {
                 return;
             }
+
+            PreRenderImages();
 
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
@@ -110,15 +132,8 @@ namespace DicomApp.Models
 
         private byte GetVoxelIntensity(int x, int y, int z)
         {
-            var dicomFile = _fileManager.DicomFiles[z];
-            var image = dicomFile.GetImage();
-            var renderedImage = image.RenderImage()
-                .As<System.Windows.Media.Imaging.WriteableBitmap>();
-            var stride =
-                renderedImage.PixelWidth * 4; // 4 bytes per pixel (BGRA)
-            var pixels = new byte[renderedImage.PixelHeight * stride];
-            renderedImage.CopyPixels(pixels, stride, 0);
-
+            var stride = _imageWidth * 4;
+            var pixels = _renderedImages[z];
             int index = (y * stride) + (x * 4);
             return pixels[index]; // Blue channel
         }
