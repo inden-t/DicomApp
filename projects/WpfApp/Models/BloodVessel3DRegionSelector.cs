@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media.Media3D;
 using DicomApp.Models;
 
-namespace DicomApp.UseCases
+namespace DicomApp.Models
 {
     public class BloodVessel3DRegionSelector
     {
