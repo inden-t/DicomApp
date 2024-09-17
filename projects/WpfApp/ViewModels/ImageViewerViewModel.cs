@@ -26,6 +26,8 @@ namespace DicomApp.ViewModels
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
 
+        private readonly BloodVessel3DRegionSelector _regionSelector;
+
         public ImageViewerViewModel()
         {
             ScrollValue.Subscribe(value =>
@@ -98,6 +100,23 @@ namespace DicomApp.ViewModels
                 new ScaleTransform(scale * _zoom, scale * _zoom));
 
             BitmapSourceImage.Value = scaledBitmap;
+        }
+
+        public void StartBloodVesselSelectionMode()
+        {
+            // 血管領域選択モードを開始
+        }
+
+        public void Select3DRegion(Point3D seedPoint, int threshold)
+        {
+            _regionSelector.Select3DRegion(seedPoint, threshold);
+            // 選択領域の表示を更新
+        }
+
+        public void EditRegion(Point3D point, bool isAdd)
+        {
+            _regionSelector.EditRegion(point, isAdd);
+            // 選択領域の表示を更新
         }
     }
 }

@@ -197,5 +197,10 @@ namespace DicomApp.Views
             Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
             Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
         }
+
+        public void DisplaySurfaceModel(SurfaceModel model)
+        {
+            // 生成されたサーフェスモデルを表示するロジックを実装
+        }
     }
 }
