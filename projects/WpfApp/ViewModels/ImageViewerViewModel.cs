@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using DicomApp.Models;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
@@ -29,8 +30,10 @@ namespace DicomApp.ViewModels
 
         private readonly BloodVessel3DRegionSelector _regionSelector;
 
-        public ImageViewerViewModel()
+        public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector)
         {
+            _regionSelector = regionSelector;
+
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
         }
@@ -119,8 +122,8 @@ namespace DicomApp.ViewModels
 
             MessageBox.Show(seedPoint.ToString());
 
-            //int threshold = 200; // しきい値は適切な値に変更してください
-            //_regionSelector.Select3DRegion(seedPoint, threshold);
+            int threshold = 200; // しきい値は適切な値に変更してください
+            _regionSelector.Select3DRegion(seedPoint, threshold);
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
