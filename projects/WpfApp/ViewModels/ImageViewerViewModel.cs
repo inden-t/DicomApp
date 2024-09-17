@@ -15,6 +15,7 @@ namespace DicomApp.ViewModels
     {
         None,
         Fill3DSelection,
+        ClearFill2DSelection
     }
 
     public class ImageViewerViewModel : ViewModelBase

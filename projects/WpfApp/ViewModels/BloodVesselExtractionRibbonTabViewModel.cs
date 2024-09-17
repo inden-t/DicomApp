@@ -12,6 +12,7 @@ namespace DicomApp.ViewModels
 
         public ReactiveCommand EndBloodVesselSelectionCommand { get; } = new();
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
+        public ReactiveCommand Clear2DFillSelectionCommand { get; } = new();
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
         public ReactiveCommand CancelExtractionCommand { get; } = new();
         public ReactiveCommand SaveModelCommand { get; } = new();
@@ -34,6 +35,9 @@ namespace DicomApp.ViewModels
             Execute3DFillSelectionCommand.Subscribe(() =>
                 _imageViewerViewModel.CurrentSelectionMode.Value =
                     SelectionMode.Fill3DSelection);
+            Clear2DFillSelectionCommand.Subscribe(() =>
+                _imageViewerViewModel.CurrentSelectionMode.Value =
+                    SelectionMode.ClearFill2DSelection);
 
             BloodVesselExtractionCommand.Subscribe(
                 ExecuteBloodVesselExtraction);

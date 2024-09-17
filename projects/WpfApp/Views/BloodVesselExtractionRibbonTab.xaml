@@ -12,6 +12,8 @@
                       Command="{Binding StartBloodVesselSelectionCommand}"/>
     <RibbonButton Label="3D塗りつぶし選択"
                       Command="{Binding Execute3DFillSelectionCommand}"/>
+    <RibbonButton Label="2D塗りつぶし選択解除"
+                      Command="{Binding Clear2DFillSelectionCommand}"/>
 
     <!--<ribbon:RibbonSlider Label="しきい値調整"
                                Minimum="0"
