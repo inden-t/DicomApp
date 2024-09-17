@@ -25,7 +25,8 @@
                   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
       <Image x:Name="DicomImage"
              Stretch="None"
-             Source="{Binding BitmapSourceImage.Value}"/>
+             Source="{Binding BitmapSourceImage.Value}"
+             MouseDown="DicomImage_Click"/>
     </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"
             Grid.Column="0"/>

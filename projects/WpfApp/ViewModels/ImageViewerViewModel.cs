@@ -112,6 +112,13 @@ namespace DicomApp.ViewModels
         {
             _regionSelector.Select3DRegion(seedPoint, threshold);
             // 選択領域の表示を更新
+            UpdateSelectedRegion();
+        }
+
+        private void UpdateSelectedRegion()
+        {
+            // 選択された3D領域を表示するための処理を実装
+            // 例えば、CanvasOverlayにグラフィックを描画するなど
         }
 
         public void EditRegion(Point3D point, bool isAdd)
