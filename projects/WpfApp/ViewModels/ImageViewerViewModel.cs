@@ -195,8 +195,19 @@ namespace DicomApp.ViewModels
                 new Int32Rect(0, 0, overlayBitmap.PixelWidth,
                     overlayBitmap.PixelHeight), pixels, stride, 0);
 
+            // 枠に対するサイズを計算
+            // 枠からはみ出ないように枠サイズの小数を切り捨てる
+            double scaleX = Math.Floor(ViewerWidth) / overlayBitmap.PixelWidth;
+            double scaleY =
+                Math.Floor(ViewerHeight) / overlayBitmap.PixelHeight;
+            double scale = Math.Min(scaleX, scaleY);
+
+            // 拡大倍率を適用
+            var scaledBitmap = new TransformedBitmap(overlayBitmap,
+                new ScaleTransform(scale * _zoom, scale * _zoom));
+
             // OverlayImageSourceを更新
-            OverlayImageSource.Value = overlayBitmap;
+            OverlayImageSource.Value = scaledBitmap;
         }
 
         public void EditRegion(Point3D point, bool isAdd)
