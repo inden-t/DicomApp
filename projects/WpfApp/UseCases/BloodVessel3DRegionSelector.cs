@@ -5,6 +5,13 @@ namespace DicomApp.UseCases
 {
     public class BloodVessel3DRegionSelector
     {
+        private readonly FileManager _fileManager;
+
+        public BloodVessel3DRegionSelector(FileManager fileManager)
+        {
+            _fileManager = fileManager;
+        }
+
         // 3D塗りつぶし選択の実装
         public void Select3DRegion(Point3D seedPoint, int threshold)
         {
