@@ -45,11 +45,11 @@
         </RibbonGroup>
         <RibbonGroup Header="3D表示">
           <RibbonButton Label="点群表示(非常に重い)"
-                        Command="{Binding DisplayPointCloud3dCommand}"/>
+                        Command="{Binding GeneratePointCloudCommand}"/>
           <RibbonButton Label="サーフェスモデル表示"
-                        Command="{Binding DisplaySurfaceModelCommand}"/>
+                        Command="{Binding GenerateSurfaceModelCommand}"/>
           <RibbonButton Label="サーフェスモデル表示(線形補間)"
-                        Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
+                        Command="{Binding GenerateSurfaceModelLinearInterpolationCommand}"/>
         </RibbonGroup>
       </RibbonTab>
     </Ribbon>

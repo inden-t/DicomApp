@@ -20,15 +20,15 @@ namespace DicomApp
             mainWindowViewModel.OpenDicomFolderCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteFolderAsync());
 
-            mainWindowViewModel.DisplayPointCloud3dCommand.Subscribe(
+            mainWindowViewModel.GeneratePointCloudCommand.Subscribe(
                 async () =>
                     await generatePointCloudUseCase.ExecuteAsync());
 
-            mainWindowViewModel.DisplaySurfaceModelCommand.Subscribe(
+            mainWindowViewModel.GenerateSurfaceModelCommand.Subscribe(
                 async () =>
                     await generateSurfaceModelUseCase.ExecuteAsync());
 
-            mainWindowViewModel.DisplaySurfaceModelLinearInterpolationCommand
+            mainWindowViewModel.GenerateSurfaceModelLinearInterpolationCommand
                 .Subscribe(async () =>
                     await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());

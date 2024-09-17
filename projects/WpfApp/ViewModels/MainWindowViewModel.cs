@@ -14,13 +14,13 @@ namespace DicomApp.ViewModels
         public ReactiveCommand ZoomInCommand { get; } = new();
         public ReactiveCommand ZoomOutCommand { get; } = new();
 
-        public ReactiveCommand DisplayPointCloud3dCommand { get; } =
+        public ReactiveCommand GeneratePointCloudCommand { get; } =
             new();
 
-        public ReactiveCommand DisplaySurfaceModelCommand { get; } =
+        public ReactiveCommand GenerateSurfaceModelCommand { get; } =
             new();
 
-        public ReactiveCommand DisplaySurfaceModelLinearInterpolationCommand
+        public ReactiveCommand GenerateSurfaceModelLinearInterpolationCommand
         {
             get;
         } = new();
