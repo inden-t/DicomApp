@@ -8,29 +8,29 @@ namespace DicomApp
     {
         public CommandFactory(MainWindowViewModel mainWindowViewModel,
             OpenDicomFileUseCase openDicomFileUseCase,
-            DisplayPointCloud3dUseCase
-                displayPointCloud3dUseCase,
-            DisplaySurfaceModelUseCase
-                displaySurfaceModelUseCase,
-            DisplaySurfaceModelLinearInterpolationUseCase
-                displaySurfaceModelLinearInterpolationUseCase)
+            GeneratePointCloudUseCase
+                generatePointCloudUseCase,
+            GenerateSurfaceModelUseCase
+                generateSurfaceModelUseCase,
+            GenerateSurfaceModelLinearInterpolationUseCase
+                generateSurfaceModelLinearInterpolationUseCase)
         {
             mainWindowViewModel.OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
             mainWindowViewModel.OpenDicomFolderCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteFolderAsync());
 
-            mainWindowViewModel.DisplayPointCloud3dCommand.Subscribe(
+            mainWindowViewModel.GeneratePointCloudCommand.Subscribe(
                 async () =>
-                    await displayPointCloud3dUseCase.ExecuteAsync());
+                    await generatePointCloudUseCase.ExecuteAsync());
 
-            mainWindowViewModel.DisplaySurfaceModelCommand.Subscribe(
+            mainWindowViewModel.GenerateSurfaceModelCommand.Subscribe(
                 async () =>
-                    await displaySurfaceModelUseCase.ExecuteAsync());
+                    await generateSurfaceModelUseCase.ExecuteAsync());
 
-            mainWindowViewModel.DisplaySurfaceModelLinearInterpolationCommand
+            mainWindowViewModel.GenerateSurfaceModelLinearInterpolationCommand
                 .Subscribe(async () =>
-                    await displaySurfaceModelLinearInterpolationUseCase
+                    await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());
         }
     }

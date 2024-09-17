@@ -6,8 +6,12 @@ using DicomApp.Models;
 
 namespace DicomApp.UseCases
 {
-    public class DisplaySurfaceModelUseCase
+    public class GenerateSurfaceModelLinearInterpolationUseCase
     {
+        private const byte _intensityIso = 200;
+        private const byte _intensityMax = 255;
+        private const byte _intensityMin = 0;
+
         private readonly FileManager _fileManager;
         private readonly IModel3dViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
@@ -15,7 +19,8 @@ namespace DicomApp.UseCases
         private IModel3dViewer _viewer;
         private IProgressWindow _progressWindow;
 
-        public DisplaySurfaceModelUseCase(FileManager fileManager,
+        public GenerateSurfaceModelLinearInterpolationUseCase(
+            FileManager fileManager,
             IModel3dViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
@@ -34,7 +39,7 @@ namespace DicomApp.UseCases
                 _progressWindow = _progressWindowFactory.Create();
                 _progressWindow.SetWindowTitle("モデル生成中");
                 _progressWindow.Start();
-                _progressWindow.SetStatusText("サーフェスモデルを生成中...");
+                _progressWindow.SetStatusText("サーフェスモデル(線形補間)を生成中...");
 
                 var model3DGroup =
                     await Task.Run(() => CreateSurfaceModel());
@@ -68,7 +73,7 @@ namespace DicomApp.UseCases
             // 3次元ボクセルグリッドを作成
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
-            var voxelGrid = new bool[width, height, totalFiles];
+            var voxelGrid = new double[width, height, totalFiles];
 
             for (int z = 0; z < totalFiles; z++)
             {
@@ -86,16 +91,23 @@ namespace DicomApp.UseCases
                     {
                         int index = (y * stride) + (x * 4);
                         byte intensity = pixels[index]; // Blue channel
-
-                        voxelGrid[x, y, z] =
-                            intensity > 200; // 血管と思われる明るい部分のしきい値
+                        intensity = intensity > _intensityMax
+                            ? _intensityMax
+                            : intensity;
+                        intensity = intensity < _intensityMin
+                            ? _intensityMin
+                            : intensity;
+                        // 0.0～1.0の範囲に正規化
+                        voxelGrid[x, y, z] = (intensity - _intensityMin) /
+                                             (double)(_intensityMax -
+                                                 _intensityMin);
                     }
                 }
 
                 double progress = (z + 1) / (double)totalFiles * 100;
                 _progressWindow.SetProgress(progress);
                 _progressWindow.SetStatusText(
-                    $"サーフェスモデルを生成中...\n{z + 1}/{totalFiles} files");
+                    $"サーフェスモデル(線形補間)を生成中...\n{z + 1}/{totalFiles} files");
             }
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
@@ -107,11 +119,11 @@ namespace DicomApp.UseCases
             // 拡散反射（基本的な色と陰影）
             materialGroup.Children.Add(
                 new DiffuseMaterial(
-                    new SolidColorBrush(Color.FromRgb(200, 0, 0))));
+                    new SolidColorBrush(Color.FromRgb(200, 200, 200))));
 
             // 鏡面反射（ハイライト）
             materialGroup.Children.Add(new SpecularMaterial(
-                new SolidColorBrush(Color.FromArgb(100, 255, 100, 100)), 10));
+                new SolidColorBrush(Color.FromArgb(100, 100, 100, 255)), 10));
 
             var surfaceModel =
                 new GeometryModel3D(surfaceGeometry, materialGroup);
@@ -129,7 +141,7 @@ namespace DicomApp.UseCases
             return model3DGroup;
         }
 
-        private MeshGeometry3D CreateSurfaceFromVoxels(bool[,,] voxelGrid)
+        private MeshGeometry3D CreateSurfaceFromVoxels(double[,,] voxelGrid)
         {
             var mesh = new MeshGeometry3D();
             int width = voxelGrid.GetLength(0);
@@ -139,6 +151,9 @@ namespace DicomApp.UseCases
             int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
             int processedVoxels = 0;
 
+            double isoValue = (_intensityIso - _intensityMin) /
+                              (double)(_intensityMax - _intensityMin); // 等値面の閾値
+
             for (int x = 0; x < width - 1; x++)
             {
                 for (int y = 0; y < height - 1; y++)
@@ -147,14 +162,18 @@ namespace DicomApp.UseCases
                     {
                         // Marching Cubesアルゴリズムの実装
                         int cubeIndex = 0;
-                        if (voxelGrid[x, y, z]) cubeIndex |= 1;
-                        if (voxelGrid[x + 1, y, z]) cubeIndex |= 2;
-                        if (voxelGrid[x + 1, y + 1, z]) cubeIndex |= 4;
-                        if (voxelGrid[x, y + 1, z]) cubeIndex |= 8;
-                        if (voxelGrid[x, y, z + 1]) cubeIndex |= 16;
-                        if (voxelGrid[x + 1, y, z + 1]) cubeIndex |= 32;
-                        if (voxelGrid[x + 1, y + 1, z + 1]) cubeIndex |= 64;
-                        if (voxelGrid[x, y + 1, z + 1]) cubeIndex |= 128;
+                        if (voxelGrid[x, y, z] > isoValue) cubeIndex |= 1;
+                        if (voxelGrid[x + 1, y, z] > isoValue) cubeIndex |= 2;
+                        if (voxelGrid[x + 1, y + 1, z] > isoValue)
+                            cubeIndex |= 4;
+                        if (voxelGrid[x, y + 1, z] > isoValue) cubeIndex |= 8;
+                        if (voxelGrid[x, y, z + 1] > isoValue) cubeIndex |= 16;
+                        if (voxelGrid[x + 1, y, z + 1] > isoValue)
+                            cubeIndex |= 32;
+                        if (voxelGrid[x + 1, y + 1, z + 1] > isoValue)
+                            cubeIndex |= 64;
+                        if (voxelGrid[x, y + 1, z + 1] > isoValue)
+                            cubeIndex |= 128;
 
                         // ルックアップテーブルを使用して三角形を生成
                         var triangles =
@@ -163,12 +182,11 @@ namespace DicomApp.UseCases
                         {
                             foreach (var edge in triangle)
                             {
-                                var v1 =
-                                    MarchingCubesLookupTable.GetVertexPosition(
-                                        edge, x, y, z);
+                                var v = GetInterpolatedVertexPosition(edge, x,
+                                    y, z, voxelGrid, isoValue);
                                 // X座標を反転
-                                v1.X = width - 1 - v1.X;
-                                mesh.Positions.Add(v1);
+                                v.X = width - 1 - v.X;
+                                mesh.Positions.Add(v);
                                 mesh.TriangleIndices.Add(mesh.Positions.Count -
                                     1);
                             }
@@ -182,7 +200,7 @@ namespace DicomApp.UseCases
                                 totalVoxels * 100;
                             _progressWindow.SetProgress(progress);
                             _progressWindow.SetStatusText(
-                                $"サーフェスモデルを生成中...\n" +
+                                $"サーフェスモデル(線形補間)を生成中...\n" +
                                 $"処理済みボクセル数: {processedVoxels}/{totalVoxels}\n" +
                                 $"生成されたポイント数: {mesh.Positions.Count}\n" +
                                 $"生成された三角形の数: {mesh.TriangleIndices.Count / 3}");
@@ -192,6 +210,31 @@ namespace DicomApp.UseCases
             }
 
             return mesh;
+        }
+
+        private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
+            int z, double[,,] voxelGrid, double isoValue)
+        {
+            int x1, y1, z1, x2, y2, z2;
+            MarchingCubesLookupTable.GetEdgeEndpoints(edge, x, y, z, out x1,
+                out y1, out z1, out x2, out y2, out z2);
+            double mu = GetInterpolationFactor(voxelGrid[x1, y1, z1],
+                voxelGrid[x2, y2, z2], isoValue);
+            var v = new Point3D(x1 + mu * (x2 - x1), y1 + mu * (y2 - y1),
+                z1 + mu * (z2 - z1));
+
+            return v;
+        }
+
+        private double GetInterpolationFactor(double v1, double v2,
+            double isoValue)
+        {
+            if (Math.Abs(v1 - v2) < 0.00001)
+                return 0.5;
+
+            double mu = (isoValue - v1) / (v2 - v1);
+
+            return mu;
         }
     }
 }
