@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Media3D;
+﻿using System.Drawing;
+using System.Windows.Media.Media3D;
 
 namespace DicomApp.Models
 {
@@ -168,6 +169,35 @@ namespace DicomApp.Models
         {
             // 選択された領域を返す
             return _selectedRegion;
+        }
+
+        public void Clear2DRegion(Point3D seedPoint)
+        {
+            int x = (int)seedPoint.X;
+            int y = (int)seedPoint.Y;
+            int z = (int)seedPoint.Z;
+
+            // 2D領域のクリア処理を実装
+            // 例: 4方向の塗りつぶしアルゴリズムを使用
+            Stack<Point> stack = new Stack<Point>();
+            stack.Push(new Point(x, y));
+
+            while (stack.Count > 0)
+            {
+                Point p = stack.Pop();
+                x = p.X;
+                y = p.Y;
+
+                if (_selectedRegion.ContainsVoxel(new Point3D(x, y, z)))
+                {
+                    _selectedRegion.RemoveVoxel(new Point3D(x, y, z));
+
+                    if (x > 0) stack.Push(new Point(x - 1, y));
+                    if (x < _imageWidth - 1) stack.Push(new Point(x + 1, y));
+                    if (y > 0) stack.Push(new Point(x, y - 1));
+                    if (y < _imageHeight - 1) stack.Push(new Point(x, y + 1));
+                }
+            }
         }
     }
 }

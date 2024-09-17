@@ -142,8 +142,9 @@ namespace DicomApp.Views
         private void DicomImage_Click(object sender, MouseButtonEventArgs e)
         {
             Point mousePos = e.GetPosition(DicomImage);
-            _viewModel.Select3DRegion(mousePos.X / DicomImage.ActualWidth,
-                mousePos.Y / DicomImage.ActualHeight);
+            double relativeX = mousePos.X / DicomImage.ActualWidth;
+            double relativeY = mousePos.Y / DicomImage.ActualHeight;
+            _viewModel.OnClick(relativeX, relativeY);
         }
     }
 }

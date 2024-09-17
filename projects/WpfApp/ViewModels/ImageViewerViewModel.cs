@@ -131,6 +131,19 @@ namespace DicomApp.ViewModels
             // 血管領域選択モードを開始
         }
 
+        public void OnClick(double relativeX, double relativeY)
+        {
+            if (CurrentSelectionMode.Value == SelectionMode.Fill3DSelection)
+            {
+                Select3DRegion(relativeX, relativeY);
+            }
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.ClearFill2DSelection)
+            {
+                Clear2DRegion(relativeX, relativeY);
+            }
+        }
+
         public async Task Select3DRegion(double relativeX, double relativeY)
         {
             if (CurrentSelectionMode.Value != SelectionMode.Fill3DSelection)
@@ -159,6 +172,27 @@ namespace DicomApp.ViewModels
                 _regionSelector.Select3DRegion(seedPoint, threshold, progress));
 
             progressWindow.End();
+
+            // 選択領域の表示を更新
+            UpdateSelectedRegion();
+
+            CurrentSelectionMode.Value = SelectionMode.None;
+        }
+
+        public void Clear2DRegion(double relativeX, double relativeY)
+        {
+            if (CurrentSelectionMode.Value !=
+                SelectionMode.ClearFill2DSelection)
+                return;
+
+            var renderedImage = _image.RenderImage();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
+                relativeY * bitmapImage.PixelHeight,
+                ScrollValue.Value);
+
+            _regionSelector.Clear2DRegion(seedPoint);
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
