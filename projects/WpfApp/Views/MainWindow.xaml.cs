@@ -1,10 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Ribbon;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Views
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : RibbonWindow
     {
         private readonly MainWindowViewModel _viewModel;
 
