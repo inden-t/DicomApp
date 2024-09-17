@@ -40,20 +40,22 @@
 
     <!-- リボン -->
     <Ribbon Grid.Column="0"
-                   Grid.ColumnSpan="2"
-                   Grid.Row="1">
-      <RibbonTab Header="表示">
-        <RibbonGroup Header="操作">
+            Grid.ColumnSpan="2"
+            Grid.Row="1">
+      <RibbonTab Header="ホーム">
+        <RibbonGroup Header="ズーム操作">
           <RibbonButton Label="ズームイン"
-                               Command="{Binding ZoomInCommand}"/>
+                        Command="{Binding ZoomInCommand}"/>
           <RibbonButton Label="ズームアウト"
-                               Command="{Binding ZoomOutCommand}"/>
+                        Command="{Binding ZoomOutCommand}"/>
+        </RibbonGroup>
+        <RibbonGroup Header="3D表示">
           <RibbonButton Label="点群表示"
-                               Command="{Binding DisplayPointCloud3dCommand}"/>
+                        Command="{Binding DisplayPointCloud3dCommand}"/>
           <RibbonButton Label="サーフェスモデル表示"
-                               Command="{Binding DisplaySurfaceModelCommand}"/>
+                        Command="{Binding DisplaySurfaceModelCommand}"/>
           <RibbonButton Label="サーフェスモデル表示(線形補間)"
-                               Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
+                        Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
         </RibbonGroup>
       </RibbonTab>
     </Ribbon>
