@@ -8,6 +8,7 @@ namespace DicomApp.ViewModels
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
         private readonly BloodVesselExtractionUseCase _extractionUseCase;
+        private readonly Model3dViewer _model3dViewer;
 
         public ReactiveCommand OpenDicomFileCommand { get; } = new();
         public ReactiveCommand OpenDicomFolderCommand { get; } = new();
@@ -30,10 +31,11 @@ namespace DicomApp.ViewModels
 
         public ReactiveProperty<int> SelectedIndex { get; } = new();
 
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel, Model3dViewer model3dViewer)
         {
             _imageViewerViewModel = imageViewerViewModel;
             _extractionUseCase = new BloodVesselExtractionUseCase(new BloodVessel3DRegionSelector(), new BloodVesselSurfaceModelGenerator());
+            _model3dViewer = model3dViewer;
 
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
@@ -104,7 +106,9 @@ namespace DicomApp.ViewModels
         {
             var progress = new Progress<int>(value => ProgressValue = value);
             var model = await _extractionUseCase.ExtractBloodVesselAsync(Threshold, progress);
+
             // 生成されたモデルを3Dビューワーに表示
+            _model3dViewer.SetModel(model.ModelGroup);
         }
     }
 }
