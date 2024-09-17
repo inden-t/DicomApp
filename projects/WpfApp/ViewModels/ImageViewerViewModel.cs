@@ -111,6 +111,9 @@ namespace DicomApp.ViewModels
                 new ScaleTransform(scale * _zoom, scale * _zoom));
 
             BitmapSourceImage.Value = scaledBitmap;
+
+            // 選択領域の表示を更新
+            UpdateSelectedRegion();
         }
 
         public void StartBloodVesselSelectionMode()

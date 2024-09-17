@@ -83,8 +83,8 @@ namespace DicomApp.ViewModels
             if (selectedFile != null)
             {
                 var image = selectedFile.GetImage();
-                _imageViewerViewModel.SetImage(image);
                 _imageViewerViewModel.ScrollValue.Value = index;
+                _imageViewerViewModel.SetImage(image);
             }
         }
 
