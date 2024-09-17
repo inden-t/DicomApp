@@ -25,11 +25,14 @@ namespace DicomApp.Models
             _selectedRegion = new BloodVessel3DRegion();
         }
 
-        private void PreRenderImages()
+        private void PreRenderImages(
+            IProgress<(int value, string text)> progress)
         {
             _renderedImages = new List<byte[]>();
+            int index = 0;
             foreach (var dicomFile in _fileManager.DicomFiles)
             {
+                index++;
                 var image = dicomFile.GetImage();
                 var renderedImage = image.RenderImage()
                     .As<System.Windows.Media.Imaging.WriteableBitmap>();
@@ -39,19 +42,25 @@ namespace DicomApp.Models
                 var pixels = new byte[_imageHeight * stride];
                 renderedImage.CopyPixels(pixels, stride, 0);
                 _renderedImages.Add(pixels);
+
+                int progressValue = index / _fileManager.DicomFiles.Count;
+                string progressText = $"3次元塗りつぶし選択を実行中...\n" +
+                                      $"プリレンダリング中... ({index * 100} / {_fileManager.DicomFiles.Count})\n";
+
+                progress.Report((progressValue, progressText));
             }
         }
 
         // 3D塗りつぶし選択の実装
         public void Select3DRegion(Point3D seedPoint, int threshold,
-            IProgress<(int value, int pointNum)> progress)
+            IProgress<(int value, string text)> progress)
         {
             if (_fileManager.DicomFiles.Count == 0)
             {
                 return;
             }
 
-            PreRenderImages();
+            PreRenderImages(progress);
 
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
@@ -69,6 +78,13 @@ namespace DicomApp.Models
                 queue.Enqueue(seedPoint);
                 visited[seedX, seedY, seedZ] = true;
             }
+
+            _visitedXMax = seedX;
+            _visitedXMin = seedX;
+            _visitedYMax = seedY;
+            _visitedYMin = seedY;
+            _visitedZMax = seedZ;
+            _visitedZMin = seedZ;
 
             while (queue.Count > 0)
             {
@@ -96,12 +112,15 @@ namespace DicomApp.Models
                         visited, queue);
                 }
 
-                int progressValue = (_visitedXMax - _visitedXMin + 1) *
-                                    (_visitedYMax - _visitedYMin + 1) *
-                                    (_visitedZMax - _visitedZMin + 1) * 100 /
-                                    (width * height * depth);
+                long progressValue = (long)(_visitedXMax - _visitedXMin + 1) *
+                                     (_visitedYMax - _visitedYMin + 1) *
+                                     (_visitedZMax - _visitedZMin + 1) * 100 /
+                                     (width * height * depth);
+                string progressText = $"3次元塗りつぶし選択を実行中...\n" +
+                                      $"進捗: {progressValue}%\n" +
+                                      $"点の個数: {_visitedCount}個";
 
-                progress.Report((progressValue, _visitedCount));
+                progress.Report(((int)progressValue, progressText));
             }
         }
 

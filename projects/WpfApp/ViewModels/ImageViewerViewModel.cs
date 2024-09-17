@@ -135,12 +135,9 @@ namespace DicomApp.ViewModels
             progressWindow.Start();
             progressWindow.SetStatusText("3次元塗りつぶし選択を実行中...");
 
-            var progress = new Progress<(int value, int pointNum)>(data =>
+            var progress = new Progress<(int value, string text)>(data =>
             {
-                progressWindow.SetStatusText(
-                    $"3次元塗りつぶし選択を実行中...\n" +
-                    $"進捗: {data.value}%\n" +
-                    $"点の個数: {data.pointNum}個");
+                progressWindow.SetStatusText(data.text);
                 progressWindow.SetProgress(data.value);
 
                 // ここでUIの更新などを行うことができます
