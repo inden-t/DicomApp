@@ -10,7 +10,8 @@ namespace DicomApp.Views
         private readonly MainWindowViewModel _viewModel;
 
         public MainWindow(MainWindowViewModel viewModel,
-            ImageViewer imageViewer)
+            ImageViewer imageViewer,
+            BloodVesselExtractionRibbonTab bloodVesselExtractionRibbonTab)
         {
             InitializeComponent();
             _viewModel = viewModel;
@@ -19,6 +20,10 @@ namespace DicomApp.Views
             // ImageContainer の中に ImageViewer を配置する
             var imageContainer = (ContentControl)FindName("ImageContainer");
             imageContainer.Content = imageViewer;
+
+            // Ribbon の中に BloodVesselExtractionRibbonTab を配置する
+            var ribbon = (Ribbon)FindName("Ribbon");
+            ribbon.Items.Add(bloodVesselExtractionRibbonTab);
         }
     }
 }
