@@ -7,6 +7,15 @@ namespace DicomApp.Models
         private readonly FileManager _fileManager;
         private BloodVessel3DRegion _selectedRegion;
 
+        private int _visitedCount;
+        int _visitedXMax = 0;
+        int _visitedXMin = 0;
+        int _visitedYMax = 0;
+        int _visitedYMin = 0;
+        int _visitedZMax = 0;
+        int _visitedZMin = 0;
+
+
         public BloodVessel3DRegionSelector(FileManager fileManager)
         {
             _fileManager = fileManager;
@@ -14,7 +23,8 @@ namespace DicomApp.Models
         }
 
         // 3D塗りつぶし選択の実装
-        public void Select3DRegion(Point3D seedPoint, int threshold)
+        public void Select3DRegion(Point3D seedPoint, int threshold,
+            IProgress<(int value, int pointNum)> progress)
         {
             if (_fileManager.DicomFiles.Count == 0)
             {
@@ -63,6 +73,13 @@ namespace DicomApp.Models
                     CheckAndEnqueueNeighbor(x, y, z - 1, width, height, depth,
                         visited, queue);
                 }
+
+                int progressValue = (_visitedXMax - _visitedXMin + 1) *
+                                    (_visitedYMax - _visitedYMin + 1) *
+                                    (_visitedZMax - _visitedZMin + 1) * 100 /
+                                    (width * height * depth);
+
+                progress.Report((progressValue, _visitedCount));
             }
         }
 
@@ -74,6 +91,13 @@ namespace DicomApp.Models
             {
                 queue.Enqueue(new Point3D(x, y, z));
                 visited[x, y, z] = true;
+                _visitedXMax = Math.Max(_visitedXMax, x);
+                _visitedXMin = Math.Min(_visitedXMin, x);
+                _visitedYMax = Math.Max(_visitedYMax, y);
+                _visitedYMin = Math.Min(_visitedYMin, y);
+                _visitedZMax = Math.Max(_visitedZMax, z);
+                _visitedZMin = Math.Min(_visitedZMin, z);
+                _visitedCount++;
             }
         }
 

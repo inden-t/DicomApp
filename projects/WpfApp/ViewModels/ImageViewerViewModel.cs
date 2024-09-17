@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using DicomApp.Models;
+using DicomApp.UseCases;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
@@ -29,10 +30,13 @@ namespace DicomApp.ViewModels
         public double ViewerHeight { get; private set; }
 
         private readonly BloodVessel3DRegionSelector _regionSelector;
+        private readonly IProgressWindowFactory _progressWindowFactory;
 
-        public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector)
+        public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector,
+            IProgressWindowFactory progressWindowFactory)
         {
             _regionSelector = regionSelector;
+            _progressWindowFactory = progressWindowFactory;
 
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
@@ -111,7 +115,7 @@ namespace DicomApp.ViewModels
             // 血管領域選択モードを開始
         }
 
-        public void Select3DRegion(double relativeX, double relativeY)
+        public async Task Select3DRegion(double relativeX, double relativeY)
         {
             var renderedImage = _image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
@@ -120,10 +124,27 @@ namespace DicomApp.ViewModels
                 relativeY * bitmapImage.PixelHeight,
                 ScrollValue.Value);
 
-            MessageBox.Show(seedPoint.ToString());
+            IProgressWindow progressWindow = _progressWindowFactory.Create();
+            progressWindow.SetWindowTitle("モデル生成中");
+            progressWindow.Start();
+            progressWindow.SetStatusText("3次元塗りつぶし選択を実行中...");
+
+            var progress = new Progress<(int value, int pointNum)>(data =>
+            {
+                progressWindow.SetStatusText(
+                    $"3次元塗りつぶし選択を実行中...\n" +
+                    $"進捗: {data.value}%\n" +
+                    $"点の個数: {data.pointNum}個");
+                progressWindow.SetProgress(data.value);
+
+                // ここでUIの更新などを行うことができます
+            });
 
             int threshold = 200; // しきい値は適切な値に変更してください
-            _regionSelector.Select3DRegion(seedPoint, threshold);
+            await Task.Run(() =>
+                _regionSelector.Select3DRegion(seedPoint, threshold, progress));
+
+            progressWindow.End();
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
