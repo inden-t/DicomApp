@@ -199,5 +199,53 @@ namespace DicomApp.Models
                 }
             }
         }
+
+        public void Clear3DRegion(Point3D seedPoint,
+            IProgress<(int value, string text)> progress)
+        {
+            int x = (int)seedPoint.X;
+            int y = (int)seedPoint.Y;
+            int z = (int)seedPoint.Z;
+
+            // 3D領域のクリア処理を実装
+            // 例: 6方向の塗りつぶしアルゴリズムを使用
+            Queue<Point3D> queue = new Queue<Point3D>();
+            queue.Enqueue(new Point3D(x, y, z));
+
+            int clearedCount = 0;
+            int totalVoxels = _selectedRegion.SelectedVoxels.Count;
+
+            while (queue.Count > 0)
+            {
+                Point3D p = queue.Dequeue();
+                x = (int)p.X;
+                y = (int)p.Y;
+                z = (int)p.Z;
+
+                if (_selectedRegion.ContainsVoxel(p))
+                {
+                    _selectedRegion.RemoveVoxel(p);
+                    clearedCount++;
+
+                    queue.Enqueue(new Point3D(x - 1, y, z));
+                    queue.Enqueue(new Point3D(x + 1, y, z));
+                    queue.Enqueue(new Point3D(x, y - 1, z));
+                    queue.Enqueue(new Point3D(x, y + 1, z));
+                    queue.Enqueue(new Point3D(x, y, z - 1));
+                    queue.Enqueue(new Point3D(x, y, z + 1));
+
+                    if (clearedCount % 1000 == 0 || queue.Count == 0)
+                    {
+                        int progressValue =
+                            (int)((double)clearedCount / totalVoxels * 100);
+                        string progressText = $"3次元塗りつぶし選択を解除中...\n" +
+                                              $"進捗: {progressValue}%\n" +
+                                              $"クリアした点の個数: {clearedCount}個";
+
+                        progress.Report((progressValue, progressText));
+                    }
+                }
+            }
+        }
     }
 }

@@ -15,7 +15,8 @@ namespace DicomApp.ViewModels
     {
         None,
         Fill3DSelection,
-        ClearFill2DSelection
+        Clear3DFillSelection,
+        ClearFill2DSelection,
     }
 
     public class ImageViewerViewModel : ViewModelBase
@@ -142,6 +143,11 @@ namespace DicomApp.ViewModels
             {
                 Clear2DRegion(relativeX, relativeY);
             }
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.Clear3DFillSelection)
+            {
+                Clear3DRegion(relativeX, relativeY);
+            }
         }
 
         public async Task Select3DRegion(double relativeX, double relativeY)
@@ -170,6 +176,41 @@ namespace DicomApp.ViewModels
             int threshold = 220; // しきい値は適切な値に変更してください
             await Task.Run(() =>
                 _regionSelector.Select3DRegion(seedPoint, threshold, progress));
+
+            progressWindow.End();
+
+            // 選択領域の表示を更新
+            UpdateSelectedRegion();
+
+            CurrentSelectionMode.Value = SelectionMode.None;
+        }
+
+        public async Task Clear3DRegion(double relativeX, double relativeY)
+        {
+            if (CurrentSelectionMode.Value !=
+                SelectionMode.Clear3DFillSelection)
+                return;
+
+            var renderedImage = _image.RenderImage();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
+                relativeY * bitmapImage.PixelHeight,
+                ScrollValue.Value);
+
+            IProgressWindow progressWindow = _progressWindowFactory.Create();
+            progressWindow.SetWindowTitle("3D領域クリア中");
+            progressWindow.Start();
+            progressWindow.SetStatusText("3次元塗りつぶし選択を解除中...");
+
+            var progress = new Progress<(int value, string text)>(data =>
+            {
+                progressWindow.SetStatusText(data.text);
+                progressWindow.SetProgress(data.value);
+            });
+
+            await Task.Run(() =>
+                _regionSelector.Clear3DRegion(seedPoint, progress));
 
             progressWindow.End();
 
