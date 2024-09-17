@@ -15,10 +15,14 @@
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
+      <!-- メニュー -->
+      <RowDefinition Height="Auto"/>
+      <!-- リボン -->
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
+    <!-- メニュー -->
     <Menu Grid.Column="0"
           Grid.ColumnSpan="2"
           Grid.Row="0">
@@ -31,32 +35,32 @@
         <MenuItem Header="終了"
                   Command="{Binding ExitCommand}"/>
       </MenuItem>
-      <!--<MenuItem Header="_View">
-        <MenuItem Header="_Zoom In"
-                  Command="{Binding ZoomInCommand}"/>
-        <MenuItem Header="_Zoom Out"
-                  Command="{Binding ZoomOutCommand}"/>
-        <Separator/>
-        <MenuItem Header="_Pan"
-                  Command="{Binding PanCommand}"/>
-        <Separator/>
-        <MenuItem Header="_Rotate"
-                  Command="{Binding RotateCommand}"/>
-      </MenuItem>-->
-      <MenuItem Header="ズームイン"
-                Command="{Binding ZoomInCommand}"/>
-      <MenuItem Header="ズームアウト"
-                Command="{Binding ZoomOutCommand}"/>
-      <MenuItem Header="点群表示"
-                Command="{Binding DisplayPointCloud3dCommand}"/>
-      <MenuItem Header="サーフェスモデル表示"
-                Command="{Binding DisplaySurfaceModelCommand}"/>
-      <MenuItem Header="サーフェスモデル表示(線形補間)"
-                Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
+      <!-- 以下のメニュー項目はリボンに移動済み -->
     </Menu>
 
+    <!-- リボン -->
+    <Ribbon Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="1">
+      <RibbonTab Header="表示">
+        <RibbonGroup Header="操作">
+          <RibbonButton Label="ズームイン"
+                               Command="{Binding ZoomInCommand}"/>
+          <RibbonButton Label="ズームアウト"
+                               Command="{Binding ZoomOutCommand}"/>
+          <RibbonButton Label="点群表示"
+                               Command="{Binding DisplayPointCloud3dCommand}"/>
+          <RibbonButton Label="サーフェスモデル表示"
+                               Command="{Binding DisplaySurfaceModelCommand}"/>
+          <RibbonButton Label="サーフェスモデル表示(線形補間)"
+                               Command="{Binding DisplaySurfaceModelLinearInterpolationCommand}"/>
+        </RibbonGroup>
+      </RibbonTab>
+    </Ribbon>
+
+    <!-- リストビュー -->
     <ListView Grid.Column="0"
-              Grid.Row="1"
+              Grid.Row="2"
               ItemsSource="{Binding DicomFiles}"
               SelectedIndex="{Binding SelectedIndex.Value, Mode=TwoWay}">
       <ListView.ItemTemplate>
@@ -66,8 +70,9 @@
       </ListView.ItemTemplate>
     </ListView>
 
+    <!-- 画像コンテナ -->
     <ContentControl x:Name="ImageContainer"
                     Grid.Column="1"
-                    Grid.Row="1"/>
+                    Grid.Row="2"/>
   </Grid>
 </Window>
