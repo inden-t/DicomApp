@@ -139,14 +139,11 @@ namespace DicomApp.Views
             }
         }
 
-        private void DicomImage_Click(object sender,
-            MouseButtonEventArgs e)
+        private void DicomImage_Click(object sender, MouseButtonEventArgs e)
         {
             Point mousePos = e.GetPosition(DicomImage);
-            Point3D seedPoint = new Point3D(mousePos.X, mousePos.Y,
-                _viewModel.ScrollValue.Value);
-            int threshold = 200; // しきい値は適切な値に変更してください
-            _viewModel.Select3DRegion(seedPoint, threshold);
+            _viewModel.Select3DRegion(mousePos.X / DicomImage.ActualWidth,
+                mousePos.Y / DicomImage.ActualHeight);
         }
     }
 }

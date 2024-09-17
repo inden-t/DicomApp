@@ -108,10 +108,20 @@ namespace DicomApp.ViewModels
             // 血管領域選択モードを開始
         }
 
-        public void Select3DRegion(Point3D seedPoint, int threshold)
+        public void Select3DRegion(double relativeX, double relativeY)
         {
+            var renderedImage = _image.RenderImage();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
+                relativeY * bitmapImage.PixelHeight,
+                ScrollValue.Value);
+
             MessageBox.Show(seedPoint.ToString());
+
+            //int threshold = 200; // しきい値は適切な値に変更してください
             //_regionSelector.Select3DRegion(seedPoint, threshold);
+
             // 選択領域の表示を更新
             UpdateSelectedRegion();
         }
