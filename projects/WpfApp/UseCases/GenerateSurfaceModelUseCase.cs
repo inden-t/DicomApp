@@ -6,7 +6,7 @@ using DicomApp.Models;
 
 namespace DicomApp.UseCases
 {
-    public class DisplaySurfaceModelUseCase
+    public class GenerateSurfaceModelUseCase
     {
         private readonly FileManager _fileManager;
         private readonly IModel3dViewerFactory _viewerFactory;
@@ -15,7 +15,7 @@ namespace DicomApp.UseCases
         private IModel3dViewer _viewer;
         private IProgressWindow _progressWindow;
 
-        public DisplaySurfaceModelUseCase(FileManager fileManager,
+        public GenerateSurfaceModelUseCase(FileManager fileManager,
             IModel3dViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
