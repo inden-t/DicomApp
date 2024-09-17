@@ -8,8 +8,8 @@ namespace DicomApp
     {
         public CommandFactory(MainWindowViewModel mainWindowViewModel,
             OpenDicomFileUseCase openDicomFileUseCase,
-            DisplayPointCloud3dUseCase
-                displayPointCloud3dUseCase,
+            GeneratePointCloudUseCase
+                generatePointCloudUseCase,
             DisplaySurfaceModelUseCase
                 displaySurfaceModelUseCase,
             DisplaySurfaceModelLinearInterpolationUseCase
@@ -22,7 +22,7 @@ namespace DicomApp
 
             mainWindowViewModel.DisplayPointCloud3dCommand.Subscribe(
                 async () =>
-                    await displayPointCloud3dUseCase.ExecuteAsync());
+                    await generatePointCloudUseCase.ExecuteAsync());
 
             mainWindowViewModel.DisplaySurfaceModelCommand.Subscribe(
                 async () =>

@@ -70,7 +70,7 @@ namespace DicomApp
             services.AddScoped<ImageViewerViewModel>();
 
             services.AddScoped<OpenDicomFileUseCase>();
-            services.AddScoped<DisplayPointCloud3dUseCase>();
+            services.AddScoped<GeneratePointCloudUseCase>();
             services.AddScoped<DisplaySurfaceModelUseCase>();
             services.AddScoped<DisplaySurfaceModelLinearInterpolationUseCase>();
             services.AddScoped<IModel3dViewerFactory, Model3dViewerFactory>();

@@ -7,7 +7,7 @@ using DicomApp.Models;
 
 namespace DicomApp.UseCases
 {
-    public class DisplayPointCloud3dUseCase
+    public class GeneratePointCloudUseCase
     {
         private readonly FileManager _fileManager;
         private readonly IModel3dViewerFactory _viewerFactory;
@@ -16,7 +16,7 @@ namespace DicomApp.UseCases
         private IModel3dViewer _viewer;
         private IProgressWindow _progressWindow;
 
-        public DisplayPointCloud3dUseCase(FileManager fileManager,
+        public GeneratePointCloudUseCase(FileManager fileManager,
             IModel3dViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
         {
