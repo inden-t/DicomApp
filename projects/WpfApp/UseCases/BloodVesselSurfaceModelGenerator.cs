@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -8,7 +8,10 @@ namespace DicomApp.UseCases
 {
     public class BloodVesselSurfaceModelGenerator
     {
-        public async Task<SurfaceModel> GenerateModelAsync(BloodVessel3DRegion region, int threshold, IProgress<int> progress)
+        public async Task<SurfaceModel> GenerateModelAsync(
+            BloodVessel3DRegion region, int threshold
+            //, IProgress<int> progress
+        )
         {
             return await Task.Run(() =>
             {
@@ -16,17 +19,23 @@ namespace DicomApp.UseCases
                 var mesh = new MeshGeometry3D();
 
                 // マーチングキューブ法を使用してメッシュを生成
-                GenerateMeshUsingMarchingCubes(region, threshold, mesh, progress);
+                GenerateMeshUsingMarchingCubes(region, threshold, mesh
+                    //, progress
+                );
 
                 // メッシュにマテリアルを適用
-                var material = new DiffuseMaterial(new SolidColorBrush(Colors.Red));
+                var material =
+                    new DiffuseMaterial(new SolidColorBrush(Colors.Red));
                 surfaceModel.AddMesh(mesh, material);
 
                 return surfaceModel;
             });
         }
 
-        private void GenerateMeshUsingMarchingCubes(BloodVessel3DRegion region, int threshold, MeshGeometry3D mesh, IProgress<int> progress)
+        private void GenerateMeshUsingMarchingCubes(BloodVessel3DRegion region,
+            int threshold, MeshGeometry3D mesh
+            //, IProgress<int> progress
+        )
         {
             // マーチングキューブ法の実装
             // この部分は複雑なアルゴリズムを含むため、ここでは簡略化しています
@@ -36,7 +45,7 @@ namespace DicomApp.UseCases
             // 進捗状況の報告
             for (int i = 0; i <= 100; i++)
             {
-                progress?.Report(i);
+                //progress?.Report(i);
                 System.Threading.Thread.Sleep(50); // シミュレーション用の遅延
             }
 

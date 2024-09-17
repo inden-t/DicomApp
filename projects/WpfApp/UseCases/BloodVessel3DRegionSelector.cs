@@ -1,3 +1,6 @@
+﻿using System.Windows.Media.Media3D;
+using DicomApp.Models;
+
 public class BloodVessel3DRegionSelector
 {
     // 3D塗りつぶし選択の実装
@@ -16,5 +19,6 @@ public class BloodVessel3DRegionSelector
     public BloodVessel3DRegion GetSelectedRegion()
     {
         // 選択された領域を返す
+        return null;
     }
 }

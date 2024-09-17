@@ -37,18 +37,18 @@
                ViewportSize="8"
                SmallChange="1"
                LargeChange="1"/>
+    <StackPanel Grid.Column="0">
+      <Button Content="血管領域選択"
+        Command="{Binding StartBloodVesselSelectionModeCommand}"/>
+      <Slider Minimum="0"
+        Maximum="255"
+        Value="{Binding Threshold}"/>
+      <!-- 3D画像表示領域 -->
+    </StackPanel>
     <b:Interaction.Triggers>
       <b:EventTrigger EventName="MouseMove">
         <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}"/>
       </b:EventTrigger>
     </b:Interaction.Triggers>
   </Grid>
-  <StackPanel>
-    <Button Content="血管領域選択"
-        Command="{Binding StartBloodVesselSelectionModeCommand}"/>
-    <Slider Minimum="0"
-        Maximum="255"
-        Value="{Binding Threshold}"/>
-    <!-- 3D画像表示領域 -->
-  </StackPanel>
 </UserControl>
