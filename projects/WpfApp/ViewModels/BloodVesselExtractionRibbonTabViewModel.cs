@@ -32,7 +32,8 @@ namespace DicomApp.ViewModels
                 IsSelectionModeActive.Value = false);
 
             Execute3DFillSelectionCommand.Subscribe(() =>
-                _imageViewerViewModel.IsSelectionModeActive = true);
+                _imageViewerViewModel.CurrentSelectionMode.Value =
+                    SelectionMode.Fill3DSelection);
 
             BloodVesselExtractionCommand.Subscribe(
                 ExecuteBloodVesselExtraction);

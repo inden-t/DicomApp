@@ -11,6 +11,12 @@ using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
 {
+    public enum SelectionMode
+    {
+        None,
+        Fill3DSelection,
+    }
+
     public class ImageViewerViewModel : ViewModelBase
     {
         private DicomImage _image;
@@ -32,7 +38,8 @@ namespace DicomApp.ViewModels
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
 
-        public bool IsSelectionModeActive { get; set; }
+        public ReactiveProperty<SelectionMode> CurrentSelectionMode { get; } =
+            new(SelectionMode.None);
 
         private readonly BloodVessel3DRegionSelector _regionSelector;
         private readonly IProgressWindowFactory _progressWindowFactory;
@@ -125,7 +132,8 @@ namespace DicomApp.ViewModels
 
         public async Task Select3DRegion(double relativeX, double relativeY)
         {
-            if (!IsSelectionModeActive) return;
+            if (CurrentSelectionMode.Value != SelectionMode.Fill3DSelection)
+                return;
 
             var renderedImage = _image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
@@ -154,7 +162,7 @@ namespace DicomApp.ViewModels
             // 選択領域の表示を更新
             UpdateSelectedRegion();
 
-            IsSelectionModeActive = false;
+            CurrentSelectionMode.Value = SelectionMode.None;
         }
 
         private void UpdateSelectedRegion()
