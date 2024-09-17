@@ -44,7 +44,7 @@
                         Command="{Binding ZoomOutCommand}"/>
         </RibbonGroup>
         <RibbonGroup Header="3D表示">
-          <RibbonButton Label="点群表示"
+          <RibbonButton Label="点群表示(非常に重い)"
                         Command="{Binding DisplayPointCloud3dCommand}"/>
           <RibbonButton Label="サーフェスモデル表示"
                         Command="{Binding DisplaySurfaceModelCommand}"/>
