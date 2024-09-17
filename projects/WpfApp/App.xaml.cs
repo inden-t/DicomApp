@@ -72,7 +72,8 @@ namespace DicomApp
             services.AddScoped<OpenDicomFileUseCase>();
             services.AddScoped<GeneratePointCloudUseCase>();
             services.AddScoped<GenerateSurfaceModelUseCase>();
-            services.AddScoped<DisplaySurfaceModelLinearInterpolationUseCase>();
+            services
+                .AddScoped<GenerateSurfaceModelLinearInterpolationUseCase>();
             services.AddScoped<IModel3dViewerFactory, Model3dViewerFactory>();
             services.AddScoped<IProgressWindowFactory, ProgressWindowFactory>();
         }

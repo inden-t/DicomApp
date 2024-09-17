@@ -12,8 +12,8 @@ namespace DicomApp
                 generatePointCloudUseCase,
             GenerateSurfaceModelUseCase
                 generateSurfaceModelUseCase,
-            DisplaySurfaceModelLinearInterpolationUseCase
-                displaySurfaceModelLinearInterpolationUseCase)
+            GenerateSurfaceModelLinearInterpolationUseCase
+                generateSurfaceModelLinearInterpolationUseCase)
         {
             mainWindowViewModel.OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
@@ -30,7 +30,7 @@ namespace DicomApp
 
             mainWindowViewModel.DisplaySurfaceModelLinearInterpolationCommand
                 .Subscribe(async () =>
-                    await displaySurfaceModelLinearInterpolationUseCase
+                    await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());
         }
     }

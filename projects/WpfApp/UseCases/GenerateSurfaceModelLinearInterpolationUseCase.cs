@@ -6,7 +6,7 @@ using DicomApp.Models;
 
 namespace DicomApp.UseCases
 {
-    public class DisplaySurfaceModelLinearInterpolationUseCase
+    public class GenerateSurfaceModelLinearInterpolationUseCase
     {
         private const byte _intensityIso = 200;
         private const byte _intensityMax = 255;
@@ -19,7 +19,7 @@ namespace DicomApp.UseCases
         private IModel3dViewer _viewer;
         private IProgressWindow _progressWindow;
 
-        public DisplaySurfaceModelLinearInterpolationUseCase(
+        public GenerateSurfaceModelLinearInterpolationUseCase(
             FileManager fileManager,
             IModel3dViewerFactory viewerFactory,
             IProgressWindowFactory progressWindowFactory)
