@@ -326,5 +326,14 @@ namespace DicomApp.ViewModels
             _regionSelector.EditRegion(point, isAdd);
             // 選択領域の表示を更新
         }
+
+        public void UndoSelection()
+        {
+            if (_regionSelector.CanUndo())
+            {
+                _regionSelector.Undo();
+                UpdateSelectedRegion();
+            }
+        }
     }
 }

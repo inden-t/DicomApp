@@ -5,7 +5,7 @@ namespace DicomApp.Models
 {
     public class BloodVessel3DRegion
     {
-        public HashSet<(int X, int Y, int Z)> SelectedVoxels { get; }
+        public HashSet<(int X, int Y, int Z)> SelectedVoxels { get; set; }
 
         public BloodVessel3DRegion()
         {

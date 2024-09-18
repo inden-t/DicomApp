@@ -20,8 +20,7 @@ namespace DicomApp.Models
         private int _imageWidth;
         private int _imageHeight;
 
-        private List<HashSet<Point3D>> _selectionHistory =
-            new List<HashSet<Point3D>>();
+        private List<HashSet<(int X, int Y, int Z)>> _selectionHistory = new();
 
         private int _currentHistoryIndex = -1;
 
@@ -41,7 +40,8 @@ namespace DicomApp.Models
             }
 
             _selectionHistory.Add(
-                new HashSet<Point3D>(_selectedRegion.SelectedVoxels));
+                new HashSet<(int X, int Y, int Z)>(_selectedRegion
+                    .SelectedVoxels));
             _currentHistoryIndex = _selectionHistory.Count - 1;
         }
 
@@ -56,7 +56,7 @@ namespace DicomApp.Models
             {
                 _currentHistoryIndex--;
                 _selectedRegion.SelectedVoxels =
-                    new HashSet<Point3D>(
+                    new HashSet<(int X, int Y, int Z)>(
                         _selectionHistory[_currentHistoryIndex]);
             }
         }

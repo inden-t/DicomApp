@@ -82,6 +82,11 @@ namespace DicomApp.ViewModels
                 ExecuteBloodVesselExtraction);
             CancelExtractionCommand.Subscribe(CancelBloodVesselExtraction);
             SaveModelCommand.Subscribe(SaveExtractedModel);
+
+            UndoSelectionCommand.Subscribe(() =>
+            {
+                _imageViewerViewModel.UndoSelection();
+            });
         }
 
         private void ExecuteBloodVesselExtraction()
