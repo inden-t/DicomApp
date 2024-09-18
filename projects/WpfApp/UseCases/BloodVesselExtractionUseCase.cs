@@ -38,7 +38,7 @@ public class BloodVesselExtractionUseCase
                 progressWindow.SetProgress(data.value);
             });
 
-            int threshold = 200;
+            int threshold = 220;
             var region = _regionSelector.GetSelectedRegion();
             var model3DGroup =
                 await _modelGenerator.GenerateModelAsync(_fileManager, region,
