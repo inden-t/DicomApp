@@ -256,22 +256,9 @@ namespace DicomApp.ViewModels
                 relativeY * bitmapImage.PixelHeight,
                 ScrollValue.Value);
 
-            IProgressWindow progressWindow = _progressWindowFactory.Create();
-            progressWindow.SetWindowTitle("2D領域選択中");
-            progressWindow.Start();
-            progressWindow.SetStatusText("2次元塗りつぶし選択を実行中...");
-
-            var progress = new Progress<(int value, string text)>(data =>
-            {
-                progressWindow.SetStatusText(data.text);
-                progressWindow.SetProgress(data.value);
-            });
-
             int threshold = 220; // しきい値は適切な値に変更してください
             await Task.Run(() =>
                 _regionSelector.Select2DRegion(seedPoint, threshold));
-
-            progressWindow.End();
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
