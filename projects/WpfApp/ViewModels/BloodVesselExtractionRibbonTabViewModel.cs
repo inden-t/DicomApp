@@ -41,11 +41,34 @@ namespace DicomApp.ViewModels
                 IsSelectionModeActive.Value = false);
 
             Execute3DFillSelectionCommand.Subscribe(() =>
-                _imageViewerViewModel.CurrentSelectionMode.Value =
-                    SelectionMode.Fill3DSelection);
+            {
+                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                    SelectionMode.Fill3DSelection)
+                {
+                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                        SelectionMode.None;
+                }
+                else
+                {
+                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                        SelectionMode.Fill3DSelection;
+                }
+            });
+
             Clear3DFillSelectionCommand.Subscribe(() =>
-                _imageViewerViewModel.CurrentSelectionMode.Value =
-                    SelectionMode.Clear3DFillSelection);
+            {
+                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                    SelectionMode.Clear3DFillSelection)
+                {
+                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                        SelectionMode.None;
+                }
+                else
+                {
+                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                        SelectionMode.Clear3DFillSelection;
+                }
+            });
 
             Execute2DFillSelectionCommand.Subscribe(() =>
             {
