@@ -41,8 +41,19 @@ namespace DicomApp.ViewModels
                     _imageViewerViewModel.CurrentSelectionMode.Value =
                         SelectionMode.Clear3DFillSelection);
             Clear2DFillSelectionCommand.Subscribe(() =>
-                _imageViewerViewModel.CurrentSelectionMode.Value =
-                    SelectionMode.ClearFill2DSelection);
+            {
+                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                    SelectionMode.ClearFill2DSelection)
+                {
+                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                        SelectionMode.None;
+                }
+                else
+                {
+                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                        SelectionMode.ClearFill2DSelection;
+                }
+            });
 
             BloodVesselExtractionCommand.Subscribe(
                 ExecuteBloodVesselExtraction);
