@@ -275,8 +275,6 @@ namespace DicomApp.ViewModels
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
-
-            CurrentSelectionMode.Value = SelectionMode.None;
         }
 
         private void UpdateSelectedRegion()

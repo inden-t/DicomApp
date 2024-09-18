@@ -16,7 +16,7 @@ namespace DicomApp.Models
         int _visitedZMax = 0;
         int _visitedZMin = 0;
 
-        private List<byte[]> _renderedImages;
+        private List<byte[]> _renderedImages = new();
         private int _imageWidth;
         private int _imageHeight;
 
@@ -146,6 +146,8 @@ namespace DicomApp.Models
             {
                 return;
             }
+
+            PreRenderImages();
 
             int x = (int)seedPoint.X;
             int y = (int)seedPoint.Y;
