@@ -59,6 +59,9 @@
                   Command="{Binding EditRegionCommand}"/>
     <RibbonButton Label="領域削除"
                   Command="{Binding DeleteRegionCommand}"/>
+    <RibbonButton Label="元に戻す"
+                  Command="{Binding UndoSelectionCommand}">
+    </RibbonButton>
   </RibbonGroup>
 
   <RibbonGroup Header="血管抽出">

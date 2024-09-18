@@ -18,6 +18,9 @@ namespace DicomApp.ViewModels
         public ReactiveCommand Clear2DFillSelectionCommand { get; } = new();
         public ReactiveCommand Execute2DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; }
+
+        public ReactiveCommand UndoSelectionCommand { get; } = new();
+
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
         public ReactiveCommand CancelExtractionCommand { get; } = new();
         public ReactiveCommand SaveModelCommand { get; } = new();

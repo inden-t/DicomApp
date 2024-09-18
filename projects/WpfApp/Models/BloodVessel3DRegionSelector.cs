@@ -20,10 +20,45 @@ namespace DicomApp.Models
         private int _imageWidth;
         private int _imageHeight;
 
+        private List<HashSet<Point3D>> _selectionHistory =
+            new List<HashSet<Point3D>>();
+
+        private int _currentHistoryIndex = -1;
+
         public BloodVessel3DRegionSelector(FileManager fileManager)
         {
             _fileManager = fileManager;
             _selectedRegion = new BloodVessel3DRegion();
+            SaveCurrentState();
+        }
+
+        private void SaveCurrentState()
+        {
+            if (_currentHistoryIndex < _selectionHistory.Count - 1)
+            {
+                _selectionHistory.RemoveRange(_currentHistoryIndex + 1,
+                    _selectionHistory.Count - _currentHistoryIndex - 1);
+            }
+
+            _selectionHistory.Add(
+                new HashSet<Point3D>(_selectedRegion.SelectedVoxels));
+            _currentHistoryIndex = _selectionHistory.Count - 1;
+        }
+
+        public bool CanUndo()
+        {
+            return _currentHistoryIndex > 0;
+        }
+
+        public void Undo()
+        {
+            if (CanUndo())
+            {
+                _currentHistoryIndex--;
+                _selectedRegion.SelectedVoxels =
+                    new HashSet<Point3D>(
+                        _selectionHistory[_currentHistoryIndex]);
+            }
         }
 
         private void PreRenderImages()
@@ -105,6 +140,8 @@ namespace DicomApp.Models
                         visited, queue);
                 }
             }
+
+            SaveCurrentState();
         }
 
         private void CheckAndEnqueueNeighbor(int x, int y, int z, int width,
@@ -195,6 +232,8 @@ namespace DicomApp.Models
                         width, height);
                 }
             }
+
+            SaveCurrentState();
         }
 
         private void CheckAndEnqueue2DNeighbor(int x, int y, int z,
@@ -244,6 +283,8 @@ namespace DicomApp.Models
                     queue.Enqueue(new Point3D(x, y, z + 1));
                 }
             }
+
+            SaveCurrentState();
         }
 
         public void Clear2DRegion(Point3D seedPoint)
@@ -273,6 +314,8 @@ namespace DicomApp.Models
                     if (y < _imageHeight - 1) stack.Push(new Point(x, y + 1));
                 }
             }
+
+            SaveCurrentState();
         }
 
         // 選択領域の編集機能
