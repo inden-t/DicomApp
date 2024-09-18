@@ -175,7 +175,7 @@ namespace DicomApp.ViewModels
 
             int threshold = 220; // しきい値は適切な値に変更してください
             await Task.Run(() =>
-                _regionSelector.Select3DRegion(seedPoint, threshold, progress));
+                _regionSelector.Select3DRegion(seedPoint, threshold));
 
             progressWindow.End();
 
@@ -209,8 +209,7 @@ namespace DicomApp.ViewModels
                 progressWindow.SetProgress(data.value);
             });
 
-            await Task.Run(() =>
-                _regionSelector.Clear3DRegion(seedPoint, progress));
+            await Task.Run(() => _regionSelector.Clear3DRegion(seedPoint));
 
             progressWindow.End();
 

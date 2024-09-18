@@ -26,8 +26,7 @@ namespace DicomApp.Models
             _selectedRegion = new BloodVessel3DRegion();
         }
 
-        private void PreRenderImages(
-            IProgress<(int value, string text)> progress)
+        private void PreRenderImages()
         {
             _renderedImages = new List<byte[]>();
             int index = 0;
@@ -43,25 +42,18 @@ namespace DicomApp.Models
                 var pixels = new byte[_imageHeight * stride];
                 renderedImage.CopyPixels(pixels, stride, 0);
                 _renderedImages.Add(pixels);
-
-                int progressValue = index * 100 / _fileManager.DicomFiles.Count;
-                string progressText = $"3次元塗りつぶし選択を実行中...\n" +
-                                      $"プリレンダリング中... ({index} / {_fileManager.DicomFiles.Count})\n";
-
-                progress.Report((progressValue, progressText));
             }
         }
 
         // 3D塗りつぶし選択の実装
-        public void Select3DRegion(Point3D seedPoint, int threshold,
-            IProgress<(int value, string text)> progress)
+        public void Select3DRegion(Point3D seedPoint, int threshold)
         {
             if (_fileManager.DicomFiles.Count == 0)
             {
                 return;
             }
 
-            PreRenderImages(progress);
+            PreRenderImages();
 
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
@@ -111,20 +103,6 @@ namespace DicomApp.Models
                         visited, queue);
                     CheckAndEnqueueNeighbor(x, y, z - 1, width, height, depth,
                         visited, queue);
-                }
-
-                if (_visitedCount % 1000 == 0)
-                {
-                    long progressValue =
-                        (long)(_visitedXMax - _visitedXMin + 1) *
-                        (_visitedYMax - _visitedYMin + 1) *
-                        (_visitedZMax - _visitedZMin + 1) * 100 /
-                        (width * height * depth);
-                    string progressText = $"3次元塗りつぶし選択を実行中...\n" +
-                                          $"進捗: {progressValue}%\n" +
-                                          $"点の個数: {_visitedCount}個";
-
-                    progress.Report(((int)progressValue, progressText));
                 }
             }
         }
@@ -204,8 +182,7 @@ namespace DicomApp.Models
             }
         }
 
-        public void Clear3DRegion(Point3D seedPoint,
-            IProgress<(int value, string text)> progress)
+        public void Clear3DRegion(Point3D seedPoint)
         {
             int x = (int)seedPoint.X;
             int y = (int)seedPoint.Y;
@@ -215,9 +192,6 @@ namespace DicomApp.Models
             // 例: 6方向の塗りつぶしアルゴリズムを使用
             Queue<Point3D> queue = new Queue<Point3D>();
             queue.Enqueue(new Point3D(x, y, z));
-
-            int clearedCount = 0;
-            int totalVoxels = _selectedRegion.SelectedVoxels.Count;
 
             while (queue.Count > 0)
             {
@@ -229,7 +203,6 @@ namespace DicomApp.Models
                 if (_selectedRegion.ContainsVoxel(p))
                 {
                     _selectedRegion.RemoveVoxel(p);
-                    clearedCount++;
 
                     queue.Enqueue(new Point3D(x - 1, y, z));
                     queue.Enqueue(new Point3D(x + 1, y, z));
@@ -237,17 +210,6 @@ namespace DicomApp.Models
                     queue.Enqueue(new Point3D(x, y + 1, z));
                     queue.Enqueue(new Point3D(x, y, z - 1));
                     queue.Enqueue(new Point3D(x, y, z + 1));
-
-                    if (clearedCount % 1000 == 0 || queue.Count == 0)
-                    {
-                        int progressValue =
-                            (int)((double)clearedCount / totalVoxels * 100);
-                        string progressText = $"3次元塗りつぶし選択を解除中...\n" +
-                                              $"進捗: {progressValue}%\n" +
-                                              $"クリアした点の個数: {clearedCount}個";
-
-                        progress.Report((progressValue, progressText));
-                    }
                 }
             }
         }
