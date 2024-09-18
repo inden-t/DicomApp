@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using System.Windows.Media.Media3D;
+﻿using System.Windows.Media.Media3D;
+using Point = System.Drawing.Point;
 
 namespace DicomApp.Models
 {
@@ -44,7 +44,7 @@ namespace DicomApp.Models
                 renderedImage.CopyPixels(pixels, stride, 0);
                 _renderedImages.Add(pixels);
 
-                int progressValue = index / _fileManager.DicomFiles.Count;
+                int progressValue = index * 100 / _fileManager.DicomFiles.Count;
                 string progressText = $"3次元塗りつぶし選択を実行中...\n" +
                                       $"プリレンダリング中... ({index} / {_fileManager.DicomFiles.Count})\n";
 
@@ -113,15 +113,19 @@ namespace DicomApp.Models
                         visited, queue);
                 }
 
-                long progressValue = (long)(_visitedXMax - _visitedXMin + 1) *
-                                     (_visitedYMax - _visitedYMin + 1) *
-                                     (_visitedZMax - _visitedZMin + 1) * 100 /
-                                     (width * height * depth);
-                string progressText = $"3次元塗りつぶし選択を実行中...\n" +
-                                      $"進捗: {progressValue}%\n" +
-                                      $"点の個数: {_visitedCount}個";
+                if (_visitedCount % 1000 == 0)
+                {
+                    long progressValue =
+                        (long)(_visitedXMax - _visitedXMin + 1) *
+                        (_visitedYMax - _visitedYMin + 1) *
+                        (_visitedZMax - _visitedZMin + 1) * 100 /
+                        (width * height * depth);
+                    string progressText = $"3次元塗りつぶし選択を実行中...\n" +
+                                          $"進捗: {progressValue}%\n" +
+                                          $"点の個数: {_visitedCount}個";
 
-                progress.Report(((int)progressValue, progressText));
+                    progress.Report(((int)progressValue, progressText));
+                }
             }
         }
 
