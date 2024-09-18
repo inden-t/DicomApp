@@ -140,6 +140,11 @@ namespace DicomApp.ViewModels
                 Select3DRegion(relativeX, relativeY);
             }
             else if (CurrentSelectionMode.Value ==
+                     SelectionMode.Fill2DSelection)
+            {
+                Select2DRegion(relativeX, relativeY);
+            }
+            else if (CurrentSelectionMode.Value ==
                      SelectionMode.ClearFill2DSelection)
             {
                 Clear2DRegion(relativeX, relativeY);
@@ -237,6 +242,41 @@ namespace DicomApp.ViewModels
 
             // 選択領域の表示を更新
             UpdateSelectedRegion();
+        }
+
+        public async Task Select2DRegion(double relativeX, double relativeY)
+        {
+            if (CurrentSelectionMode.Value != SelectionMode.Fill2DSelection)
+                return;
+
+            var renderedImage = _image.RenderImage();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
+                relativeY * bitmapImage.PixelHeight,
+                ScrollValue.Value);
+
+            IProgressWindow progressWindow = _progressWindowFactory.Create();
+            progressWindow.SetWindowTitle("2D領域選択中");
+            progressWindow.Start();
+            progressWindow.SetStatusText("2次元塗りつぶし選択を実行中...");
+
+            var progress = new Progress<(int value, string text)>(data =>
+            {
+                progressWindow.SetStatusText(data.text);
+                progressWindow.SetProgress(data.value);
+            });
+
+            int threshold = 220; // しきい値は適切な値に変更してください
+            await Task.Run(() =>
+                _regionSelector.Select2DRegion(seedPoint, threshold));
+
+            progressWindow.End();
+
+            // 選択領域の表示を更新
+            UpdateSelectedRegion();
+
+            CurrentSelectionMode.Value = SelectionMode.None;
         }
 
         private void UpdateSelectedRegion()

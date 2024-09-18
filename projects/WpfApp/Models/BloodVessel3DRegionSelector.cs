@@ -140,6 +140,59 @@ namespace DicomApp.Models
             return pixels[index]; // Blue channel
         }
 
+        public void Select2DRegion(Point3D seedPoint, int threshold)
+        {
+            if (_fileManager.DicomFiles.Count == 0)
+            {
+                return;
+            }
+
+            int x = (int)seedPoint.X;
+            int y = (int)seedPoint.Y;
+            int z = (int)seedPoint.Z;
+
+            if (!IsValidPoint(x, y, z, _imageWidth, _imageHeight,
+                    _renderedImages.Count))
+            {
+                return;
+            }
+
+            bool[,] visited = new bool[_imageWidth, _imageHeight];
+            Queue<Point> queue = new Queue<Point>();
+
+            queue.Enqueue(new Point(x, y));
+            visited[x, y] = true;
+
+            while (queue.Count > 0)
+            {
+                Point current = queue.Dequeue();
+                x = current.X;
+                y = current.Y;
+
+                if (GetVoxelIntensity(x, y, z) > threshold)
+                {
+                    _selectedRegion.AddVoxel(new Point3D(x, y, z));
+
+                    // 4方向の隣接ピクセルをチェック
+                    CheckAndEnqueue2DNeighbor(x + 1, y, z, visited, queue);
+                    CheckAndEnqueue2DNeighbor(x - 1, y, z, visited, queue);
+                    CheckAndEnqueue2DNeighbor(x, y + 1, z, visited, queue);
+                    CheckAndEnqueue2DNeighbor(x, y - 1, z, visited, queue);
+                }
+            }
+        }
+
+        private void CheckAndEnqueue2DNeighbor(int x, int y, int z,
+            bool[,] visited, Queue<Point> queue)
+        {
+            if (IsValidPoint(x, y, z, _imageWidth, _imageHeight,
+                    _renderedImages.Count) && !visited[x, y])
+            {
+                queue.Enqueue(new Point(x, y));
+                visited[x, y] = true;
+            }
+        }
+
         // 選択領域の編集機能
         public void EditRegion(Point3D point, bool isAdd)
         {
