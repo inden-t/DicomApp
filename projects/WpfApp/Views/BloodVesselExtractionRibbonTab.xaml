@@ -26,8 +26,6 @@
                       Value="LightBlue"/>
               <Setter Property="BorderBrush"
                       Value="Blue"/>
-              <Setter Property="BorderThickness"
-                      Value="2"/>
             </DataTrigger>
           </Style.Triggers>
         </Style>
