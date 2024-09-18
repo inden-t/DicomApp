@@ -214,17 +214,36 @@ namespace DicomApp.Models
             return pixels[index]; // Blue channel
         }
 
-        // 選択領域の編集機能
-        public void EditRegion(Point3D point, bool isAdd)
+        public void Clear3DRegion(Point3D seedPoint)
         {
-            // 領域の追加または削除のロジックを実装
-        }
+            int x = (int)seedPoint.X;
+            int y = (int)seedPoint.Y;
+            int z = (int)seedPoint.Z;
 
-        // 選択領域の取得
-        public BloodVessel3DRegion GetSelectedRegion()
-        {
-            // 選択された領域を返す
-            return _selectedRegion;
+            // 3D領域のクリア処理を実装
+            // 例: 6方向の塗りつぶしアルゴリズムを使用
+            Queue<Point3D> queue = new Queue<Point3D>();
+            queue.Enqueue(new Point3D(x, y, z));
+
+            while (queue.Count > 0)
+            {
+                Point3D p = queue.Dequeue();
+                x = (int)p.X;
+                y = (int)p.Y;
+                z = (int)p.Z;
+
+                if (_selectedRegion.ContainsVoxel(p))
+                {
+                    _selectedRegion.RemoveVoxel(p);
+
+                    queue.Enqueue(new Point3D(x - 1, y, z));
+                    queue.Enqueue(new Point3D(x + 1, y, z));
+                    queue.Enqueue(new Point3D(x, y - 1, z));
+                    queue.Enqueue(new Point3D(x, y + 1, z));
+                    queue.Enqueue(new Point3D(x, y, z - 1));
+                    queue.Enqueue(new Point3D(x, y, z + 1));
+                }
+            }
         }
 
         public void Clear2DRegion(Point3D seedPoint)
@@ -256,36 +275,17 @@ namespace DicomApp.Models
             }
         }
 
-        public void Clear3DRegion(Point3D seedPoint)
+        // 選択領域の編集機能
+        public void EditRegion(Point3D point, bool isAdd)
         {
-            int x = (int)seedPoint.X;
-            int y = (int)seedPoint.Y;
-            int z = (int)seedPoint.Z;
+            // 領域の追加または削除のロジックを実装
+        }
 
-            // 3D領域のクリア処理を実装
-            // 例: 6方向の塗りつぶしアルゴリズムを使用
-            Queue<Point3D> queue = new Queue<Point3D>();
-            queue.Enqueue(new Point3D(x, y, z));
-
-            while (queue.Count > 0)
-            {
-                Point3D p = queue.Dequeue();
-                x = (int)p.X;
-                y = (int)p.Y;
-                z = (int)p.Z;
-
-                if (_selectedRegion.ContainsVoxel(p))
-                {
-                    _selectedRegion.RemoveVoxel(p);
-
-                    queue.Enqueue(new Point3D(x - 1, y, z));
-                    queue.Enqueue(new Point3D(x + 1, y, z));
-                    queue.Enqueue(new Point3D(x, y - 1, z));
-                    queue.Enqueue(new Point3D(x, y + 1, z));
-                    queue.Enqueue(new Point3D(x, y, z - 1));
-                    queue.Enqueue(new Point3D(x, y, z + 1));
-                }
-            }
+        // 選択領域の取得
+        public BloodVessel3DRegion GetSelectedRegion()
+        {
+            // 選択された領域を返す
+            return _selectedRegion;
         }
     }
 }
