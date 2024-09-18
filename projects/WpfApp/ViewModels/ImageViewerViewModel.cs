@@ -16,6 +16,7 @@ namespace DicomApp.ViewModels
         None,
         Fill3DSelection,
         Clear3DFillSelection,
+        Fill2DSelection,
         ClearFill2DSelection,
     }
 
