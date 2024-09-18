@@ -9,13 +9,13 @@
            Header="血管抽出">
   <RibbonGroup Header="血管領域選択">
     <RibbonButton Label="血管領域選択"
-                      Command="{Binding StartBloodVesselSelectionCommand}"/>
+                  Command="{Binding StartBloodVesselSelectionCommand}"/>
     <RibbonButton Label="3D塗りつぶし選択"
-                      Command="{Binding Execute3DFillSelectionCommand}"/>
+                  Command="{Binding Execute3DFillSelectionCommand}"/>
     <RibbonButton Label="3D塗りつぶし選択解除"
-                      Command="{Binding Clear3DFillSelectionCommand}"/>
+                  Command="{Binding Clear3DFillSelectionCommand}"/>
     <RibbonButton Label="2D塗りつぶし選択解除"
-                      Command="{Binding Clear2DFillSelectionCommand}"/>
+                  Command="{Binding Clear2DFillSelectionCommand}"/>
 
     <!--<ribbon:RibbonSlider Label="しきい値調整"
                                Minimum="0"
@@ -23,20 +23,20 @@
               Value="{Binding ThresholdValue}"/>-->
 
     <RibbonButton Label="領域編集"
-                      Command="{Binding EditRegionCommand}"/>
+                  Command="{Binding EditRegionCommand}"/>
     <RibbonButton Label="領域削除"
-                      Command="{Binding DeleteRegionCommand}"/>
+                  Command="{Binding DeleteRegionCommand}"/>
   </RibbonGroup>
 
   <RibbonGroup Header="血管抽出">
     <RibbonButton Label="血管抽出"
-                      Command="{Binding BloodVesselExtractionCommand}"/>
+                  Command="{Binding BloodVesselExtractionCommand}"/>
     <RibbonButton Label="モデル保存"
-                      Command="{Binding SaveModelCommand}"/>
+                  Command="{Binding SaveModelCommand}"/>
   </RibbonGroup>
 
   <RibbonGroup Header="操作">
     <RibbonButton Label="選択を破棄して終了"
-                      Command="{Binding DiscardSelectionCommand}"/>
+                  Command="{Binding DiscardSelectionCommand}"/>
   </RibbonGroup>
 </RibbonTab>
