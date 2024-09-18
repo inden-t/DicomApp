@@ -1,30 +1,42 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 
 namespace DicomApp.Models
 {
     public class BloodVessel3DRegion
     {
-        public HashSet<Point3D> SelectedVoxels { get; private set; }
+        public HashSet<(int X, int Y, int Z)> SelectedVoxels { get; }
 
         public BloodVessel3DRegion()
         {
-            SelectedVoxels = new HashSet<Point3D>();
+            SelectedVoxels = new HashSet<(int, int, int)>();
         }
 
         public void AddVoxel(Point3D voxel)
         {
-            SelectedVoxels.Add(voxel);
+            SelectedVoxels.Add((
+                (int)Math.Round(voxel.X),
+                (int)Math.Round(voxel.Y),
+                (int)Math.Round(voxel.Z)
+            ));
         }
 
         public void RemoveVoxel(Point3D voxel)
         {
-            SelectedVoxels.Remove(voxel);
+            SelectedVoxels.Remove((
+                (int)Math.Round(voxel.X),
+                (int)Math.Round(voxel.Y),
+                (int)Math.Round(voxel.Z)
+            ));
         }
 
         public bool ContainsVoxel(Point3D voxel)
         {
-            return SelectedVoxels.Contains(voxel);
+            return SelectedVoxels.Contains((
+                (int)Math.Round(voxel.X),
+                (int)Math.Round(voxel.Y),
+                (int)Math.Round(voxel.Z)
+            ));
         }
 
         public void Clear()
