@@ -17,7 +17,7 @@ namespace DicomApp.ViewModels
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear2DFillSelectionCommand { get; } = new();
         public ReactiveCommand Execute2DFillSelectionCommand { get; } = new();
-        public ReactiveCommand Clear3DFillSelectionCommand { get; }
+        public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
 
         public ReactiveCommand UndoSelectionCommand { get; } = new();
 
@@ -43,10 +43,9 @@ namespace DicomApp.ViewModels
             Execute3DFillSelectionCommand.Subscribe(() =>
                 _imageViewerViewModel.CurrentSelectionMode.Value =
                     SelectionMode.Fill3DSelection);
-            Clear3DFillSelectionCommand = new ReactiveCommand()
-                .WithSubscribe(() =>
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
-                        SelectionMode.Clear3DFillSelection);
+            Clear3DFillSelectionCommand.Subscribe(() =>
+                _imageViewerViewModel.CurrentSelectionMode.Value =
+                    SelectionMode.Clear3DFillSelection);
 
             Execute2DFillSelectionCommand.Subscribe(() =>
             {
