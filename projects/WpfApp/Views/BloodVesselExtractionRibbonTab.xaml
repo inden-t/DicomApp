@@ -15,7 +15,24 @@
     <RibbonButton Label="3D塗りつぶし選択解除"
                   Command="{Binding Clear3DFillSelectionCommand}"/>
     <RibbonButton Label="2D塗りつぶし選択解除"
-                  Command="{Binding Clear2DFillSelectionCommand}"/>
+                  Command="{Binding Clear2DFillSelectionCommand}">
+      <RibbonButton.Style>
+        <Style TargetType="RibbonButton"
+               BasedOn="{StaticResource {x:Type RibbonButton}}">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+                         Value="ClearFill2DSelection">
+              <Setter Property="Background"
+                      Value="LightBlue"/>
+              <Setter Property="BorderBrush"
+                      Value="Blue"/>
+              <Setter Property="BorderThickness"
+                      Value="2"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </RibbonButton.Style>
+    </RibbonButton>
 
     <!--<ribbon:RibbonSlider Label="しきい値調整"
                                Minimum="0"

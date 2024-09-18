@@ -5,6 +5,9 @@ namespace DicomApp.ViewModels
 {
     public class BloodVesselExtractionRibbonTabViewModel : ViewModelBase
     {
+        public ImageViewerViewModel ImageViewerViewModel =>
+            _imageViewerViewModel;
+
         private readonly ImageViewerViewModel _imageViewerViewModel;
 
         public ReactiveCommand StartBloodVesselSelectionCommand { get; } =
