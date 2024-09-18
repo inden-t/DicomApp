@@ -147,23 +147,32 @@ namespace DicomApp.Models
                 return;
             }
 
-            PreRenderImages();
-
             int x = (int)seedPoint.X;
             int y = (int)seedPoint.Y;
             int z = (int)seedPoint.Z;
 
-            if (!IsValidPoint(x, y, z, _imageWidth, _imageHeight,
-                    _renderedImages.Count))
+            var dicomFile = _fileManager.DicomFiles[z];
+            var image = dicomFile.GetImage();
+            var renderedImage = image.RenderImage()
+                .As<System.Windows.Media.Imaging.WriteableBitmap>();
+            int width = renderedImage.PixelWidth;
+            int height = renderedImage.PixelHeight;
+
+            if (!IsValidPoint(x, y, z, width, height,
+                    _fileManager.DicomFiles.Count))
             {
                 return;
             }
 
-            bool[,] visited = new bool[_imageWidth, _imageHeight];
+            bool[,] visited = new bool[width, height];
             Queue<Point> queue = new Queue<Point>();
 
             queue.Enqueue(new Point(x, y));
             visited[x, y] = true;
+
+            int stride = width * 4; // 4 bytes per pixel (BGRA)
+            byte[] pixels = new byte[height * stride];
+            renderedImage.CopyPixels(pixels, stride, 0);
 
             while (queue.Count > 0)
             {
@@ -171,28 +180,38 @@ namespace DicomApp.Models
                 x = current.X;
                 y = current.Y;
 
-                if (GetVoxelIntensity(x, y, z) > threshold)
+                if (GetPixelIntensity(x, y, pixels, stride) > threshold)
                 {
                     _selectedRegion.AddVoxel(new Point3D(x, y, z));
 
                     // 4方向の隣接ピクセルをチェック
-                    CheckAndEnqueue2DNeighbor(x + 1, y, z, visited, queue);
-                    CheckAndEnqueue2DNeighbor(x - 1, y, z, visited, queue);
-                    CheckAndEnqueue2DNeighbor(x, y + 1, z, visited, queue);
-                    CheckAndEnqueue2DNeighbor(x, y - 1, z, visited, queue);
+                    CheckAndEnqueue2DNeighbor(x + 1, y, z, visited, queue,
+                        width, height);
+                    CheckAndEnqueue2DNeighbor(x - 1, y, z, visited, queue,
+                        width, height);
+                    CheckAndEnqueue2DNeighbor(x, y + 1, z, visited, queue,
+                        width, height);
+                    CheckAndEnqueue2DNeighbor(x, y - 1, z, visited, queue,
+                        width, height);
                 }
             }
         }
 
         private void CheckAndEnqueue2DNeighbor(int x, int y, int z,
-            bool[,] visited, Queue<Point> queue)
+            bool[,] visited, Queue<Point> queue, int width, int height)
         {
-            if (IsValidPoint(x, y, z, _imageWidth, _imageHeight,
-                    _renderedImages.Count) && !visited[x, y])
+            if (IsValidPoint(x, y, z, width, height,
+                    _fileManager.DicomFiles.Count) && !visited[x, y])
             {
                 queue.Enqueue(new Point(x, y));
                 visited[x, y] = true;
             }
+        }
+
+        private byte GetPixelIntensity(int x, int y, byte[] pixels, int stride)
+        {
+            int index = (y * stride) + (x * 4);
+            return pixels[index]; // Blue channel
         }
 
         // 選択領域の編集機能
