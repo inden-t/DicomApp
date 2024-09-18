@@ -30,14 +30,13 @@ namespace DicomApp.UseCases
             int width = boundingBox.Width;
             int height = boundingBox.Height;
             int depth = boundingBox.Depth;
-            var voxelGrid = new double[width, height, depth];
 
-            // ボクセルグリッドを初期化
-            InitializeVoxelGrid(voxelGrid, region, boundingBox);
+            // 画像の色情報を取得
+            var imageIntensities = GetImageIntensities(boundingBox);
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
-            var surfaceGeometry =
-                CreateSurfaceFromVoxels(voxelGrid, threshold, progress, width);
+            var surfaceGeometry = CreateSurfaceFromVoxels(region,
+                imageIntensities, threshold, progress, width);
 
             // マテリアルを作成
             var materialGroup = CreateMaterial();
@@ -91,14 +90,16 @@ namespace DicomApp.UseCases
             }
         }
 
-        private MeshGeometry3D CreateSurfaceFromVoxels(double[,,] voxelGrid,
+        private MeshGeometry3D CreateSurfaceFromVoxels(
+            BloodVessel3DRegion region, double[,,] imageIntensities,
             int threshold, IProgress<(int value, string text)> progress,
             int totalWidth)
         {
             var mesh = new MeshGeometry3D();
-            int width = voxelGrid.GetLength(0);
-            int height = voxelGrid.GetLength(1);
-            int depth = voxelGrid.GetLength(2);
+            var boundingBox = GetBoundingBox(region);
+            int width = boundingBox.Width;
+            int height = boundingBox.Height;
+            int depth = boundingBox.Depth;
 
             int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
             int processedVoxels = 0;
@@ -113,17 +114,29 @@ namespace DicomApp.UseCases
                     {
                         // Marching Cubesアルゴリズムの実装
                         int cubeIndex = 0;
-                        if (voxelGrid[x, y, z] > isoValue) cubeIndex |= 1;
-                        if (voxelGrid[x + 1, y, z] > isoValue) cubeIndex |= 2;
-                        if (voxelGrid[x + 1, y + 1, z] > isoValue)
-                            cubeIndex |= 4;
-                        if (voxelGrid[x, y + 1, z] > isoValue) cubeIndex |= 8;
-                        if (voxelGrid[x, y, z + 1] > isoValue) cubeIndex |= 16;
-                        if (voxelGrid[x + 1, y, z + 1] > isoValue)
-                            cubeIndex |= 32;
-                        if (voxelGrid[x + 1, y + 1, z + 1] > isoValue)
-                            cubeIndex |= 64;
-                        if (voxelGrid[x, y + 1, z + 1] > isoValue)
+                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
+                                y + boundingBox.Y, z + boundingBox.Z)))
+                            cubeIndex |= 1;
+                        if (region.ContainsVoxel(new Point3D(
+                                x + 1 + boundingBox.X, y + boundingBox.Y,
+                                z + boundingBox.Z))) cubeIndex |= 2;
+                        if (region.ContainsVoxel(new Point3D(
+                                x + 1 + boundingBox.X, y + 1 + boundingBox.Y,
+                                z + boundingBox.Z))) cubeIndex |= 4;
+                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
+                                y + 1 + boundingBox.Y, z + boundingBox.Z)))
+                            cubeIndex |= 8;
+                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
+                                y + boundingBox.Y, z + 1 + boundingBox.Z)))
+                            cubeIndex |= 16;
+                        if (region.ContainsVoxel(new Point3D(
+                                x + 1 + boundingBox.X, y + boundingBox.Y,
+                                z + 1 + boundingBox.Z))) cubeIndex |= 32;
+                        if (region.ContainsVoxel(new Point3D(
+                                x + 1 + boundingBox.X, y + 1 + boundingBox.Y,
+                                z + 1 + boundingBox.Z))) cubeIndex |= 64;
+                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
+                                y + 1 + boundingBox.Y, z + 1 + boundingBox.Z)))
                             cubeIndex |= 128;
 
                         // ルックアップテーブルを使用して三角形を生成
@@ -134,7 +147,8 @@ namespace DicomApp.UseCases
                             foreach (var edge in triangle)
                             {
                                 var v = GetInterpolatedVertexPosition(edge, x,
-                                    y, z, voxelGrid, isoValue, totalWidth);
+                                    y, z, region, imageIntensities, isoValue,
+                                    totalWidth, boundingBox);
                                 mesh.Positions.Add(v);
                                 mesh.TriangleIndices.Add(mesh.Positions.Count -
                                     1);
@@ -161,13 +175,25 @@ namespace DicomApp.UseCases
         }
 
         private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
-            int z, double[,,] voxelGrid, double isoValue, int totalWidth)
+            int z, BloodVessel3DRegion region, double[,,] imageIntensities,
+            double isoValue, int totalWidth,
+            (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox)
         {
             int x1, y1, z1, x2, y2, z2;
             MarchingCubesLookupTable.GetEdgeEndpoints(edge, x, y, z, out x1,
                 out y1, out z1, out x2, out y2, out z2);
-            double mu = GetInterpolationFactor(voxelGrid[x1, y1, z1],
-                voxelGrid[x2, y2, z2], isoValue);
+
+            // バウンディングボックスの位置を考慮して座標を調整
+            x1 += boundingBox.X;
+            x2 += boundingBox.X;
+            y1 += boundingBox.Y;
+            y2 += boundingBox.Y;
+            z1 += boundingBox.Z;
+            z2 += boundingBox.Z;
+
+            double v1 = imageIntensities[x1, y1, z1];
+            double v2 = imageIntensities[x2, y2, z2];
+            double mu = GetInterpolationFactor(v1, v2, isoValue);
 
             // X座標を反転
             double invertedX1 = totalWidth - 1 - x1;
@@ -200,6 +226,17 @@ namespace DicomApp.UseCases
                 new SolidColorBrush(Color.FromArgb(100, 255, 100, 100)), 10));
 
             return materialGroup;
+        }
+
+        private double[,,] GetImageIntensities(
+            (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox)
+        {
+            // この部分は、実際のDICOMファイルから画像の色情報を取得する処理を実装する必要があります
+            // ここでは簡単な例として、ダミーデータを返しています
+            var intensities = new double[boundingBox.Width, boundingBox.Height,
+                boundingBox.Depth];
+            // 実際のDICOMデータから色情報を取得し、intensities配列に格納する処理を実装してください
+            return intensities;
         }
     }
 }
