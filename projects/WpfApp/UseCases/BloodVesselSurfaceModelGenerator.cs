@@ -212,7 +212,8 @@ namespace DicomApp.UseCases
         private double GetInterpolationFactor(double v1, double v2,
             double isoValue)
         {
-            if (Math.Abs(v1 - v2) < 0.00001)
+            if (Math.Abs(v1 - v2) < 0.00001 ||
+                (isoValue - v1) * (isoValue - v2) > 0)
                 return 0.5;
 
             return (isoValue - v1) / (v2 - v1);
