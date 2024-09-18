@@ -185,7 +185,11 @@ namespace DicomApp.UseCases
             MarchingCubesLookupTable.GetEdgeEndpoints(edge, x, y, z, out x1,
                 out y1, out z1, out x2, out y2, out z2);
 
-            // バウンディングボックスの位置を考慮して座標を調整
+            // imageIntensities配列用の相対座標を計算
+            int rx1 = x1, ry1 = y1, rz1 = z1;
+            int rx2 = x2, ry2 = y2, rz2 = z2;
+
+            // グローバル座標系での位置を計算
             x1 += boundingBox.X;
             x2 += boundingBox.X;
             y1 += boundingBox.Y;
@@ -193,8 +197,8 @@ namespace DicomApp.UseCases
             z1 += boundingBox.Z;
             z2 += boundingBox.Z;
 
-            double v1 = imageIntensities[x1, y1, z1];
-            double v2 = imageIntensities[x2, y2, z2];
+            double v1 = imageIntensities[rx1, ry1, rz1];
+            double v2 = imageIntensities[rx2, ry2, rz2];
             double mu = GetInterpolationFactor(v1, v2, isoValue);
 
             // X座標を反転
