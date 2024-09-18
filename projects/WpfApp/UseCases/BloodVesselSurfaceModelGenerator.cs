@@ -13,15 +13,16 @@ namespace DicomApp.UseCases
         private const byte _intensityMin = 0;
 
         public async Task<Model3DGroup> GenerateModelAsync(
-            BloodVessel3DRegion region, int threshold,
+            FileManager fileManager, BloodVessel3DRegion region, int threshold,
             IProgress<(int value, string text)> progress)
         {
             return await Task.Run(() =>
-                CreateSurfaceModel(region, threshold, progress));
+                CreateSurfaceModel(fileManager, region, threshold, progress));
         }
 
-        private Model3DGroup CreateSurfaceModel(BloodVessel3DRegion region,
-            int threshold, IProgress<(int value, string text)> progress)
+        private Model3DGroup CreateSurfaceModel(FileManager fileManager,
+            BloodVessel3DRegion region, int threshold,
+            IProgress<(int value, string text)> progress)
         {
             var model3DGroup = new Model3DGroup();
 
@@ -32,7 +33,8 @@ namespace DicomApp.UseCases
             int depth = boundingBox.Depth;
 
             // 画像の色情報を取得
-            var imageIntensities = GetImageIntensities(boundingBox);
+            var imageIntensities =
+                GetImageIntensities(fileManager, boundingBox);
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
             var surfaceGeometry = CreateSurfaceFromVoxels(region,
@@ -228,14 +230,39 @@ namespace DicomApp.UseCases
             return materialGroup;
         }
 
-        private double[,,] GetImageIntensities(
+        private double[,,] GetImageIntensities(FileManager fileManager,
             (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox)
         {
-            // この部分は、実際のDICOMファイルから画像の色情報を取得する処理を実装する必要があります
-            // ここでは簡単な例として、ダミーデータを返しています
             var intensities = new double[boundingBox.Width, boundingBox.Height,
                 boundingBox.Depth];
-            // 実際のDICOMデータから色情報を取得し、intensities配列に格納する処理を実装してください
+
+            for (int z = 0; z < boundingBox.Depth; z++)
+            {
+                var dicomFile = fileManager.DicomFiles[z + boundingBox.Z];
+                var image = dicomFile.GetImage();
+                var renderedImage = image.RenderImage()
+                    .As<System.Windows.Media.Imaging.WriteableBitmap>();
+                var stride =
+                    renderedImage.PixelWidth * 4; // 4 bytes per pixel (BGRA)
+                var pixels = new byte[renderedImage.PixelHeight * stride];
+                renderedImage.CopyPixels(pixels, stride, 0);
+
+                for (int y = 0; y < boundingBox.Height; y++)
+                {
+                    for (int x = 0; x < boundingBox.Width; x++)
+                    {
+                        int index = ((y + boundingBox.Y) * stride) +
+                                    ((x + boundingBox.X) * 4);
+                        byte intensity = pixels[index]; // Blue channel
+                        intensity = Math.Max(_intensityMin,
+                            Math.Min(_intensityMax, intensity));
+                        intensities[x, y, z] = (intensity - _intensityMin) /
+                                               (double)(_intensityMax -
+                                                   _intensityMin);
+                    }
+                }
+            }
+
             return intensities;
         }
     }

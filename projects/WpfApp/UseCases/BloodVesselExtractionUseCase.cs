@@ -4,17 +4,19 @@ using DicomApp.UseCases;
 
 public class BloodVesselExtractionUseCase
 {
+    private readonly FileManager _fileManager;
     private readonly BloodVessel3DRegionSelector _regionSelector;
     private readonly BloodVesselSurfaceModelGenerator _modelGenerator;
     private readonly IModel3dViewerFactory _viewerFactory;
     private readonly IProgressWindowFactory _progressWindowFactory;
 
     public BloodVesselExtractionUseCase(
-        BloodVessel3DRegionSelector regionSelector,
+        FileManager fileManager, BloodVessel3DRegionSelector regionSelector,
         BloodVesselSurfaceModelGenerator modelGenerator,
         IModel3dViewerFactory viewerFactory,
         IProgressWindowFactory progressWindowFactory)
     {
+        _fileManager = fileManager;
         _regionSelector = regionSelector;
         _modelGenerator = modelGenerator;
         _viewerFactory = viewerFactory;
@@ -39,7 +41,8 @@ public class BloodVesselExtractionUseCase
             int threshold = 200;
             var region = _regionSelector.GetSelectedRegion();
             var model3DGroup =
-                await _modelGenerator.GenerateModelAsync(region, threshold,
+                await _modelGenerator.GenerateModelAsync(_fileManager, region,
+                    threshold,
                     progress);
 
             var viewer = _viewerFactory.Create();
