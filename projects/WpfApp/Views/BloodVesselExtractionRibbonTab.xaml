@@ -8,12 +8,23 @@
            d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">
   <RibbonGroup Header="操作">
-    <RibbonButton Label="元に戻す"
-                  Command="{Binding UndoSelectionCommand}">
-    </RibbonButton>
-    <RibbonButton Label="やり直す"
-                  Command="{Binding RedoSelectionCommand}">
-    </RibbonButton>
+    <RibbonGroup.ItemsPanel>
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal"/>
+      </ItemsPanelTemplate>
+    </RibbonGroup.ItemsPanel>
+
+    <RibbonControlGroup>
+      <RibbonButton Label="元に戻す"
+                    Command="{Binding UndoSelectionCommand}">
+      </RibbonButton>
+      <RibbonButton Label="やり直す"
+                    Command="{Binding RedoSelectionCommand}">
+      </RibbonButton>
+    </RibbonControlGroup>
+  </RibbonGroup>
+
+  <RibbonGroup Header="選択範囲">
     <RibbonButton Label="選択範囲を保存"
                   Command="{Binding SaveSelectionCommand}">
     </RibbonButton>
