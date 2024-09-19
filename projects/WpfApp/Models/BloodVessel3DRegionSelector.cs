@@ -115,12 +115,13 @@ namespace DicomApp.Models
                 return;
             }
 
-            int width = _fileManager.DicomFiles[0].GetImage().Width;
-            int height = _fileManager.DicomFiles[0].GetImage().Height;
-            int depth = _fileManager.DicomFiles.Count;
+            int width = _imageWidth;
+            int height = _imageHeight;
+            int depth = _renderedImages.Count;
 
             bool[,,] visited = new bool[width, height, depth];
             Queue<Point3D> queue = new Queue<Point3D>();
+            Queue<Point3D> nextSliceQueue = new Queue<Point3D>();
 
             int seedX = (int)seedPoint.X;
             int seedY = (int)seedPoint.Y;
@@ -132,8 +133,14 @@ namespace DicomApp.Models
                 visited[seedX, seedY, seedZ] = true;
             }
 
-            while (queue.Count > 0)
+            while (queue.Count > 0 || nextSliceQueue.Count > 0)
             {
+                if (queue.Count == 0)
+                {
+                    queue = nextSliceQueue;
+                    nextSliceQueue = new Queue<Point3D>();
+                }
+
                 Point3D current = queue.Dequeue();
                 int x = (int)current.X;
                 int y = (int)current.Y;
@@ -143,7 +150,7 @@ namespace DicomApp.Models
                 {
                     _selectedRegion.AddVoxel(current);
 
-                    // 6方向の隣接ボクセルをチェック
+                    // 同じスライス内の4方向をチェック
                     CheckAndEnqueueNeighbor(x + 1, y, z, width, height, depth,
                         visited, queue);
                     CheckAndEnqueueNeighbor(x - 1, y, z, width, height, depth,
@@ -152,10 +159,12 @@ namespace DicomApp.Models
                         visited, queue);
                     CheckAndEnqueueNeighbor(x, y - 1, z, width, height, depth,
                         visited, queue);
+
+                    // 隣接するスライスをチェック
                     CheckAndEnqueueNeighbor(x, y, z + 1, width, height, depth,
-                        visited, queue);
+                        visited, nextSliceQueue);
                     CheckAndEnqueueNeighbor(x, y, z - 1, width, height, depth,
-                        visited, queue);
+                        visited, nextSliceQueue);
                 }
             }
 
