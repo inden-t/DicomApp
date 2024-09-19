@@ -103,7 +103,7 @@ namespace DicomApp.Models
 
             if (IsValidPoint(seedX, seedY, seedZ, width, height, depth))
             {
-                queue.Enqueue(seedPoint);
+                queue.Enqueue(new Point3D(seedX, seedY, seedZ));
                 visited[seedX, seedY, seedZ] = true;
             }
 
