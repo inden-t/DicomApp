@@ -63,4 +63,8 @@ public class BloodVesselExtractionUseCase
             System.Windows.Input.Mouse.OverrideCursor = null;
         }
     }
+
+    public async Task SaveModel()
+    {
+    }
 }
