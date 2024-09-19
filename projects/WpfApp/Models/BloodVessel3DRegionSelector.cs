@@ -69,6 +69,25 @@ namespace DicomApp.Models
             }
         }
 
+        // 選択領域の取得
+        public BloodVessel3DRegion GetSelectedRegion()
+        {
+            // 選択された領域を返す
+            return _selectedRegion;
+        }
+
+        public void SetSelectedRegion(BloodVessel3DRegion region)
+        {
+            _selectedRegion = region;
+            SaveCurrentState();
+        }
+
+        public void ClearAllRegions()
+        {
+            _selectedRegion.Clear();
+            SaveCurrentState();
+        }
+
         public void PreRenderImages()
         {
             _renderedImages = new List<byte[]>();
@@ -307,25 +326,6 @@ namespace DicomApp.Models
                 }
             }
 
-            SaveCurrentState();
-        }
-
-        // 選択領域の取得
-        public BloodVessel3DRegion GetSelectedRegion()
-        {
-            // 選択された領域を返す
-            return _selectedRegion;
-        }
-
-        public void SetSelectedRegion(BloodVessel3DRegion region)
-        {
-            _selectedRegion = region;
-            SaveCurrentState();
-        }
-
-        public void ClearAllRegions()
-        {
-            _selectedRegion.Clear();
             SaveCurrentState();
         }
     }
