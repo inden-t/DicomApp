@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
-using DicomApp.Models;
 using DicomApp.UseCases;
 
 namespace DicomApp.Views
@@ -197,11 +196,6 @@ namespace DicomApp.Views
                     CenterMarkCanvas.ActualHeight / 2);
             Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
             Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
-        }
-
-        public void DisplaySurfaceModel(SurfaceModel model)
-        {
-            // 生成されたサーフェスモデルを表示するロジックを実装
         }
     }
 }

@@ -115,18 +115,5 @@ namespace DicomApp.ViewModels
         {
             _imageViewerViewModel.Zoom(0.8);
         }
-
-        public async Task ExtractBloodVesselAsync()
-        {
-            //var progress = new Progress<int>(value => ProgressValue = value);
-            //var model =
-            //    await _extractionUseCase.ExtractBloodVesselAsync(
-            //        //Threshold
-            //        //, progress
-            //    );
-
-            // 生成されたモデルを3Dビューワーに表示
-            //_model3dViewer.SetModel(model.ModelGroup);
-        }
     }
 }
