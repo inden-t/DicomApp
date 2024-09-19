@@ -72,6 +72,9 @@
       </RibbonButton.Style>
     </RibbonButton>
 
+    <!-- 空スペースを追加 -->
+    <RibbonButton Label=" " Visibility="Hidden"/>
+
     <RibbonButton Label="2D塗りつぶし選択"
                   Command="{Binding Execute2DFillSelectionCommand}">
       <RibbonButton.Style>
