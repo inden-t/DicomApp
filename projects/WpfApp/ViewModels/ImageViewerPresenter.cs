@@ -16,5 +16,10 @@ namespace DicomApp.ViewModels
         {
             _imageViewerViewModel.Render();
         }
+
+        public void SetSelectionModeActive(bool isActive)
+        {
+            _imageViewerViewModel.IsSelectionModeActive.Value = isActive;
+        }
     }
 }
