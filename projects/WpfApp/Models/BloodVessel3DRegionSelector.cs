@@ -190,7 +190,7 @@ namespace DicomApp.Models
 
         public void Select2DRegion(Point3D seedPoint, int threshold)
         {
-            if (_fileManager.DicomFiles.Count == 0)
+            if (_renderedImages.Count == 0)
             {
                 return;
             }
@@ -199,28 +199,20 @@ namespace DicomApp.Models
             int y = (int)seedPoint.Y;
             int z = (int)seedPoint.Z;
 
-            var dicomFile = _fileManager.DicomFiles[z];
-            var image = dicomFile.GetImage();
-            var renderedImage = image.RenderImage()
-                .As<System.Windows.Media.Imaging.WriteableBitmap>();
-            int width = renderedImage.PixelWidth;
-            int height = renderedImage.PixelHeight;
-
-            if (!IsValidPoint(x, y, z, width, height,
-                    _fileManager.DicomFiles.Count))
+            if (!IsValidPoint(x, y, z, _imageWidth, _imageHeight,
+                    _renderedImages.Count))
             {
                 return;
             }
 
-            bool[,] visited = new bool[width, height];
+            bool[,] visited = new bool[_imageWidth, _imageHeight];
             Queue<Point> queue = new Queue<Point>();
 
             queue.Enqueue(new Point(x, y));
             visited[x, y] = true;
 
-            int stride = width * 4; // 4 bytes per pixel (BGRA)
-            byte[] pixels = new byte[height * stride];
-            renderedImage.CopyPixels(pixels, stride, 0);
+            byte[] pixels = _renderedImages[z];
+            int stride = _imageWidth * 4; // 4 bytes per pixel (BGRA)
 
             while (queue.Count > 0)
             {
@@ -228,19 +220,19 @@ namespace DicomApp.Models
                 x = current.X;
                 y = current.Y;
 
-                if (GetPixelIntensity(x, y, pixels, stride) > threshold)
+                if (GetVoxelIntensity(x, y, z) > threshold)
                 {
                     _selectedRegion.AddVoxel(new Point3D(x, y, z));
 
                     // 4方向の隣接ピクセルをチェック
                     CheckAndEnqueue2DNeighbor(x + 1, y, z, visited, queue,
-                        width, height);
+                        _imageWidth, _imageHeight);
                     CheckAndEnqueue2DNeighbor(x - 1, y, z, visited, queue,
-                        width, height);
+                        _imageWidth, _imageHeight);
                     CheckAndEnqueue2DNeighbor(x, y + 1, z, visited, queue,
-                        width, height);
+                        _imageWidth, _imageHeight);
                     CheckAndEnqueue2DNeighbor(x, y - 1, z, visited, queue,
-                        width, height);
+                        _imageWidth, _imageHeight);
                 }
             }
 
@@ -256,12 +248,6 @@ namespace DicomApp.Models
                 queue.Enqueue(new Point(x, y));
                 visited[x, y] = true;
             }
-        }
-
-        private byte GetPixelIntensity(int x, int y, byte[] pixels, int stride)
-        {
-            int index = (y * stride) + (x * 4);
-            return pixels[index]; // Blue channel
         }
 
         public void Clear3DRegion(Point3D seedPoint)
