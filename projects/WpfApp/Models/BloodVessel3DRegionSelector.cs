@@ -320,6 +320,7 @@ namespace DicomApp.Models
         public void SetSelectedRegion(BloodVessel3DRegion region)
         {
             _selectedRegion = region;
+            SaveCurrentState();
         }
 
         public void ClearAllRegions()
