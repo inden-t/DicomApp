@@ -19,7 +19,15 @@ namespace DicomApp.Models
         public BloodVessel3DRegionSelector(FileManager fileManager)
         {
             _fileManager = fileManager;
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             _selectedRegion = new BloodVessel3DRegion();
+            _renderedImages = new List<byte[]>();
+            _selectionHistory = new List<HashSet<(int X, int Y, int Z)>>();
+            _currentHistoryIndex = -1;
             SaveCurrentState();
         }
 

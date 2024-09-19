@@ -20,6 +20,12 @@ namespace DicomApp.UseCases
             _imageViewerPresenter = imageViewerPresenter;
         }
 
+        public void InitializeRegionSelector()
+        {
+            _regionSelector.Initialize();
+            _imageViewerPresenter.RenderImage();
+        }
+
         public async Task UndoSelection()
         {
             if (_regionSelector.CanUndo())

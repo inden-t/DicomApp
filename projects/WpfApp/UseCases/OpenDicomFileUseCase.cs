@@ -12,15 +12,20 @@ namespace DicomApp.UseCases
         private readonly IProgressWindowFactory _progressWindowFactory;
         private readonly FileManager _fileManager;
 
+        private readonly ManageBloodVesselRegionUseCase
+            _manageBloodVesselRegionUseCase;
+
         private IProgressWindow _progressWindow;
 
         public OpenDicomFileUseCase(IMainWindowPresenter mainWindowPresenter,
             IProgressWindowFactory progressWindowFactory,
-            FileManager fileManager)
+            FileManager fileManager,
+            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
         {
             _mainWindowPresenter = mainWindowPresenter;
             _progressWindowFactory = progressWindowFactory;
             _fileManager = fileManager;
+            _manageBloodVesselRegionUseCase = manageBloodVesselRegionUseCase;
         }
 
         public async Task ExecuteAsync()
@@ -29,6 +34,7 @@ namespace DicomApp.UseCases
 
             if (filePaths != null && filePaths.Length > 0)
             {
+                _manageBloodVesselRegionUseCase.InitializeRegionSelector();
                 _fileManager.ClearFiles();
                 await OpenFilesFromPathsAsync(filePaths);
             }
@@ -40,6 +46,7 @@ namespace DicomApp.UseCases
 
             if (!string.IsNullOrEmpty(folderPath))
             {
+                _manageBloodVesselRegionUseCase.InitializeRegionSelector();
                 _fileManager.ClearFiles();
 
                 string[] filePaths = Directory.GetFiles(folderPath, "*.dcm",
