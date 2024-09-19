@@ -71,9 +71,6 @@ namespace DicomApp.UseCases
 
                     // 読み込んだ領域を_regionSelectorに設定
                     _regionSelector.SetSelectedRegion(loadedRegion);
-
-                    MessageBox.Show($"{selectedFile} から領域を読み込みました。", "読み込み完了",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
                 _imageViewerPresenter.RenderImage();
