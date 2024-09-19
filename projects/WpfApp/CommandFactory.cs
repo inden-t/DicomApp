@@ -62,6 +62,11 @@ namespace DicomApp
                 .Subscribe(async () =>
                     await manageBloodVesselRegionUseCase
                         .ClearAllSelection());
+
+            bloodVesselExtractionRibbonTabViewModel.DiscardSelectionCommand
+                .Subscribe(async () =>
+                    await manageBloodVesselRegionUseCase
+                        .ClearAllSelection());
         }
     }
 }
