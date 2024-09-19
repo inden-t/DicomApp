@@ -10,7 +10,6 @@ namespace DicomApp.ViewModels
 
         private readonly ImageViewerViewModel _imageViewerViewModel;
 
-        public ReactiveCommand DiscardSelectionCommand { get; } = new();
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Execute2DFillSelectionCommand { get; } = new();
@@ -23,6 +22,8 @@ namespace DicomApp.ViewModels
         public ReactiveCommand ClearAllSelectionCommand { get; } = new();
 
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
+
+        public ReactiveCommand DiscardSelectionCommand { get; } = new();
 
         public ReactiveProperty<double> ThresholdValue { get; } = new(128);
 
