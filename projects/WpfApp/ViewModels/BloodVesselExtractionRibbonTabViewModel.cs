@@ -93,18 +93,10 @@ namespace DicomApp.ViewModels
                 }
             });
 
-            SaveModelCommand.Subscribe(SaveExtractedModel);
-
             UndoSelectionCommand.Subscribe(() =>
             {
                 _imageViewerViewModel.UndoSelection();
             });
-        }
-
-        private void SaveExtractedModel()
-        {
-            // 抽出されたモデルの保存処理の実装
-            Console.WriteLine("抽出されたモデルを保存します。");
         }
     }
 }
