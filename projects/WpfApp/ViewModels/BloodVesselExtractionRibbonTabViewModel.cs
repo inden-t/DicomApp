@@ -19,7 +19,6 @@ namespace DicomApp.ViewModels
         public ReactiveCommand UndoSelectionCommand { get; } = new();
 
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
-        public ReactiveCommand CancelExtractionCommand { get; } = new();
         public ReactiveCommand SaveModelCommand { get; } = new();
 
         public ReactiveProperty<double> ThresholdValue { get; } = new(128);
@@ -92,27 +91,12 @@ namespace DicomApp.ViewModels
                 }
             });
 
-            BloodVesselExtractionCommand.Subscribe(
-                ExecuteBloodVesselExtraction);
-            CancelExtractionCommand.Subscribe(CancelBloodVesselExtraction);
             SaveModelCommand.Subscribe(SaveExtractedModel);
 
             UndoSelectionCommand.Subscribe(() =>
             {
                 _imageViewerViewModel.UndoSelection();
             });
-        }
-
-        private void ExecuteBloodVesselExtraction()
-        {
-            // 血管抽出処理の実装
-            Console.WriteLine("血管抽出処理を開始します。しきい値: " + ThresholdValue.Value);
-        }
-
-        private void CancelBloodVesselExtraction()
-        {
-            // 血管抽出処理のキャンセル実装
-            Console.WriteLine("血管抽出処理をキャンセルしました。");
         }
 
         private void SaveExtractedModel()

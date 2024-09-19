@@ -89,10 +89,6 @@
               Maximum="255"
               Value="{Binding ThresholdValue}"/>-->
 
-    <RibbonButton Label="領域編集"
-                  Command="{Binding EditRegionCommand}"/>
-    <RibbonButton Label="領域削除"
-                  Command="{Binding DeleteRegionCommand}"/>
   </RibbonGroup>
 
   <RibbonGroup Header="モデル">
