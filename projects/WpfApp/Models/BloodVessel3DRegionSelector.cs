@@ -8,14 +8,6 @@ namespace DicomApp.Models
         private readonly FileManager _fileManager;
         private readonly BloodVessel3DRegion _selectedRegion;
 
-        private int _visitedCount;
-        int _visitedXMax = 0;
-        int _visitedXMin = 0;
-        int _visitedYMax = 0;
-        int _visitedYMin = 0;
-        int _visitedZMax = 0;
-        int _visitedZMin = 0;
-
         private List<byte[]> _renderedImages = new();
         private int _imageWidth;
         private int _imageHeight;
@@ -105,13 +97,6 @@ namespace DicomApp.Models
                 visited[seedX, seedY, seedZ] = true;
             }
 
-            _visitedXMax = seedX;
-            _visitedXMin = seedX;
-            _visitedYMax = seedY;
-            _visitedYMin = seedY;
-            _visitedZMax = seedZ;
-            _visitedZMin = seedZ;
-
             while (queue.Count > 0)
             {
                 Point3D current = queue.Dequeue();
@@ -150,13 +135,6 @@ namespace DicomApp.Models
             {
                 queue.Enqueue(new Point3D(x, y, z));
                 visited[x, y, z] = true;
-                _visitedXMax = Math.Max(_visitedXMax, x);
-                _visitedXMin = Math.Min(_visitedXMin, x);
-                _visitedYMax = Math.Max(_visitedYMax, y);
-                _visitedYMin = Math.Min(_visitedYMin, y);
-                _visitedZMax = Math.Max(_visitedZMax, z);
-                _visitedZMin = Math.Min(_visitedZMin, z);
-                _visitedCount++;
             }
         }
 
@@ -314,12 +292,6 @@ namespace DicomApp.Models
             }
 
             SaveCurrentState();
-        }
-
-        // 選択領域の編集機能
-        public void EditRegion(Point3D point, bool isAdd)
-        {
-            // 領域の追加または削除のロジックを実装
         }
 
         // 選択領域の取得

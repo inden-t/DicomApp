@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using DicomApp.Models;
@@ -77,19 +76,6 @@ namespace DicomApp.UseCases
 
             return (minX, minY, minZ, maxX - minX + 1, maxY - minY + 1,
                 maxZ - minZ + 1);
-        }
-
-        private void InitializeVoxelGrid(double[,,] voxelGrid,
-            BloodVessel3DRegion region,
-            (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox)
-        {
-            foreach (var voxel in region.SelectedVoxels)
-            {
-                int x = voxel.X - boundingBox.X;
-                int y = voxel.Y - boundingBox.Y;
-                int z = voxel.Z - boundingBox.Z;
-                voxelGrid[x, y, z] = 1.0; // 選択された領域を1.0（最大値）に設定
-            }
         }
 
         private MeshGeometry3D CreateSurfaceFromVoxels(

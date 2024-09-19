@@ -127,11 +127,6 @@ namespace DicomApp.ViewModels
             UpdateSelectedRegion();
         }
 
-        public void StartBloodVesselSelectionMode()
-        {
-            // 血管領域選択モードを開始
-        }
-
         public async Task OnClick(double relativeX, double relativeY)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -236,12 +231,6 @@ namespace DicomApp.ViewModels
 
             // OverlayImageSourceを更新
             OverlayImageSource.Value = scaledBitmap;
-        }
-
-        public void EditRegion(Point3D point, bool isAdd)
-        {
-            _regionSelector.EditRegion(point, isAdd);
-            // 選択領域の表示を更新
         }
 
         public void UndoSelection()
