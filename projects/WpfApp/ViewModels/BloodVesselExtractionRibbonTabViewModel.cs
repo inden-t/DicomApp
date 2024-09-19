@@ -93,11 +93,6 @@ namespace DicomApp.ViewModels
                         SelectionMode.ClearFill2DSelection;
                 }
             });
-
-            UndoSelectionCommand.Subscribe(() =>
-            {
-                _imageViewerViewModel.UndoSelection();
-            });
         }
     }
 }

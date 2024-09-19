@@ -232,14 +232,5 @@ namespace DicomApp.ViewModels
             // OverlayImageSourceを更新
             OverlayImageSource.Value = scaledBitmap;
         }
-
-        public void UndoSelection()
-        {
-            if (_regionSelector.CanUndo())
-            {
-                _regionSelector.Undo();
-                UpdateSelectedRegion();
-            }
-        }
     }
 }

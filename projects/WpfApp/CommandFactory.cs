@@ -42,6 +42,10 @@ namespace DicomApp
                     await bloodVesselExtractionUseCase
                         .ExtractBloodVesselAsync());
 
+            bloodVesselExtractionRibbonTabViewModel.UndoSelectionCommand
+                .Subscribe(async () =>
+                    await manageBloodVesselRegionUseCase
+                        .UndoSelection());
             bloodVesselExtractionRibbonTabViewModel.RedoSelectionCommand
                 .Subscribe(async () =>
                     await manageBloodVesselRegionUseCase
