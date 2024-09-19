@@ -7,6 +7,12 @@
            mc:Ignorable="d"
            d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">
+  <RibbonGroup Header="操作">
+    <RibbonButton Label="元に戻す"
+                  Command="{Binding UndoSelectionCommand}">
+    </RibbonButton>
+  </RibbonGroup>
+
   <RibbonGroup Header="血管領域選択">
     <RibbonButton Label="3D塗りつぶし選択"
                   Command="{Binding Execute3DFillSelectionCommand}">
@@ -87,19 +93,16 @@
                   Command="{Binding EditRegionCommand}"/>
     <RibbonButton Label="領域削除"
                   Command="{Binding DeleteRegionCommand}"/>
-    <RibbonButton Label="元に戻す"
-                  Command="{Binding UndoSelectionCommand}">
-    </RibbonButton>
   </RibbonGroup>
 
-  <RibbonGroup Header="血管抽出">
-    <RibbonButton Label="血管抽出"
+  <RibbonGroup Header="モデル">
+    <RibbonButton Label="サーフェスモデル生成"
                   Command="{Binding BloodVesselExtractionCommand}"/>
     <RibbonButton Label="モデル保存"
                   Command="{Binding SaveModelCommand}"/>
   </RibbonGroup>
 
-  <RibbonGroup Header="操作">
+  <RibbonGroup Header="終了">
     <RibbonButton Label="選択を破棄して終了"
                   Command="{Binding DiscardSelectionCommand}"/>
   </RibbonGroup>
