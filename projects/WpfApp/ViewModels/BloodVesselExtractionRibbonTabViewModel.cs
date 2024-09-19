@@ -12,11 +12,12 @@ namespace DicomApp.ViewModels
 
         public ReactiveCommand DiscardSelectionCommand { get; } = new();
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
-        public ReactiveCommand Clear2DFillSelectionCommand { get; } = new();
-        public ReactiveCommand Execute2DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
+        public ReactiveCommand Execute2DFillSelectionCommand { get; } = new();
+        public ReactiveCommand Clear2DFillSelectionCommand { get; } = new();
 
         public ReactiveCommand UndoSelectionCommand { get; } = new();
+        public ReactiveCommand SaveSelectionCommand { get; } = new();
 
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
         public ReactiveCommand SaveModelCommand { get; } = new();

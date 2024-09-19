@@ -134,4 +134,12 @@ public class BloodVesselExtractionUseCase
     {
         // PLYファイルの保存処理を実装
     }
+
+    public async Task SaveSelectedRegion()
+    {
+        // 選択された領域を保存する処理を実装
+        var selectedRegion = _regionSelector.GetSelectedRegion();
+        // 例: ファイルに保存するなどの処理
+        MessageBox.Show("選択された領域を保存しました。");
+    }
 }

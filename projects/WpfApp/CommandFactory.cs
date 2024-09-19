@@ -44,6 +44,9 @@ namespace DicomApp
             bloodVesselExtractionRibbonTabViewModel.SaveModelCommand
                 .Subscribe(async () =>
                     await bloodVesselExtractionUseCase.SaveModel());
+            bloodVesselExtractionRibbonTabViewModel.SaveSelectionCommand
+                .Subscribe(async () =>
+                    await bloodVesselExtractionUseCase.SaveSelectedRegion());
         }
     }
 }
