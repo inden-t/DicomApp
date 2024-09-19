@@ -100,8 +100,6 @@
   <RibbonGroup Header="モデル">
     <RibbonButton Label="サーフェスモデル生成"
                   Command="{Binding BloodVesselExtractionCommand}"/>
-    <RibbonButton Label="モデル保存"
-                  Command="{Binding SaveModelCommand}"/>
   </RibbonGroup>
 
   <RibbonGroup Header="終了">

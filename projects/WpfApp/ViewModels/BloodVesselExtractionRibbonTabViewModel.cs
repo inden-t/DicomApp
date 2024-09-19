@@ -21,7 +21,6 @@ namespace DicomApp.ViewModels
         public ReactiveCommand LoadSelectionCommand { get; } = new();
 
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
-        public ReactiveCommand SaveModelCommand { get; } = new();
 
         public ReactiveProperty<double> ThresholdValue { get; } = new(128);
 
