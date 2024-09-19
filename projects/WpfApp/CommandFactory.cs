@@ -43,25 +43,20 @@ namespace DicomApp
                         .ExtractBloodVesselAsync());
 
             bloodVesselExtractionRibbonTabViewModel.UndoSelectionCommand
-                .Subscribe(async () =>
-                    await manageBloodVesselRegionUseCase
-                        .UndoSelection());
+                .Subscribe(() =>
+                    manageBloodVesselRegionUseCase.UndoSelection());
             bloodVesselExtractionRibbonTabViewModel.RedoSelectionCommand
-                .Subscribe(async () =>
-                    await manageBloodVesselRegionUseCase
-                        .RedoSelection());
+                .Subscribe(() =>
+                    manageBloodVesselRegionUseCase.RedoSelection());
             bloodVesselExtractionRibbonTabViewModel.SaveSelectionCommand
-                .Subscribe(async () =>
-                    await manageBloodVesselRegionUseCase
-                        .SaveSelectedRegionAsync());
+                .Subscribe(() => manageBloodVesselRegionUseCase
+                    .SaveSelectedRegion());
             bloodVesselExtractionRibbonTabViewModel.LoadSelectionCommand
-                .Subscribe(async () =>
-                    await manageBloodVesselRegionUseCase
-                        .LoadSelectedRegionAsync());
+                .Subscribe(() =>
+                    manageBloodVesselRegionUseCase.LoadSelectedRegion());
             bloodVesselExtractionRibbonTabViewModel.ClearAllSelectionCommand
-                .Subscribe(async () =>
-                    await manageBloodVesselRegionUseCase
-                        .ClearAllSelection());
+                .Subscribe(() =>
+                    manageBloodVesselRegionUseCase.ClearAllSelection());
 
             bloodVesselExtractionRibbonTabViewModel.DiscardSelectionCommand
                 .Subscribe(() =>
