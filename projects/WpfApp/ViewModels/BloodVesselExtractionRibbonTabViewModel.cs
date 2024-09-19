@@ -19,6 +19,7 @@ namespace DicomApp.ViewModels
         public ReactiveCommand UndoSelectionCommand { get; } = new();
         public ReactiveCommand SaveSelectionCommand { get; } = new();
         public ReactiveCommand LoadSelectionCommand { get; } = new();
+        public ReactiveCommand ClearAllSelectionCommand { get; } = new();
 
         public ReactiveCommand BloodVesselExtractionCommand { get; } = new();
 

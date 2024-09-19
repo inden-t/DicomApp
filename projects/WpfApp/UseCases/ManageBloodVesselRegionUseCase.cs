@@ -20,6 +20,15 @@ namespace DicomApp.UseCases
             _imageViewerPresenter = imageViewerPresenter;
         }
 
+        public async Task ClearAllSelection()
+        {
+            if (_regionSelector != null)
+            {
+                _regionSelector.ClearAllRegions();
+                _imageViewerPresenter.RenderImage();
+            }
+        }
+
         public async Task SaveSelectedRegionAsync()
         {
             try

@@ -17,6 +17,9 @@
     <RibbonButton Label="選択範囲を読み込む"
                   Command="{Binding LoadSelectionCommand}">
     </RibbonButton>
+    <RibbonButton Label="選択範囲をすべて削除"
+                  Command="{Binding ClearAllSelectionCommand}">
+    </RibbonButton>
   </RibbonGroup>
 
   <RibbonGroup Header="血管領域選択">

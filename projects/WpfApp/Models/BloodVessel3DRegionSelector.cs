@@ -305,5 +305,11 @@ namespace DicomApp.Models
         {
             _selectedRegion = region;
         }
+
+        public void ClearAllRegions()
+        {
+            _selectedRegion.Clear();
+            SaveCurrentState();
+        }
     }
 }
