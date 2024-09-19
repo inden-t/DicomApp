@@ -127,7 +127,7 @@ namespace DicomApp.ViewModels
             UpdateSelectedRegion();
         }
 
-        public async Task OnClick(double relativeX, double relativeY)
+        public void OnClick(double relativeX, double relativeY)
         {
             Mouse.OverrideCursor = Cursors.Wait;
 
@@ -142,8 +142,7 @@ namespace DicomApp.ViewModels
 
             if (CurrentSelectionMode.Value == SelectionMode.Fill3DSelection)
             {
-                await Task.Run(() =>
-                    _regionSelector.Select3DRegion(seedPoint, threshold));
+                _regionSelector.Select3DRegion(seedPoint, threshold);
 
                 // 選択領域の表示を更新
                 UpdateSelectedRegion();
