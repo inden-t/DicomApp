@@ -19,8 +19,7 @@ namespace DicomApp.Views
             DataContext = _viewModel;
 
             // ImageContainer の中に ImageViewer を配置する
-            var imageContainer = (ContentControl)FindName("ImageContainer");
-            imageContainer.Content = imageViewer;
+            ImageContainer.Content = imageViewer;
 
             // Ribbon の中に BloodVesselExtractionRibbonTab を配置する
             Ribbon.Items.Add(bloodVesselExtractionRibbonTab);
