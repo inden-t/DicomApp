@@ -22,8 +22,7 @@ namespace DicomApp.Views
             imageContainer.Content = imageViewer;
 
             // Ribbon の中に BloodVesselExtractionRibbonTab を配置する
-            var ribbon = (Ribbon)FindName("Ribbon");
-            ribbon.Items.Add(bloodVesselExtractionRibbonTab);
+            BloodVesselExtractionTab = bloodVesselExtractionRibbonTab;
         }
     }
 }

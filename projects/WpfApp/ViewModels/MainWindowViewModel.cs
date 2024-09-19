@@ -8,6 +8,9 @@ namespace DicomApp.ViewModels
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
 
+        public ImageViewerViewModel ImageViewerViewModel =>
+            _imageViewerViewModel;
+
         public ReactiveCommand OpenDicomFileCommand { get; } = new();
         public ReactiveCommand OpenDicomFolderCommand { get; } = new();
         public ReactiveCommand ExitCommand { get; } = new();

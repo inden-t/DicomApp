@@ -56,6 +56,9 @@
                         Command="{Binding StartBloodVesselSelectionCommand}"/>
         </RibbonGroup>
       </RibbonTab>
+
+      <RibbonTab x:Name="BloodVesselExtractionTab"
+                 Visibility="{Binding ImageViewerViewModel.IsSelectionModeActive.Value, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Ribbon>
 
     <!-- リストビュー -->
