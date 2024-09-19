@@ -3,8 +3,18 @@ using Point = System.Drawing.Point;
 
 namespace DicomApp.Models
 {
+    public class UndoRedoStateChangedEventArgs(bool canUndo, bool canRedo)
+        : EventArgs
+    {
+        public bool CanUndo { get; } = canUndo;
+        public bool CanRedo { get; } = canRedo;
+    }
+
     public class BloodVessel3DRegionSelector
     {
+        public event EventHandler<UndoRedoStateChangedEventArgs>
+            UndoRedoStateChanged;
+
         private readonly FileManager _fileManager;
         private BloodVessel3DRegion _selectedRegion;
 
@@ -27,8 +37,14 @@ namespace DicomApp.Models
             _selectedRegion = new BloodVessel3DRegion();
             _renderedImages = new List<byte[]>();
             _selectionHistory = new List<HashSet<(int X, int Y, int Z)>>();
-            _currentHistoryIndex = -1;
+            SetCurrentHistoryIndex(-1);
             SaveCurrentState();
+        }
+
+        private void SetCurrentHistoryIndex(int index)
+        {
+            _currentHistoryIndex = index;
+            UpdateUndoRedoState();
         }
 
         private void SaveCurrentState()
@@ -42,7 +58,7 @@ namespace DicomApp.Models
             _selectionHistory.Add(
                 new HashSet<(int X, int Y, int Z)>(_selectedRegion
                     .SelectedVoxels));
-            _currentHistoryIndex = _selectionHistory.Count - 1;
+            SetCurrentHistoryIndex(_selectionHistory.Count - 1);
         }
 
         public bool CanUndo()
@@ -54,7 +70,7 @@ namespace DicomApp.Models
         {
             if (CanUndo())
             {
-                _currentHistoryIndex--;
+                SetCurrentHistoryIndex(_currentHistoryIndex - 1);
                 _selectedRegion.SelectedVoxels =
                     new HashSet<(int X, int Y, int Z)>(
                         _selectionHistory[_currentHistoryIndex]);
@@ -70,7 +86,7 @@ namespace DicomApp.Models
         {
             if (CanRedo())
             {
-                _currentHistoryIndex++;
+                SetCurrentHistoryIndex(_currentHistoryIndex + 1);
                 _selectedRegion.SelectedVoxels =
                     new HashSet<(int X, int Y, int Z)>(
                         _selectionHistory[_currentHistoryIndex]);
@@ -330,6 +346,12 @@ namespace DicomApp.Models
             }
 
             SaveCurrentState();
+        }
+
+        private void UpdateUndoRedoState()
+        {
+            UndoRedoStateChanged?.Invoke(this,
+                new UndoRedoStateChangedEventArgs(CanUndo(), CanRedo()));
         }
     }
 }

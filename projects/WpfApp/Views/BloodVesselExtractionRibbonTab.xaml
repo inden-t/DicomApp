@@ -16,11 +16,11 @@
 
     <RibbonControlGroup>
       <RibbonButton Label="元に戻す"
-                    Command="{Binding UndoSelectionCommand}">
-      </RibbonButton>
+                    Command="{Binding UndoSelectionCommand}"
+                    IsEnabled="{Binding CanUndo.Value}"/>
       <RibbonButton Label="やり直す"
-                    Command="{Binding RedoSelectionCommand}">
-      </RibbonButton>
+                    Command="{Binding RedoSelectionCommand}"
+                    IsEnabled="{Binding CanRedo.Value}"/>
     </RibbonControlGroup>
   </RibbonGroup>
 

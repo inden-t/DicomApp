@@ -1,4 +1,5 @@
 ﻿using System;
+using DicomApp.Models;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -9,6 +10,7 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel;
 
         private readonly ImageViewerViewModel _imageViewerViewModel;
+        private readonly BloodVessel3DRegionSelector _regionSelector;
 
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
@@ -27,10 +29,20 @@ namespace DicomApp.ViewModels
 
         public ReactiveProperty<double> ThresholdValue { get; } = new(128);
 
+        public ReactiveProperty<bool> CanUndo { get; } = new(false);
+        public ReactiveProperty<bool> CanRedo { get; } = new(false);
+
         public BloodVesselExtractionRibbonTabViewModel(
-            ImageViewerViewModel imageViewerViewModel)
+            ImageViewerViewModel imageViewerViewModel,
+            BloodVessel3DRegionSelector regionSelector)
         {
             _imageViewerViewModel = imageViewerViewModel;
+            _regionSelector = regionSelector;
+            _regionSelector.UndoRedoStateChanged += (sender, e) =>
+            {
+                CanUndo.Value = e.CanUndo;
+                CanRedo.Value = e.CanRedo;
+            };
 
             Execute3DFillSelectionCommand.Subscribe(() =>
             {
