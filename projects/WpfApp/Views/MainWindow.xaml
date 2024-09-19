@@ -21,9 +21,11 @@
     </Grid.RowDefinitions>
 
     <!-- リボン -->
-    <Ribbon Grid.Column="0"
+    <Ribbon x:Name="Ribbon"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
-            Grid.Row="0">
+            Grid.Row="0"
+            SelectedIndex="{Binding SelectedRibbonTabIndex.Value}">
       <Ribbon.ApplicationMenu>
         <RibbonApplicationMenu>
           <RibbonApplicationMenuItem Header="ファイルを開く..."
@@ -50,6 +52,8 @@
                         Command="{Binding GenerateSurfaceModelCommand}"/>
           <RibbonButton Label="サーフェスモデル表示(線形補間)"
                         Command="{Binding GenerateSurfaceModelLinearInterpolationCommand}"/>
+          <RibbonButton Label="血管抽出"
+                        Command="{Binding StartBloodVesselSelectionCommand}"/>
         </RibbonGroup>
       </RibbonTab>
     </Ribbon>

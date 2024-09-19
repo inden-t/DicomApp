@@ -23,9 +23,17 @@
                   MouseMove="ScrollViewer_MouseMove"
                   MouseUp="ScrollViewer_MouseUp"
                   PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-      <Image x:Name="DicomImage"
-             Stretch="None"
-             Source="{Binding BitmapSourceImage.Value}"/>
+      <Grid>
+        <Image x:Name="DicomImage"
+               Stretch="None"
+               Source="{Binding BitmapSourceImage.Value}"
+               MouseDown="DicomImage_Click"/>
+        <Image x:Name="OverlayImage"
+               Stretch="None"
+               Source="{Binding OverlayImageSource.Value}"
+               Opacity="0.5"
+               IsHitTestVisible="False"/>
+      </Grid>
     </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"
             Grid.Column="0"/>

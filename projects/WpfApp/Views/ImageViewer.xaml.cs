@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Views
@@ -136,6 +137,14 @@ namespace DicomApp.Views
                     parent.RaiseEvent(eventArg);
                 }
             }
+        }
+
+        private void DicomImage_Click(object sender, MouseButtonEventArgs e)
+        {
+            Point mousePos = e.GetPosition(DicomImage);
+            double relativeX = mousePos.X / DicomImage.ActualWidth;
+            double relativeY = mousePos.Y / DicomImage.ActualHeight;
+            _viewModel.OnClick(relativeX, relativeY);
         }
     }
 }

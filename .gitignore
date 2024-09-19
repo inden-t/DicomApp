@@ -1,6 +1,7 @@
 ### 追加 ###
 .venv
 .dcm
+.temp
 
 # 出力フォルダ
 AnyCPU

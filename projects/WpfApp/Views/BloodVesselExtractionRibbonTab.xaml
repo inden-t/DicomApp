@@ -1,0 +1,129 @@
+﻿<RibbonTab x:Class="DicomApp.Views.BloodVesselExtractionRibbonTab"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           xmlns:viewmodels="clr-namespace:DicomApp.ViewModels"
+           mc:Ignorable="d"
+           d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
+           Header="血管抽出">
+  <RibbonGroup Header="操作">
+    <RibbonGroup.ItemsPanel>
+      <ItemsPanelTemplate>
+        <StackPanel Orientation="Horizontal"/>
+      </ItemsPanelTemplate>
+    </RibbonGroup.ItemsPanel>
+
+    <RibbonControlGroup>
+      <RibbonButton Label="元に戻す"
+                    Command="{Binding UndoSelectionCommand}"
+                    IsEnabled="{Binding CanUndo.Value}"/>
+      <RibbonButton Label="やり直す"
+                    Command="{Binding RedoSelectionCommand}"
+                    IsEnabled="{Binding CanRedo.Value}"/>
+    </RibbonControlGroup>
+  </RibbonGroup>
+
+  <RibbonGroup Header="選択範囲">
+    <RibbonButton Label="選択範囲を保存"
+                  Command="{Binding SaveSelectionCommand}">
+    </RibbonButton>
+    <RibbonButton Label="選択範囲を読み込む"
+                  Command="{Binding LoadSelectionCommand}">
+    </RibbonButton>
+    <RibbonButton Label="選択範囲をすべて削除"
+                  Command="{Binding ClearAllSelectionCommand}">
+    </RibbonButton>
+  </RibbonGroup>
+
+  <RibbonGroup Header="血管領域選択">
+    <RibbonButton Label="3D塗りつぶし選択"
+                  Command="{Binding Execute3DFillSelectionCommand}">
+      <RibbonButton.Style>
+        <Style TargetType="RibbonButton"
+               BasedOn="{StaticResource {x:Type RibbonButton}}">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+                         Value="Fill3DSelection">
+              <Setter Property="Background"
+                      Value="LightBlue"/>
+              <Setter Property="BorderBrush"
+                      Value="Blue"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </RibbonButton.Style>
+    </RibbonButton>
+    <RibbonButton Label="3D塗りつぶし選択解除"
+                  Command="{Binding Clear3DFillSelectionCommand}">
+      <RibbonButton.Style>
+        <Style TargetType="RibbonButton"
+               BasedOn="{StaticResource {x:Type RibbonButton}}">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+                         Value="Clear3DFillSelection">
+              <Setter Property="Background"
+                      Value="LightBlue"/>
+              <Setter Property="BorderBrush"
+                      Value="Blue"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </RibbonButton.Style>
+    </RibbonButton>
+
+    <!-- 空スペースを追加 -->
+    <RibbonButton Label=" " Visibility="Hidden"/>
+
+    <RibbonButton Label="2D塗りつぶし選択"
+                  Command="{Binding Execute2DFillSelectionCommand}">
+      <RibbonButton.Style>
+        <Style TargetType="RibbonButton"
+               BasedOn="{StaticResource {x:Type RibbonButton}}">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+                         Value="Fill2DSelection">
+              <Setter Property="Background"
+                      Value="LightBlue"/>
+              <Setter Property="BorderBrush"
+                      Value="Blue"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </RibbonButton.Style>
+    </RibbonButton>
+    <RibbonButton Label="2D塗りつぶし選択解除"
+                  Command="{Binding Clear2DFillSelectionCommand}">
+      <RibbonButton.Style>
+        <Style TargetType="RibbonButton"
+               BasedOn="{StaticResource {x:Type RibbonButton}}">
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+                         Value="ClearFill2DSelection">
+              <Setter Property="Background"
+                      Value="LightBlue"/>
+              <Setter Property="BorderBrush"
+                      Value="Blue"/>
+            </DataTrigger>
+          </Style.Triggers>
+        </Style>
+      </RibbonButton.Style>
+    </RibbonButton>
+
+    <!--<ribbon:RibbonSlider Label="しきい値調整"
+                               Minimum="0"
+              Maximum="255"
+              Value="{Binding ThresholdValue}"/>-->
+
+  </RibbonGroup>
+
+  <RibbonGroup Header="モデル">
+    <RibbonButton Label="サーフェスモデル生成"
+                  Command="{Binding BloodVesselExtractionCommand}"/>
+  </RibbonGroup>
+
+  <RibbonGroup Header="終了">
+    <RibbonButton Label="選択を破棄して終了"
+                  Command="{Binding DiscardSelectionCommand}"/>
+  </RibbonGroup>
+</RibbonTab>
