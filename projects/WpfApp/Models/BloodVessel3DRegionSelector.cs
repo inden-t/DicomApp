@@ -53,6 +53,22 @@ namespace DicomApp.Models
             }
         }
 
+        public bool CanRedo()
+        {
+            return _currentHistoryIndex < _selectionHistory.Count - 1;
+        }
+
+        public void Redo()
+        {
+            if (CanRedo())
+            {
+                _currentHistoryIndex++;
+                _selectedRegion.SelectedVoxels =
+                    new HashSet<(int X, int Y, int Z)>(
+                        _selectionHistory[_currentHistoryIndex]);
+            }
+        }
+
         public void PreRenderImages()
         {
             _renderedImages = new List<byte[]>();
