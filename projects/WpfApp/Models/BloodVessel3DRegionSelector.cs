@@ -6,7 +6,7 @@ namespace DicomApp.Models
     public class BloodVessel3DRegionSelector
     {
         private readonly FileManager _fileManager;
-        private readonly BloodVessel3DRegion _selectedRegion;
+        private BloodVessel3DRegion _selectedRegion;
 
         private List<byte[]> _renderedImages = new();
         private int _imageWidth;
@@ -299,6 +299,11 @@ namespace DicomApp.Models
         {
             // 選択された領域を返す
             return _selectedRegion;
+        }
+
+        public void SetSelectedRegion(BloodVessel3DRegion region)
+        {
+            _selectedRegion = region;
         }
     }
 }

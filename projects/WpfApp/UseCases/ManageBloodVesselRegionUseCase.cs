@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Media3D;
 using DicomApp.Models;
 
 namespace DicomApp.UseCases
@@ -52,7 +53,35 @@ namespace DicomApp.UseCases
 
         public async Task LoadSelectedRegionAsync()
         {
-            // 領域を読み込むメソッドを実装する場合はここに追加
+            try
+            {
+                // ファイル選択ダイアログを表示
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "Region Data (*.region)|*.region",
+                    DefaultExt = ".region"
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    var selectedFile = openFileDialog.FileName;
+
+                    // ファイルから領域を読み込む
+                    var loadedRegion = await LoadRegionFromFile(selectedFile);
+
+                    // 読み込んだ領域を_regionSelectorに設定
+                    _regionSelector.SetSelectedRegion(loadedRegion);
+
+                    MessageBox.Show($"{selectedFile} から領域を読み込みました。", "読み込み完了",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"領域の読み込み中にエラーが発生しました: {ex.Message}", "エラー",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine($"詳細なエラー情報: {ex}");
+            }
         }
 
         private async Task SaveRegionToFile(string filePath,
@@ -70,6 +99,27 @@ namespace DicomApp.UseCases
                     writer.Write(voxel.Z);
                 }
             }
+        }
+
+        private async Task<BloodVessel3DRegion> LoadRegionFromFile(
+            string filePath)
+        {
+            var region = new BloodVessel3DRegion();
+
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            using (var reader = new BinaryReader(stream))
+            {
+                int voxelCount = reader.ReadInt32();
+                for (int i = 0; i < voxelCount; i++)
+                {
+                    int x = reader.ReadInt32();
+                    int y = reader.ReadInt32();
+                    int z = reader.ReadInt32();
+                    region.AddVoxel(new Point3D(x, y, z));
+                }
+            }
+
+            return region;
         }
     }
 }
