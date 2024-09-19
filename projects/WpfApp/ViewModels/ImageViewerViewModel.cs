@@ -5,7 +5,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using DicomApp.Models;
-using DicomApp.UseCases;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
@@ -48,13 +47,10 @@ namespace DicomApp.ViewModels
             new(SelectionMode.None);
 
         private readonly BloodVessel3DRegionSelector _regionSelector;
-        private readonly IProgressWindowFactory _progressWindowFactory;
 
-        public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector,
-            IProgressWindowFactory progressWindowFactory)
+        public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector)
         {
             _regionSelector = regionSelector;
-            _progressWindowFactory = progressWindowFactory;
 
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
