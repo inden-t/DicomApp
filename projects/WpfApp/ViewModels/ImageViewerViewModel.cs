@@ -38,6 +38,9 @@ namespace DicomApp.ViewModels
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
 
+        public ReactiveProperty<bool> IsSelectionModeActive { get; } =
+            new(false);
+
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
 

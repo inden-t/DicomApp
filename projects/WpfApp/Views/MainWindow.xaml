@@ -52,6 +52,8 @@
                         Command="{Binding GenerateSurfaceModelCommand}"/>
           <RibbonButton Label="サーフェスモデル表示(線形補間)"
                         Command="{Binding GenerateSurfaceModelLinearInterpolationCommand}"/>
+          <RibbonButton Label="血管領域選択"
+                        Command="{Binding StartBloodVesselSelectionCommand}"/>
         </RibbonGroup>
       </RibbonTab>
     </Ribbon>

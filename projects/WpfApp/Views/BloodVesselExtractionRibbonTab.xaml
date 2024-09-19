@@ -8,8 +8,6 @@
            d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">
   <RibbonGroup Header="血管領域選択">
-    <RibbonButton Label="血管領域選択"
-                  Command="{Binding StartBloodVesselSelectionCommand}"/>
     <RibbonButton Label="3D塗りつぶし選択"
                   Command="{Binding Execute3DFillSelectionCommand}">
       <RibbonButton.Style>

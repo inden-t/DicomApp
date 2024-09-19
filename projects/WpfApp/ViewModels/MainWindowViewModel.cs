@@ -25,6 +25,9 @@ namespace DicomApp.ViewModels
             get;
         } = new();
 
+        public ReactiveCommand StartBloodVesselSelectionCommand { get; } =
+            new();
+
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<int> SelectedIndex { get; } = new();
@@ -52,6 +55,9 @@ namespace DicomApp.ViewModels
                 _imageViewerViewModel.SetMaximumScrollValue(
                     DicomFiles.Count - 1);
             };
+
+            StartBloodVesselSelectionCommand.Subscribe(() =>
+                _imageViewerViewModel.IsSelectionModeActive.Value = true);
         }
 
         private void SwitchImageByIndex(int index)
