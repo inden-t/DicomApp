@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using DicomApp.Models;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -7,6 +8,7 @@ namespace DicomApp.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
+        private readonly BloodVessel3DRegionSelector _regionSelector;
 
         public ImageViewerViewModel ImageViewerViewModel =>
             _imageViewerViewModel;
@@ -36,9 +38,11 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
+            BloodVessel3DRegionSelector regionSelector)
         {
             _imageViewerViewModel = imageViewerViewModel;
+            _regionSelector = regionSelector;
 
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
@@ -64,6 +68,7 @@ namespace DicomApp.ViewModels
             {
                 _imageViewerViewModel.IsSelectionModeActive.Value = true;
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
+                _regionSelector.PreRenderImages();
             });
         }
 

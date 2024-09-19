@@ -61,7 +61,7 @@ namespace DicomApp.Models
             }
         }
 
-        private void PreRenderImages()
+        public void PreRenderImages()
         {
             _renderedImages = new List<byte[]>();
             int index = 0;
@@ -87,8 +87,6 @@ namespace DicomApp.Models
             {
                 return;
             }
-
-            PreRenderImages();
 
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
