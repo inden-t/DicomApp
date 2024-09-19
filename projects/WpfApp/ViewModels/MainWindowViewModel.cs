@@ -34,6 +34,7 @@ namespace DicomApp.ViewModels
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<int> SelectedIndex { get; } = new();
+        public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
@@ -60,7 +61,10 @@ namespace DicomApp.ViewModels
             };
 
             StartBloodVesselSelectionCommand.Subscribe(() =>
-                _imageViewerViewModel.IsSelectionModeActive.Value = true);
+            {
+                _imageViewerViewModel.IsSelectionModeActive.Value = true;
+                SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
+            });
         }
 
         private void SwitchImageByIndex(int index)

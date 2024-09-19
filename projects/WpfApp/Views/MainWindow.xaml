@@ -25,7 +25,8 @@
     <Ribbon x:Name="Ribbon"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Grid.Row="0">
+            Grid.Row="0"
+            SelectedIndex="{Binding SelectedRibbonTabIndex.Value}">
       <Ribbon.ApplicationMenu>
         <RibbonApplicationMenu>
           <RibbonApplicationMenuItem Header="ファイルを開く..."
