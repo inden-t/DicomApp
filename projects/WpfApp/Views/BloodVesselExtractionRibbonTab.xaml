@@ -14,6 +14,9 @@
     <RibbonButton Label="選択範囲を保存"
                   Command="{Binding SaveSelectionCommand}">
     </RibbonButton>
+    <RibbonButton Label="選択範囲を読み込む"
+                  Command="{Binding LoadSelectionCommand}">
+    </RibbonButton>
   </RibbonGroup>
 
   <RibbonGroup Header="血管領域選択">

@@ -49,6 +49,10 @@ namespace DicomApp
                 .Subscribe(async () =>
                     await manageBloodVesselRegionUseCase
                         .SaveSelectedRegionAsync());
+            bloodVesselExtractionRibbonTabViewModel.LoadSelectionCommand
+                .Subscribe(async () =>
+                    await manageBloodVesselRegionUseCase
+                        .LoadSelectedRegionAsync());
         }
     }
 }
