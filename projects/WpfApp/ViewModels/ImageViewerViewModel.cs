@@ -135,6 +135,8 @@ namespace DicomApp.ViewModels
 
         public async Task OnClick(double relativeX, double relativeY)
         {
+            Mouse.OverrideCursor = Cursors.Wait;
+
             var renderedImage = _image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
 
@@ -157,7 +159,7 @@ namespace DicomApp.ViewModels
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Clear3DFillSelection)
             {
-                await Task.Run(() => _regionSelector.Clear3DRegion(seedPoint));
+                _regionSelector.Clear3DRegion(seedPoint);
 
                 // 選択領域の表示を更新
                 UpdateSelectedRegion();
@@ -167,8 +169,7 @@ namespace DicomApp.ViewModels
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Fill2DSelection)
             {
-                await Task.Run(() =>
-                    _regionSelector.Select2DRegion(seedPoint, threshold));
+                _regionSelector.Select2DRegion(seedPoint, threshold);
 
                 // 選択領域の表示を更新
                 UpdateSelectedRegion();
@@ -181,6 +182,8 @@ namespace DicomApp.ViewModels
                 // 選択領域の表示を更新
                 UpdateSelectedRegion();
             }
+
+            Mouse.OverrideCursor = null;
         }
 
         private void UpdateSelectedRegion()
