@@ -133,135 +133,54 @@ namespace DicomApp.ViewModels
             // 血管領域選択モードを開始
         }
 
-        public void OnClick(double relativeX, double relativeY)
+        public async Task OnClick(double relativeX, double relativeY)
         {
+            var renderedImage = _image.RenderImage();
+            var bitmapImage = renderedImage.As<WriteableBitmap>();
+
+            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
+                relativeY * bitmapImage.PixelHeight,
+                ScrollValue.Value);
+
+            int threshold = 220; // しきい値は適切な値に変更してください
+
             if (CurrentSelectionMode.Value == SelectionMode.Fill3DSelection)
             {
-                Select3DRegion(relativeX, relativeY);
-            }
-            else if (CurrentSelectionMode.Value ==
-                     SelectionMode.Fill2DSelection)
-            {
-                Select2DRegion(relativeX, relativeY);
-            }
-            else if (CurrentSelectionMode.Value ==
-                     SelectionMode.ClearFill2DSelection)
-            {
-                Clear2DRegion(relativeX, relativeY);
+                await Task.Run(() =>
+                    _regionSelector.Select3DRegion(seedPoint, threshold));
+
+                // 選択領域の表示を更新
+                UpdateSelectedRegion();
+
+                CurrentSelectionMode.Value = SelectionMode.None;
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Clear3DFillSelection)
             {
-                Clear3DRegion(relativeX, relativeY);
+                await Task.Run(() => _regionSelector.Clear3DRegion(seedPoint));
+
+                // 選択領域の表示を更新
+                UpdateSelectedRegion();
+
+                CurrentSelectionMode.Value = SelectionMode.None;
             }
-        }
-
-        public async Task Select3DRegion(double relativeX, double relativeY)
-        {
-            if (CurrentSelectionMode.Value != SelectionMode.Fill3DSelection)
-                return;
-
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-
-            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
-                relativeY * bitmapImage.PixelHeight,
-                ScrollValue.Value);
-
-            IProgressWindow progressWindow = _progressWindowFactory.Create();
-            progressWindow.SetWindowTitle("モデル生成中");
-            progressWindow.Start();
-            progressWindow.SetStatusText("3次元塗りつぶし選択を実行中...");
-
-            var progress = new Progress<(int value, string text)>(data =>
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.Fill2DSelection)
             {
-                progressWindow.SetStatusText(data.text);
-                progressWindow.SetProgress(data.value);
-            });
+                await Task.Run(() =>
+                    _regionSelector.Select2DRegion(seedPoint, threshold));
 
-            int threshold = 220; // しきい値は適切な値に変更してください
-            await Task.Run(() =>
-                _regionSelector.Select3DRegion(seedPoint, threshold));
-
-            progressWindow.End();
-
-            // 選択領域の表示を更新
-            UpdateSelectedRegion();
-
-            CurrentSelectionMode.Value = SelectionMode.None;
-        }
-
-        public async Task Clear3DRegion(double relativeX, double relativeY)
-        {
-            if (CurrentSelectionMode.Value !=
-                SelectionMode.Clear3DFillSelection)
-                return;
-
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-
-            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
-                relativeY * bitmapImage.PixelHeight,
-                ScrollValue.Value);
-
-            IProgressWindow progressWindow = _progressWindowFactory.Create();
-            progressWindow.SetWindowTitle("3D領域クリア中");
-            progressWindow.Start();
-            progressWindow.SetStatusText("3次元塗りつぶし選択を解除中...");
-
-            var progress = new Progress<(int value, string text)>(data =>
+                // 選択領域の表示を更新
+                UpdateSelectedRegion();
+            }
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.ClearFill2DSelection)
             {
-                progressWindow.SetStatusText(data.text);
-                progressWindow.SetProgress(data.value);
-            });
+                _regionSelector.Clear2DRegion(seedPoint);
 
-            await Task.Run(() => _regionSelector.Clear3DRegion(seedPoint));
-
-            progressWindow.End();
-
-            // 選択領域の表示を更新
-            UpdateSelectedRegion();
-
-            CurrentSelectionMode.Value = SelectionMode.None;
-        }
-
-        public void Clear2DRegion(double relativeX, double relativeY)
-        {
-            if (CurrentSelectionMode.Value !=
-                SelectionMode.ClearFill2DSelection)
-                return;
-
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-
-            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
-                relativeY * bitmapImage.PixelHeight,
-                ScrollValue.Value);
-
-            _regionSelector.Clear2DRegion(seedPoint);
-
-            // 選択領域の表示を更新
-            UpdateSelectedRegion();
-        }
-
-        public async Task Select2DRegion(double relativeX, double relativeY)
-        {
-            if (CurrentSelectionMode.Value != SelectionMode.Fill2DSelection)
-                return;
-
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-
-            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
-                relativeY * bitmapImage.PixelHeight,
-                ScrollValue.Value);
-
-            int threshold = 220; // しきい値は適切な値に変更してください
-            await Task.Run(() =>
-                _regionSelector.Select2DRegion(seedPoint, threshold));
-
-            // 選択領域の表示を更新
-            UpdateSelectedRegion();
+                // 選択領域の表示を更新
+                UpdateSelectedRegion();
+            }
         }
 
         private void UpdateSelectedRegion()
