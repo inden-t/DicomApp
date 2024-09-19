@@ -156,8 +156,6 @@ namespace DicomApp.ViewModels
 
                 // 選択領域の表示を更新
                 UpdateSelectedRegion();
-
-                CurrentSelectionMode.Value = SelectionMode.None;
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Clear3DFillSelection)
@@ -166,8 +164,6 @@ namespace DicomApp.ViewModels
 
                 // 選択領域の表示を更新
                 UpdateSelectedRegion();
-
-                CurrentSelectionMode.Value = SelectionMode.None;
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Fill2DSelection)
