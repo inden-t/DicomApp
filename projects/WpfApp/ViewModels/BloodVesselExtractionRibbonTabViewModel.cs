@@ -32,9 +32,6 @@ namespace DicomApp.ViewModels
         {
             _imageViewerViewModel = imageViewerViewModel;
 
-            DiscardSelectionCommand.Subscribe(() =>
-                _imageViewerViewModel.IsSelectionModeActive.Value = false);
-
             Execute3DFillSelectionCommand.Subscribe(() =>
             {
                 if (_imageViewerViewModel.CurrentSelectionMode.Value ==
