@@ -102,7 +102,7 @@ namespace DicomApp.ViewModels
             Render();
         }
 
-        private void Render()
+        public void Render()
         {
             if (_image == null)
                 return;

@@ -10,14 +10,14 @@ namespace DicomApp.UseCases
     public class ManageBloodVesselRegionUseCase
     {
         private readonly BloodVessel3DRegionSelector _regionSelector;
-        private readonly IProgressWindowFactory _progressWindowFactory;
+        private readonly IImageViewerPresenter _imageViewerPresenter;
 
         public ManageBloodVesselRegionUseCase(
             BloodVessel3DRegionSelector regionSelector,
-            IProgressWindowFactory progressWindowFactory)
+            IImageViewerPresenter imageViewerPresenter)
         {
             _regionSelector = regionSelector;
-            _progressWindowFactory = progressWindowFactory;
+            _imageViewerPresenter = imageViewerPresenter;
         }
 
         public async Task SaveSelectedRegionAsync()
@@ -75,6 +75,8 @@ namespace DicomApp.UseCases
                     MessageBox.Show($"{selectedFile} から領域を読み込みました。", "読み込み完了",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+
+                _imageViewerPresenter.RenderImage();
             }
             catch (Exception ex)
             {
