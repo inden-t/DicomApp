@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
+using System.Windows.Data;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Views
@@ -22,7 +23,24 @@ namespace DicomApp.Views
             imageContainer.Content = imageViewer;
 
             // Ribbon の中に BloodVesselExtractionRibbonTab を配置する
-            BloodVesselExtractionTab = bloodVesselExtractionRibbonTab;
+            Ribbon.Items.Add(bloodVesselExtractionRibbonTab);
+
+            // Visibility を設定する
+            SetupVisibilityBinding(bloodVesselExtractionRibbonTab);
+        }
+
+        private void SetupVisibilityBinding(FrameworkElement targetControl)
+        {
+            // バインディングを作成
+            var binding =
+                new Binding("ImageViewerViewModel.IsSelectionModeActive.Value")
+                {
+                    Source = DataContext,
+                    Converter = new BooleanToVisibilityConverter()
+                };
+
+            // バインディングを適用
+            targetControl.SetBinding(UIElement.VisibilityProperty, binding);
         }
     }
 }
