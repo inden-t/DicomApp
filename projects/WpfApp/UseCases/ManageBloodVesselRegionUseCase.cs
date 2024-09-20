@@ -23,6 +23,7 @@ namespace DicomApp.UseCases
         {
             _regionSelector.Initialize();
             _imageViewerPresenter.SetSelectionModeActive(false);
+            _imageViewerPresenter.ResetSelectionMode();
             UpdateSelectedRegion();
         }
 

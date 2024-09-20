@@ -8,5 +8,6 @@ namespace DicomApp.UseCases
         void RenderImage();
         void SetSelectedRegion(BloodVessel3DRegion selectedRegion);
         void SetSelectionModeActive(bool isActive);
+        void ResetSelectionMode();
     }
 }
