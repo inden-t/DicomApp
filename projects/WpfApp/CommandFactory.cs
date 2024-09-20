@@ -17,50 +17,20 @@ namespace DicomApp
             BloodVesselExtractionRibbonTabViewModel
                 bloodVesselExtractionRibbonTabViewModel,
             BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
-            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase,
+            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase,
+            ImageViewerViewModel imageViewerViewModel)
         {
-            mainWindowViewModel.OpenDicomFileCommand.Subscribe(async _ =>
-                await openDicomFileUseCase.ExecuteAsync());
-            mainWindowViewModel.OpenDicomFolderCommand.Subscribe(async _ =>
-                await openDicomFileUseCase.ExecuteFolderAsync());
+            mainWindowViewModel.InitializeDependencies(openDicomFileUseCase,
+                generatePointCloudUseCase, generateSurfaceModelUseCase,
+                generateSurfaceModelLinearInterpolationUseCase);
 
-            mainWindowViewModel.GeneratePointCloudCommand.Subscribe(
-                async () =>
-                    await generatePointCloudUseCase.ExecuteAsync());
+            bloodVesselExtractionRibbonTabViewModel.InitializeDependencies(
+                bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase,
+                manageBloodVesselRegionUseCase);
 
-            mainWindowViewModel.GenerateSurfaceModelCommand.Subscribe(
-                async () =>
-                    await generateSurfaceModelUseCase.ExecuteAsync());
-
-            mainWindowViewModel.GenerateSurfaceModelLinearInterpolationCommand
-                .Subscribe(async () =>
-                    await generateSurfaceModelLinearInterpolationUseCase
-                        .ExecuteAsync());
-
-            bloodVesselExtractionRibbonTabViewModel.BloodVesselExtractionCommand
-                .Subscribe(async () =>
-                    await bloodVesselExtractionUseCase
-                        .ExtractBloodVesselAsync());
-
-            bloodVesselExtractionRibbonTabViewModel.UndoSelectionCommand
-                .Subscribe(() =>
-                    manageBloodVesselRegionUseCase.UndoSelection());
-            bloodVesselExtractionRibbonTabViewModel.RedoSelectionCommand
-                .Subscribe(() =>
-                    manageBloodVesselRegionUseCase.RedoSelection());
-            bloodVesselExtractionRibbonTabViewModel.SaveSelectionCommand
-                .Subscribe(() => manageBloodVesselRegionUseCase
-                    .SaveSelectedRegion());
-            bloodVesselExtractionRibbonTabViewModel.LoadSelectionCommand
-                .Subscribe(() =>
-                    manageBloodVesselRegionUseCase.LoadSelectedRegion());
-            bloodVesselExtractionRibbonTabViewModel.ClearAllSelectionCommand
-                .Subscribe(() =>
-                    manageBloodVesselRegionUseCase.ClearAllSelection());
-
-            bloodVesselExtractionRibbonTabViewModel.DiscardSelectionCommand
-                .Subscribe(() =>
-                    manageBloodVesselRegionUseCase.InitializeRegionSelector());
+            imageViewerViewModel.InitializeDependencies(
+                select3DBloodVesselRegionUseCase);
         }
     }
 }

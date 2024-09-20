@@ -1,5 +1,6 @@
 ﻿using System;
 using DicomApp.Models;
+using DicomApp.UseCases;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -11,6 +12,9 @@ namespace DicomApp.ViewModels
 
         private readonly ImageViewerViewModel _imageViewerViewModel;
         private readonly BloodVessel3DRegionSelector _regionSelector;
+
+        private Select3DBloodVesselRegionUseCase
+            _select3DBloodVesselRegionUseCase;
 
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
@@ -103,6 +107,32 @@ namespace DicomApp.ViewModels
                         SelectionMode.ClearFill2DSelection;
                 }
             });
+        }
+
+        public void InitializeDependencies(
+            BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase,
+            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
+        {
+            BloodVesselExtractionCommand.Subscribe(async () =>
+                await bloodVesselExtractionUseCase.ExtractBloodVesselAsync());
+
+            _select3DBloodVesselRegionUseCase =
+                select3DBloodVesselRegionUseCase;
+
+            UndoSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.UndoSelection());
+            RedoSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.RedoSelection());
+            SaveSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.SaveSelectedRegion());
+            LoadSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.LoadSelectedRegion());
+            ClearAllSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.ClearAllSelection());
+
+            DiscardSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.InitializeRegionSelector());
         }
     }
 }

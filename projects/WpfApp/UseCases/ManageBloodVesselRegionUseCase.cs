@@ -24,7 +24,7 @@ namespace DicomApp.UseCases
         {
             _regionSelector.Initialize();
             _imageViewerPresenter.SetSelectionModeActive(false);
-            _imageViewerPresenter.RenderImage();
+            UpdateSelectedRegion();
         }
 
         public void UndoSelection()
@@ -32,7 +32,7 @@ namespace DicomApp.UseCases
             if (_regionSelector.CanUndo())
             {
                 _regionSelector.Undo();
-                _imageViewerPresenter.RenderImage();
+                UpdateSelectedRegion();
             }
         }
 
@@ -41,7 +41,7 @@ namespace DicomApp.UseCases
             if (_regionSelector.CanRedo())
             {
                 _regionSelector.Redo();
-                _imageViewerPresenter.RenderImage();
+                UpdateSelectedRegion();
             }
         }
 
@@ -50,7 +50,7 @@ namespace DicomApp.UseCases
             if (_regionSelector != null)
             {
                 _regionSelector.ClearAllRegions();
-                _imageViewerPresenter.RenderImage();
+                UpdateSelectedRegion();
             }
         }
 
@@ -107,7 +107,7 @@ namespace DicomApp.UseCases
                     _regionSelector.SetSelectedRegion(loadedRegion);
                 }
 
-                _imageViewerPresenter.RenderImage();
+                UpdateSelectedRegion();
             }
             catch (Exception ex)
             {
@@ -149,6 +149,12 @@ namespace DicomApp.UseCases
             }
 
             return region;
+        }
+
+        private void UpdateSelectedRegion()
+        {
+            var selectedRegion = _regionSelector.GetSelectedRegion();
+            _imageViewerPresenter.SetSelectedRegion(selectedRegion);
         }
     }
 }
