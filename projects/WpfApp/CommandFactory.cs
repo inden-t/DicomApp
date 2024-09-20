@@ -27,8 +27,7 @@ namespace DicomApp
                 bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase);
 
             bloodVesselExtractionRibbonTabViewModel.InitializeDependencies(
-                bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase,
-                manageBloodVesselRegionUseCase);
+                bloodVesselExtractionUseCase, manageBloodVesselRegionUseCase);
 
             imageViewerViewModel.InitializeDependencies(
                 select3DBloodVesselRegionUseCase);

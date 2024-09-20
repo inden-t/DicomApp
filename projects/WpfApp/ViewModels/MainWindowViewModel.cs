@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using DicomApp.Models;
 using DicomApp.UseCases;
 using Reactive.Bindings;
 
