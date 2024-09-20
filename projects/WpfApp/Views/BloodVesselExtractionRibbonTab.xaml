@@ -109,12 +109,6 @@
         </Style>
       </RibbonButton.Style>
     </RibbonButton>
-
-    <!--<ribbon:RibbonSlider Label="しきい値調整"
-                               Minimum="0"
-              Maximum="255"
-              Value="{Binding ThresholdValue}"/>-->
-
   </RibbonGroup>
 
   <RibbonGroup Header="モデル">
