@@ -39,6 +39,8 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
+        public ReactiveProperty<double> ThresholdValue { get; } = new(220);
+
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
             BloodVessel3DRegionSelector regionSelector)
         {

@@ -57,12 +57,12 @@
 
         <RibbonGroup Header="血管抽出">
           <StackPanel Orientation="Vertical">
-            <TextBlock Text="{Binding ImageViewerViewModel.ThresholdValue.Value, StringFormat=しきい値: {0}}"
+            <TextBlock Text="{Binding ThresholdValue.Value, StringFormat=血管抽出のしきい値: {0}}"
                        Margin="0,0,0,5"/>
             <Slider Minimum="0"
                     Maximum="255"
                     Width="150"
-                    Value="{Binding ImageViewerViewModel.ThresholdValue.Value, Mode=TwoWay}"
+                    Value="{Binding ThresholdValue.Value, Mode=TwoWay}"
                     TickFrequency="1"
                     IsSnapToTickEnabled="True"/>
           </StackPanel>
