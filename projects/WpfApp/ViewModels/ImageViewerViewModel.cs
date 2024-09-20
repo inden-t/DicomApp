@@ -147,12 +147,10 @@ namespace DicomApp.ViewModels
                 relativeY * bitmapImage.PixelHeight,
                 ScrollValue.Value);
 
-            int threshold = 220; // しきい値は適切な値に変更してください
-
             if (CurrentSelectionMode.Value == SelectionMode.Fill3DSelection)
             {
                 _select3DBloodVesselRegionUseCase.Execute3DFillSelection(
-                    seedPoint, threshold);
+                    seedPoint);
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Clear3DFillSelection)
@@ -164,7 +162,7 @@ namespace DicomApp.ViewModels
                      SelectionMode.Fill2DSelection)
             {
                 _select3DBloodVesselRegionUseCase.Execute2DFillSelection(
-                    seedPoint, threshold);
+                    seedPoint);
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.ClearFill2DSelection)

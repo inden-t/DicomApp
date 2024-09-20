@@ -8,6 +8,8 @@ namespace DicomApp.UseCases
         private readonly BloodVessel3DRegionSelector _regionSelector;
         private readonly IImageViewerPresenter _imageViewerPresenter;
 
+        private int _threshold = 220;
+
         public Select3DBloodVesselRegionUseCase(
             BloodVessel3DRegionSelector regionSelector,
             IImageViewerPresenter imageViewerPresenter)
@@ -16,9 +18,15 @@ namespace DicomApp.UseCases
             _imageViewerPresenter = imageViewerPresenter;
         }
 
-        public void Execute3DFillSelection(Point3D seedPoint, int threshold)
+        public void StartSelection(int threshold)
         {
-            _regionSelector.Select3DRegion(seedPoint, threshold);
+            _threshold = threshold;
+            _regionSelector.PreRenderImages();
+        }
+
+        public void Execute3DFillSelection(Point3D seedPoint)
+        {
+            _regionSelector.Select3DRegion(seedPoint, _threshold);
             UpdateSelectedRegion();
         }
 
@@ -28,9 +36,9 @@ namespace DicomApp.UseCases
             UpdateSelectedRegion();
         }
 
-        public void Execute2DFillSelection(Point3D seedPoint, int threshold)
+        public void Execute2DFillSelection(Point3D seedPoint)
         {
-            _regionSelector.Select2DRegion(seedPoint, threshold);
+            _regionSelector.Select2DRegion(seedPoint, _threshold);
             UpdateSelectedRegion();
         }
 

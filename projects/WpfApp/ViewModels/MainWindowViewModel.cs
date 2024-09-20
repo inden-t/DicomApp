@@ -11,6 +11,9 @@ namespace DicomApp.ViewModels
         private readonly ImageViewerViewModel _imageViewerViewModel;
         private readonly BloodVessel3DRegionSelector _regionSelector;
 
+        private Select3DBloodVesselRegionUseCase
+            _select3DBloodVesselRegionUseCase;
+
         public ImageViewerViewModel ImageViewerViewModel =>
             _imageViewerViewModel;
 
@@ -39,7 +42,7 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
-        public ReactiveProperty<double> ThresholdValue { get; } = new(220);
+        public ReactiveProperty<int> ThresholdValue { get; } = new(220);
 
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
             BloodVessel3DRegionSelector regionSelector)
@@ -71,7 +74,8 @@ namespace DicomApp.ViewModels
             {
                 _imageViewerViewModel.IsSelectionModeActive.Value = true;
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
-                _regionSelector.PreRenderImages();
+                _select3DBloodVesselRegionUseCase?.StartSelection(ThresholdValue
+                    .Value);
             });
         }
 
@@ -81,7 +85,8 @@ namespace DicomApp.ViewModels
             GeneratePointCloudUseCase generatePointCloudUseCase,
             GenerateSurfaceModelUseCase generateSurfaceModelUseCase,
             GenerateSurfaceModelLinearInterpolationUseCase
-                generateSurfaceModelLinearInterpolationUseCase)
+                generateSurfaceModelLinearInterpolationUseCase,
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
         {
             OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
@@ -100,6 +105,9 @@ namespace DicomApp.ViewModels
                 .Subscribe(async () =>
                     await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());
+
+            _select3DBloodVesselRegionUseCase =
+                select3DBloodVesselRegionUseCase;
         }
 
         private void SwitchImageByIndex(int index)
