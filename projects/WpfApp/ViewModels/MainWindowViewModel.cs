@@ -14,6 +14,8 @@ namespace DicomApp.ViewModels
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
+        public ImageViewerViewModel ImageViewerViewModel =>
+            _imageViewerViewModel;
 
         public ReactiveCommand OpenDicomFileCommand { get; } = new();
         public ReactiveCommand OpenDicomFolderCommand { get; } = new();

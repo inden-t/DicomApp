@@ -32,7 +32,9 @@ namespace DicomApp.Views
         {
             // バインディングを作成
             var binding =
-                new Binding("ImageViewerViewModel.IsSelectionModeActive.Value")
+                new Binding(nameof(MainWindowViewModel.ImageViewerViewModel) +
+                            "." + nameof(ImageViewerViewModel
+                                .IsSelectionModeActive) + ".Value")
                 {
                     Source = DataContext,
                     Converter = new BooleanToVisibilityConverter()
