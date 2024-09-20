@@ -11,6 +11,8 @@ namespace DicomApp.ViewModels
         private readonly ImageViewerViewModel _imageViewerViewModel;
         private readonly BloodVessel3DRegionSelector _regionSelector;
 
+        private BloodVesselExtractionUseCase _bloodVesselExtractionUseCase;
+
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
@@ -76,6 +78,8 @@ namespace DicomApp.ViewModels
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
                 _select3DBloodVesselRegionUseCase?.StartSelection(ThresholdValue
                     .Value);
+                _bloodVesselExtractionUseCase?.SetThreshold(ThresholdValue
+                    .Value);
             });
         }
 
@@ -86,6 +90,7 @@ namespace DicomApp.ViewModels
             GenerateSurfaceModelUseCase generateSurfaceModelUseCase,
             GenerateSurfaceModelLinearInterpolationUseCase
                 generateSurfaceModelLinearInterpolationUseCase,
+            BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
             Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
         {
             OpenDicomFileCommand.Subscribe(async _ =>
@@ -106,6 +111,7 @@ namespace DicomApp.ViewModels
                     await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());
 
+            _bloodVesselExtractionUseCase = bloodVesselExtractionUseCase;
             _select3DBloodVesselRegionUseCase =
                 select3DBloodVesselRegionUseCase;
         }
