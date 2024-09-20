@@ -32,6 +32,7 @@ namespace DicomApp.ViewModels
         {
             _imageViewerViewModel.CurrentSelectionMode.Value =
                 SelectionMode.None;
+            _imageViewerViewModel.IsSelectionVisible.Value = true;
         }
     }
 }
