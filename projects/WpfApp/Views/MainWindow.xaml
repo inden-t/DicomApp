@@ -39,6 +39,13 @@
       </Ribbon.ApplicationMenu>
 
       <RibbonTab Header="ホーム">
+        <RibbonGroup Header="ファイル">
+          <RibbonButton Label="ファイルを開く..."
+                        Command="{Binding OpenDicomFileCommand}"/>
+          <RibbonButton Label="フォルダーを開く..."
+                        Command="{Binding OpenDicomFolderCommand}"/>
+        </RibbonGroup>
+
         <RibbonGroup Header="ズーム操作">
           <RibbonButton Label="ズームイン"
                         Command="{Binding ZoomInCommand}"/>
