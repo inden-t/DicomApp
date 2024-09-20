@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using DicomApp.Models;
+using DicomApp.UseCases;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -70,6 +71,33 @@ namespace DicomApp.ViewModels
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
                 _regionSelector.PreRenderImages();
             });
+        }
+
+
+        public void InitializeDependencies(
+            OpenDicomFileUseCase openDicomFileUseCase,
+            GeneratePointCloudUseCase generatePointCloudUseCase,
+            GenerateSurfaceModelUseCase generateSurfaceModelUseCase,
+            GenerateSurfaceModelLinearInterpolationUseCase
+                generateSurfaceModelLinearInterpolationUseCase)
+        {
+            OpenDicomFileCommand.Subscribe(async _ =>
+                await openDicomFileUseCase.ExecuteAsync());
+            OpenDicomFolderCommand.Subscribe(async _ =>
+                await openDicomFileUseCase.ExecuteFolderAsync());
+
+            GeneratePointCloudCommand.Subscribe(
+                async () =>
+                    await generatePointCloudUseCase.ExecuteAsync());
+
+            GenerateSurfaceModelCommand.Subscribe(
+                async () =>
+                    await generateSurfaceModelUseCase.ExecuteAsync());
+
+            GenerateSurfaceModelLinearInterpolationCommand
+                .Subscribe(async () =>
+                    await generateSurfaceModelLinearInterpolationUseCase
+                        .ExecuteAsync());
         }
 
         private void SwitchImageByIndex(int index)

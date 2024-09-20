@@ -1,5 +1,6 @@
 ﻿using System;
 using DicomApp.Models;
+using DicomApp.UseCases;
 using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
@@ -103,6 +104,28 @@ namespace DicomApp.ViewModels
                         SelectionMode.ClearFill2DSelection;
                 }
             });
+        }
+
+        public void InitializeDependencies(
+            BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
+            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
+        {
+            BloodVesselExtractionCommand.Subscribe(async () =>
+                await bloodVesselExtractionUseCase.ExtractBloodVesselAsync());
+
+            UndoSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.UndoSelection());
+            RedoSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.RedoSelection());
+            SaveSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.SaveSelectedRegion());
+            LoadSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.LoadSelectedRegion());
+            ClearAllSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.ClearAllSelection());
+
+            DiscardSelectionCommand.Subscribe(() =>
+                manageBloodVesselRegionUseCase.InitializeRegionSelector());
         }
     }
 }
