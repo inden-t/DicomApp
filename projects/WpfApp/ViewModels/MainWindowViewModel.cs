@@ -44,6 +44,9 @@ namespace DicomApp.ViewModels
 
         public ReactiveProperty<int> ThresholdValue { get; } = new(220);
 
+        public ReactiveProperty<bool>
+            IsBloodVesselExtractionUiEnabled { get; } = new(true);
+
         public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
@@ -77,6 +80,9 @@ namespace DicomApp.ViewModels
                 _bloodVesselExtractionUseCase?.SetThreshold(ThresholdValue
                     .Value);
             });
+
+            _imageViewerViewModel.IsSelectionModeActive.Subscribe((value) =>
+                IsBloodVesselExtractionUiEnabled.Value = !value);
         }
 
 

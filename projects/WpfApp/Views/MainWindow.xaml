@@ -56,7 +56,8 @@
         </RibbonGroup>
 
         <RibbonGroup Header="血管抽出">
-          <StackPanel Orientation="Vertical">
+          <StackPanel Orientation="Vertical"
+                      IsEnabled="{Binding IsBloodVesselExtractionUiEnabled.Value}">
             <TextBlock Text="{Binding ThresholdValue.Value, StringFormat=血管抽出のしきい値: {0}}"
                        Margin="0,0,0,5"/>
             <Slider Minimum="0"
@@ -67,7 +68,8 @@
                     IsSnapToTickEnabled="True"/>
           </StackPanel>
           <RibbonButton Label="血管抽出開始"
-                        Command="{Binding StartBloodVesselSelectionCommand}"/>
+                        Command="{Binding StartBloodVesselSelectionCommand}"
+                        IsEnabled="{Binding IsBloodVesselExtractionUiEnabled.Value}"/>
         </RibbonGroup>
       </RibbonTab>
     </Ribbon>
