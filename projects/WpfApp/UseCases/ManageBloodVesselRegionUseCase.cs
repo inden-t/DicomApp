@@ -19,7 +19,7 @@ namespace DicomApp.UseCases
             _imageViewerPresenter = imageViewerPresenter;
         }
 
-        public void InitializeRegionSelector()
+        public void InitializeRegionSelection()
         {
             _regionSelector.Initialize();
             _imageViewerPresenter.SetSelectionModeActive(false);

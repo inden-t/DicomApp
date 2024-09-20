@@ -34,7 +34,7 @@ namespace DicomApp.UseCases
 
             if (filePaths != null && filePaths.Length > 0)
             {
-                _manageBloodVesselRegionUseCase.InitializeRegionSelector();
+                _manageBloodVesselRegionUseCase.InitializeRegionSelection();
                 _fileManager.ClearFiles();
                 await OpenFilesFromPathsAsync(filePaths);
             }
@@ -46,7 +46,7 @@ namespace DicomApp.UseCases
 
             if (!string.IsNullOrEmpty(folderPath))
             {
-                _manageBloodVesselRegionUseCase.InitializeRegionSelector();
+                _manageBloodVesselRegionUseCase.InitializeRegionSelection();
                 _fileManager.ClearFiles();
 
                 string[] filePaths = Directory.GetFiles(folderPath, "*.dcm",

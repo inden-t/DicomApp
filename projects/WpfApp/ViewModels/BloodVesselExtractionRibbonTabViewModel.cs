@@ -123,7 +123,7 @@ namespace DicomApp.ViewModels
                 manageBloodVesselRegionUseCase.ClearAllSelection());
 
             DiscardSelectionCommand.Subscribe(() =>
-                manageBloodVesselRegionUseCase.InitializeRegionSelector());
+                manageBloodVesselRegionUseCase.InitializeRegionSelection());
         }
     }
 }
