@@ -9,15 +9,12 @@ namespace DicomApp.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
-        private readonly BloodVessel3DRegionSelector _regionSelector;
 
         private BloodVesselExtractionUseCase _bloodVesselExtractionUseCase;
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
-        public ImageViewerViewModel ImageViewerViewModel =>
-            _imageViewerViewModel;
 
         public ReactiveCommand OpenDicomFileCommand { get; } = new();
         public ReactiveCommand OpenDicomFolderCommand { get; } = new();
@@ -46,11 +43,9 @@ namespace DicomApp.ViewModels
 
         public ReactiveProperty<int> ThresholdValue { get; } = new(220);
 
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
-            BloodVessel3DRegionSelector regionSelector)
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
-            _regionSelector = regionSelector;
 
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
