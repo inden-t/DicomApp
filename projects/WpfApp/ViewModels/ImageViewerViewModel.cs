@@ -41,6 +41,8 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<bool> IsSelectionModeActive { get; } =
             new(false);
 
+        public ReactiveProperty<bool> IsSelectionVisible { get; } = new(true);
+
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
 

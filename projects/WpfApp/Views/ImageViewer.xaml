@@ -10,6 +10,10 @@
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
              MouseWheel="UserControl_MouseWheel"
              SizeChanged="UserControl_SizeChanged">
+  <UserControl.Resources>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+  </UserControl.Resources>
+
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
@@ -32,7 +36,8 @@
                Stretch="None"
                Source="{Binding OverlayImageSource.Value}"
                Opacity="0.5"
-               IsHitTestVisible="False"/>
+               IsHitTestVisible="False"
+               Visibility="{Binding IsSelectionVisible.Value,  Converter={StaticResource BooleanToVisibilityConverter}}"/>
       </Grid>
     </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"

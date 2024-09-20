@@ -34,6 +34,9 @@
     <RibbonButton Label="選択範囲をすべて削除"
                   Command="{Binding ClearAllSelectionCommand}">
     </RibbonButton>
+    <RibbonToggleButton Label="選択範囲を非表示"
+                        IsChecked="{Binding IsSelectionHidden.Value, Mode=TwoWay}">
+    </RibbonToggleButton>
   </RibbonGroup>
 
   <RibbonGroup Header="血管領域選択">
@@ -73,7 +76,8 @@
     </RibbonButton>
 
     <!-- 空スペースを追加 -->
-    <RibbonButton Label=" " Visibility="Hidden"/>
+    <RibbonButton Label=" "
+                  Visibility="Hidden"/>
 
     <RibbonButton Label="2D塗りつぶし選択"
                   Command="{Binding Execute2DFillSelectionCommand}">
