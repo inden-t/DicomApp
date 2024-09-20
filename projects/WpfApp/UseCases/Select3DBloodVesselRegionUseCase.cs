@@ -42,7 +42,8 @@ namespace DicomApp.UseCases
 
         private void UpdateSelectedRegion()
         {
-            _imageViewerPresenter.RenderImage();
+            var selectedRegion = _regionSelector.GetSelectedRegion();
+            _imageViewerPresenter.SetSelectedRegion(selectedRegion);
         }
     }
 }

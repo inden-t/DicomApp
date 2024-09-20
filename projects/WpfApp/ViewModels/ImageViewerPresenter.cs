@@ -1,4 +1,5 @@
 ﻿using System;
+using DicomApp.Models;
 using DicomApp.UseCases;
 
 namespace DicomApp.ViewModels
@@ -15,6 +16,11 @@ namespace DicomApp.ViewModels
         public void RenderImage()
         {
             _imageViewerViewModel.Render();
+        }
+
+        public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
+        {
+            _imageViewerViewModel.SetSelectedRegion(selectedRegion);
         }
 
         public void SetSelectionModeActive(bool isActive)

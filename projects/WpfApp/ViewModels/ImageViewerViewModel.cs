@@ -47,15 +47,13 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<SelectionMode> CurrentSelectionMode { get; } =
             new(SelectionMode.None);
 
-        private readonly BloodVessel3DRegionSelector _regionSelector;
+        private BloodVessel3DRegion _selectedRegion = new();
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
-        public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector)
+        public ImageViewerViewModel()
         {
-            _regionSelector = regionSelector;
-
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
         }
@@ -178,9 +176,15 @@ namespace DicomApp.ViewModels
             Mouse.OverrideCursor = null;
         }
 
+        public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
+        {
+            _selectedRegion = selectedRegion;
+            UpdateSelectedRegion();
+        }
+
         private void UpdateSelectedRegion()
         {
-            if (_image == null || _regionSelector == null)
+            if (_image == null || _selectedRegion == null)
                 return;
 
             var renderedImage = _image.RenderImage();
@@ -193,11 +197,9 @@ namespace DicomApp.ViewModels
             var stride = overlayBitmap.PixelWidth * 4;
             var pixels = new byte[overlayBitmap.PixelHeight * stride];
 
-            // 選択された領域を取得
-            var selectedRegion = _regionSelector.GetSelectedRegion();
 
             // 選択された領域を描画
-            foreach (var point in selectedRegion.SelectedVoxels)
+            foreach (var point in _selectedRegion.SelectedVoxels)
             {
                 if (point.Z == ScrollValue.Value) // 現在のスライスのみ描画
                 {
