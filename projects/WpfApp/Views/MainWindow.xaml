@@ -45,6 +45,7 @@
           <RibbonButton Label="ズームアウト"
                         Command="{Binding ZoomOutCommand}"/>
         </RibbonGroup>
+
         <RibbonGroup Header="3D表示">
           <RibbonButton Label="点群表示(非常に重い)"
                         Command="{Binding GeneratePointCloudCommand}"/>
@@ -52,7 +53,20 @@
                         Command="{Binding GenerateSurfaceModelCommand}"/>
           <RibbonButton Label="サーフェスモデル表示(線形補間)"
                         Command="{Binding GenerateSurfaceModelLinearInterpolationCommand}"/>
-          <RibbonButton Label="血管抽出"
+        </RibbonGroup>
+
+        <RibbonGroup Header="血管抽出">
+          <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding ImageViewerViewModel.ThresholdValue.Value, StringFormat=しきい値: {0}}"
+                       Margin="0,0,0,5"/>
+            <Slider Minimum="0"
+                    Maximum="255"
+                    Width="150"
+                    Value="{Binding ImageViewerViewModel.ThresholdValue.Value, Mode=TwoWay}"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"/>
+          </StackPanel>
+          <RibbonButton Label="血管抽出開始"
                         Command="{Binding StartBloodVesselSelectionCommand}"/>
         </RibbonGroup>
       </RibbonTab>
