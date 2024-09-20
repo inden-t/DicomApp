@@ -30,7 +30,6 @@ namespace DicomApp.ViewModels
 
         public ReactiveProperty<bool> CanUndo { get; } = new(false);
         public ReactiveProperty<bool> CanRedo { get; } = new(false);
-        public ReactiveProperty<bool> IsSelectionHidden { get; } = new(false);
 
         public BloodVesselExtractionRibbonTabViewModel(
             ImageViewerViewModel imageViewerViewModel,
@@ -103,9 +102,6 @@ namespace DicomApp.ViewModels
                         SelectionMode.ClearFill2DSelection;
                 }
             });
-
-            IsSelectionHidden.Subscribe(value =>
-                ImageViewerViewModel.IsSelectionVisible.Value = !value);
         }
 
         public void InitializeDependencies(
