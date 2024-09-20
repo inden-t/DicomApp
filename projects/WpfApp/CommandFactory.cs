@@ -17,14 +17,20 @@ namespace DicomApp
             BloodVesselExtractionRibbonTabViewModel
                 bloodVesselExtractionRibbonTabViewModel,
             BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
-            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase,
+            ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase,
+            ImageViewerViewModel imageViewerViewModel)
         {
             mainWindowViewModel.InitializeDependencies(openDicomFileUseCase,
                 generatePointCloudUseCase, generateSurfaceModelUseCase,
                 generateSurfaceModelLinearInterpolationUseCase);
 
             bloodVesselExtractionRibbonTabViewModel.InitializeDependencies(
-                bloodVesselExtractionUseCase, manageBloodVesselRegionUseCase);
+                bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase,
+                manageBloodVesselRegionUseCase);
+
+            imageViewerViewModel.InitializeDependencies(
+                select3DBloodVesselRegionUseCase);
         }
     }
 }

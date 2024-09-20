@@ -79,6 +79,7 @@ namespace DicomApp
             services.AddScoped<IImageViewerPresenter, ImageViewerPresenter>();
             services.AddScoped<BloodVesselExtractionRibbonTabViewModel>();
             services.AddScoped<BloodVesselExtractionUseCase>();
+            services.AddScoped<Select3DBloodVesselRegionUseCase>();
             services.AddScoped<ManageBloodVesselRegionUseCase>();
             services.AddScoped<BloodVessel3DRegionSelector>();
             services.AddScoped<BloodVesselSurfaceModelGenerator>();

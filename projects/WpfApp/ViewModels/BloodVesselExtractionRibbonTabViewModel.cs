@@ -13,6 +13,9 @@ namespace DicomApp.ViewModels
         private readonly ImageViewerViewModel _imageViewerViewModel;
         private readonly BloodVessel3DRegionSelector _regionSelector;
 
+        private Select3DBloodVesselRegionUseCase
+            _select3DBloodVesselRegionUseCase;
+
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Execute2DFillSelectionCommand { get; } = new();
@@ -108,10 +111,14 @@ namespace DicomApp.ViewModels
 
         public void InitializeDependencies(
             BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase,
             ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
         {
             BloodVesselExtractionCommand.Subscribe(async () =>
                 await bloodVesselExtractionUseCase.ExtractBloodVesselAsync());
+
+            _select3DBloodVesselRegionUseCase =
+                select3DBloodVesselRegionUseCase;
 
             UndoSelectionCommand.Subscribe(() =>
                 manageBloodVesselRegionUseCase.UndoSelection());

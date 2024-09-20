@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using DicomApp.Models;
+using DicomApp.UseCases;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
@@ -48,12 +49,22 @@ namespace DicomApp.ViewModels
 
         private readonly BloodVessel3DRegionSelector _regionSelector;
 
+        private Select3DBloodVesselRegionUseCase
+            _select3DBloodVesselRegionUseCase;
+
         public ImageViewerViewModel(BloodVessel3DRegionSelector regionSelector)
         {
             _regionSelector = regionSelector;
 
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
+        }
+
+        public void InitializeDependencies(
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
+        {
+            _select3DBloodVesselRegionUseCase =
+                select3DBloodVesselRegionUseCase;
         }
 
         public void SwitchImageByOffset(int offset)
@@ -142,34 +153,26 @@ namespace DicomApp.ViewModels
 
             if (CurrentSelectionMode.Value == SelectionMode.Fill3DSelection)
             {
-                _regionSelector.Select3DRegion(seedPoint, threshold);
-
-                // 選択領域の表示を更新
-                UpdateSelectedRegion();
+                _select3DBloodVesselRegionUseCase.Execute3DFillSelection(
+                    seedPoint, threshold);
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Clear3DFillSelection)
             {
-                _regionSelector.Clear3DRegion(seedPoint);
-
-                // 選択領域の表示を更新
-                UpdateSelectedRegion();
+                _select3DBloodVesselRegionUseCase.Clear3DFillSelection(
+                    seedPoint);
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.Fill2DSelection)
             {
-                _regionSelector.Select2DRegion(seedPoint, threshold);
-
-                // 選択領域の表示を更新
-                UpdateSelectedRegion();
+                _select3DBloodVesselRegionUseCase.Execute2DFillSelection(
+                    seedPoint, threshold);
             }
             else if (CurrentSelectionMode.Value ==
                      SelectionMode.ClearFill2DSelection)
             {
-                _regionSelector.Clear2DRegion(seedPoint);
-
-                // 選択領域の表示を更新
-                UpdateSelectedRegion();
+                _select3DBloodVesselRegionUseCase.Clear2DFillSelection(
+                    seedPoint);
             }
 
             Mouse.OverrideCursor = null;
