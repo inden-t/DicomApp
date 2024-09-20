@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Media.Media3D;
 using DicomApp.Models;
 using DicomApp.UseCases;
 
@@ -10,6 +9,8 @@ public class BloodVesselExtractionUseCase
     private readonly BloodVesselSurfaceModelGenerator _modelGenerator;
     private readonly IModel3dViewerFactory _viewerFactory;
     private readonly IProgressWindowFactory _progressWindowFactory;
+
+    private int _threshold = 220;
 
     public BloodVesselExtractionUseCase(
         FileManager fileManager, BloodVessel3DRegionSelector regionSelector,
@@ -22,6 +23,11 @@ public class BloodVesselExtractionUseCase
         _modelGenerator = modelGenerator;
         _viewerFactory = viewerFactory;
         _progressWindowFactory = progressWindowFactory;
+    }
+
+    public void SetThreshold(int threshold)
+    {
+        _threshold = threshold;
     }
 
     public async Task ExtractBloodVesselAsync()
@@ -39,12 +45,10 @@ public class BloodVesselExtractionUseCase
                 progressWindow.SetProgress(data.value);
             });
 
-            int threshold = 220;
             var region = _regionSelector.GetSelectedRegion();
             var model3DGroup =
                 await _modelGenerator.GenerateModelAsync(_fileManager, region,
-                    threshold,
-                    progress);
+                    _threshold, progress);
 
             var viewer = _viewerFactory.Create();
             viewer.SetModel(model3DGroup);

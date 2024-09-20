@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using DicomApp.Models;
 using DicomApp.UseCases;
 using Reactive.Bindings;
 
@@ -9,7 +8,11 @@ namespace DicomApp.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
-        private readonly BloodVessel3DRegionSelector _regionSelector;
+
+        private BloodVesselExtractionUseCase _bloodVesselExtractionUseCase;
+
+        private Select3DBloodVesselRegionUseCase
+            _select3DBloodVesselRegionUseCase;
 
         public ImageViewerViewModel ImageViewerViewModel =>
             _imageViewerViewModel;
@@ -39,11 +42,14 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
-            BloodVessel3DRegionSelector regionSelector)
+        public ReactiveProperty<int> ThresholdValue { get; } = new(220);
+
+        public ReactiveProperty<bool>
+            IsBloodVesselExtractionUiEnabled { get; } = new(true);
+
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
-            _regionSelector = regionSelector;
 
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
@@ -69,8 +75,14 @@ namespace DicomApp.ViewModels
             {
                 _imageViewerViewModel.IsSelectionModeActive.Value = true;
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
-                _regionSelector.PreRenderImages();
+                _select3DBloodVesselRegionUseCase?.StartSelection(ThresholdValue
+                    .Value);
+                _bloodVesselExtractionUseCase?.SetThreshold(ThresholdValue
+                    .Value);
             });
+
+            _imageViewerViewModel.IsSelectionModeActive.Subscribe((value) =>
+                IsBloodVesselExtractionUiEnabled.Value = !value);
         }
 
 
@@ -79,7 +91,9 @@ namespace DicomApp.ViewModels
             GeneratePointCloudUseCase generatePointCloudUseCase,
             GenerateSurfaceModelUseCase generateSurfaceModelUseCase,
             GenerateSurfaceModelLinearInterpolationUseCase
-                generateSurfaceModelLinearInterpolationUseCase)
+                generateSurfaceModelLinearInterpolationUseCase,
+            BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
         {
             OpenDicomFileCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteAsync());
@@ -98,6 +112,10 @@ namespace DicomApp.ViewModels
                 .Subscribe(async () =>
                     await generateSurfaceModelLinearInterpolationUseCase
                         .ExecuteAsync());
+
+            _bloodVesselExtractionUseCase = bloodVesselExtractionUseCase;
+            _select3DBloodVesselRegionUseCase =
+                select3DBloodVesselRegionUseCase;
         }
 
         private void SwitchImageByIndex(int index)

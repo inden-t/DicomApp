@@ -23,11 +23,11 @@ namespace DicomApp
         {
             mainWindowViewModel.InitializeDependencies(openDicomFileUseCase,
                 generatePointCloudUseCase, generateSurfaceModelUseCase,
-                generateSurfaceModelLinearInterpolationUseCase);
+                generateSurfaceModelLinearInterpolationUseCase,
+                bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase);
 
             bloodVesselExtractionRibbonTabViewModel.InitializeDependencies(
-                bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase,
-                manageBloodVesselRegionUseCase);
+                bloodVesselExtractionUseCase, manageBloodVesselRegionUseCase);
 
             imageViewerViewModel.InitializeDependencies(
                 select3DBloodVesselRegionUseCase);
