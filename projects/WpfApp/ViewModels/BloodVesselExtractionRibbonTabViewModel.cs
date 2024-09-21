@@ -11,7 +11,14 @@ namespace DicomApp.ViewModels
             _imageViewerViewModel;
 
         private readonly ImageViewerViewModel _imageViewerViewModel;
+
+        private readonly SelectionOverlayControlViewModel
+            _overlayControlViewModel;
+
         private readonly BloodVessel3DRegionSelector _regionSelector;
+
+        public SelectionOverlayControlViewModel
+            SelectionOverlayControlViewModel => _overlayControlViewModel;
 
         public ReactiveCommand Execute3DFillSelectionCommand { get; } = new();
         public ReactiveCommand Clear3DFillSelectionCommand { get; } = new();
@@ -33,9 +40,11 @@ namespace DicomApp.ViewModels
 
         public BloodVesselExtractionRibbonTabViewModel(
             ImageViewerViewModel imageViewerViewModel,
+            SelectionOverlayControlViewModel overlayControlViewModel,
             BloodVessel3DRegionSelector regionSelector)
         {
             _imageViewerViewModel = imageViewerViewModel;
+            _overlayControlViewModel = overlayControlViewModel;
             _regionSelector = regionSelector;
             _regionSelector.UndoRedoStateChanged += (sender, e) =>
             {
@@ -45,60 +54,60 @@ namespace DicomApp.ViewModels
 
             Execute3DFillSelectionCommand.Subscribe(() =>
             {
-                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                     SelectionMode.Fill3DSelection)
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.None;
                 }
                 else
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.Fill3DSelection;
                 }
             });
 
             Clear3DFillSelectionCommand.Subscribe(() =>
             {
-                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                     SelectionMode.Clear3DFillSelection)
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.None;
                 }
                 else
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.Clear3DFillSelection;
                 }
             });
 
             Execute2DFillSelectionCommand.Subscribe(() =>
             {
-                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                     SelectionMode.Fill2DSelection)
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.None;
                 }
                 else
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.Fill2DSelection;
                 }
             });
 
             Clear2DFillSelectionCommand.Subscribe(() =>
             {
-                if (_imageViewerViewModel.CurrentSelectionMode.Value ==
+                if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                     SelectionMode.ClearFill2DSelection)
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.None;
                 }
                 else
                 {
-                    _imageViewerViewModel.CurrentSelectionMode.Value =
+                    _overlayControlViewModel.CurrentSelectionMode.Value =
                         SelectionMode.ClearFill2DSelection;
                 }
             });

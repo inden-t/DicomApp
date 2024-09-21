@@ -7,10 +7,22 @@ using FellowOakDicom.Imaging;
 
 namespace DicomApp.ViewModels
 {
+    public enum SelectionMode
+    {
+        None,
+        Fill3DSelection,
+        Clear3DFillSelection,
+        Fill2DSelection,
+        ClearFill2DSelection,
+    }
+
     public class SelectionOverlayControlViewModel : ViewModelBase
     {
         public ReactiveProperty<ImageSource> OverlaySource { get; }
         public ReactiveProperty<bool> IsVisible { get; }
+
+        public ReactiveProperty<SelectionMode> CurrentSelectionMode { get; } =
+            new(SelectionMode.None);
 
         public SelectionOverlayControlViewModel()
         {

@@ -11,15 +11,6 @@ using Reactive.Bindings;
 
 namespace DicomApp.ViewModels
 {
-    public enum SelectionMode
-    {
-        None,
-        Fill3DSelection,
-        Clear3DFillSelection,
-        Fill2DSelection,
-        ClearFill2DSelection,
-    }
-
     public class ImageViewerViewModel : ViewModelBase
     {
         private readonly SelectionOverlayControlViewModel
@@ -46,9 +37,6 @@ namespace DicomApp.ViewModels
 
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
-
-        public ReactiveProperty<SelectionMode> CurrentSelectionMode { get; } =
-            new(SelectionMode.None);
 
         private BloodVessel3DRegion _selectedRegion = new();
 
@@ -154,24 +142,25 @@ namespace DicomApp.ViewModels
                 relativeY * bitmapImage.PixelHeight,
                 ScrollValue.Value);
 
-            if (CurrentSelectionMode.Value == SelectionMode.Fill3DSelection)
+            if (_overlayControlViewModel.CurrentSelectionMode.Value ==
+                SelectionMode.Fill3DSelection)
             {
                 _select3DBloodVesselRegionUseCase.Execute3DFillSelection(
                     seedPoint);
             }
-            else if (CurrentSelectionMode.Value ==
+            else if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                      SelectionMode.Clear3DFillSelection)
             {
                 _select3DBloodVesselRegionUseCase.Clear3DFillSelection(
                     seedPoint);
             }
-            else if (CurrentSelectionMode.Value ==
+            else if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                      SelectionMode.Fill2DSelection)
             {
                 _select3DBloodVesselRegionUseCase.Execute2DFillSelection(
                     seedPoint);
             }
-            else if (CurrentSelectionMode.Value ==
+            else if (_overlayControlViewModel.CurrentSelectionMode.Value ==
                      SelectionMode.ClearFill2DSelection)
             {
                 _select3DBloodVesselRegionUseCase.Clear2DFillSelection(
