@@ -8,9 +8,14 @@ namespace DicomApp.ViewModels
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
 
-        public ImageViewerPresenter(ImageViewerViewModel imageViewerViewModel)
+        private readonly SelectionOverlayControlViewModel
+            _overlayControlViewModel;
+
+        public ImageViewerPresenter(ImageViewerViewModel imageViewerViewModel,
+            SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
+            _overlayControlViewModel = overlayControlViewModel;
         }
 
         public void RenderImage()
@@ -32,7 +37,7 @@ namespace DicomApp.ViewModels
         {
             _imageViewerViewModel.CurrentSelectionMode.Value =
                 SelectionMode.None;
-            _imageViewerViewModel.IsSelectionVisible.Value = true;
+            _overlayControlViewModel.IsVisible.Value = true;
         }
     }
 }

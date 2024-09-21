@@ -28,6 +28,9 @@ namespace DicomApp.ViewModels
         private DicomImage _image;
         private double _zoom = 1.0;
 
+        public SelectionOverlayControlViewModel
+            SelectionOverlayControlViewModel => _overlayControlViewModel;
+
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
@@ -41,8 +44,6 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<bool> IsSelectionModeActive { get; } =
             new(false);
 
-        public ReactiveProperty<bool> IsSelectionVisible { get; } = new(true);
-
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }
 
@@ -55,8 +56,7 @@ namespace DicomApp.ViewModels
             _select3DBloodVesselRegionUseCase;
 
         public ImageViewerViewModel(
-            SelectionOverlayControlViewModel overlayControlViewModel
-        )
+            SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
 

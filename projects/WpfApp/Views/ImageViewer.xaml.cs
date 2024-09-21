@@ -21,11 +21,6 @@ namespace DicomApp.Views
             DataContext = _viewModel;
 
             SelectionOverlay.Content = selectionOverlay;
-
-            _viewModel.IsSelectionVisible.Subscribe(isVisible =>
-            {
-                selectionOverlay.ViewModel.SetVisibility(isVisible);
-            });
         }
 
         private void UserControl_MouseWheel(object sender,

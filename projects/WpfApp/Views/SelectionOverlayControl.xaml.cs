@@ -13,8 +13,5 @@ namespace DicomApp.Views
             InitializeComponent();
             DataContext = viewModel;
         }
-
-        public SelectionOverlayControlViewModel ViewModel =>
-            (SelectionOverlayControlViewModel)DataContext;
     }
 }

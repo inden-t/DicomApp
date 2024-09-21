@@ -18,11 +18,6 @@ namespace DicomApp.ViewModels
             IsVisible = new ReactiveProperty<bool>(true);
         }
 
-        public void SetVisibility(bool isVisible)
-        {
-            IsVisible.Value = isVisible;
-        }
-
         public void UpdateSelectedRegion(BloodVessel3DRegion _selectedRegion,
             DicomImage _image, double ViewerWidth, double ViewerHeight, int z,
             double _zoom)
