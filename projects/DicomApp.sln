@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainUseCases", "MainUseCase
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodVesselExtractionPresenter", "BloodVesselExtractionPresenter\BloodVesselExtractionPresenter.csproj", "{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainViewModels", "MainViewModels\MainViewModels.csproj", "{C9694A27-E103-4A92-9004-6CF2EE31407C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,22 @@ Global
 		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x64.Build.0 = Release|Any CPU
 		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x86.ActiveCfg = Release|Any CPU
 		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x86.Build.0 = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|x64.Build.0 = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Debug|x86.Build.0 = Debug|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|ARM64.Build.0 = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|x64.ActiveCfg = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|x64.Build.0 = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9694A27-E103-4A92-9004-6CF2EE31407C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
