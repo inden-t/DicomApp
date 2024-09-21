@@ -17,7 +17,18 @@ namespace DicomApp.Views
             InitializeComponent();
 
             _viewModel = imageViewerViewModel;
-            DataContext = imageViewerViewModel;
+            DataContext = _viewModel;
+
+            // SelectionOverlayControlのViewModelを設定
+            _viewModel.OverlayImageSource.Subscribe(source =>
+            {
+                SelectionOverlay.ViewModel.SetOverlaySource(source);
+            });
+
+            _viewModel.IsSelectionVisible.Subscribe(isVisible =>
+            {
+                SelectionOverlay.ViewModel.SetVisibility(isVisible);
+            });
         }
 
         private void UserControl_MouseWheel(object sender,

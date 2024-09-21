@@ -33,9 +33,7 @@
                Stretch="None"
                Source="{Binding BitmapSourceImage.Value}"
                MouseDown="DicomImage_Click"/>
-        <views:SelectionOverlayControl
-          OverlaySource="{Binding OverlayImageSource.Value}"
-          IsVisible="{Binding IsSelectionVisible.Value}"/>
+        <views:SelectionOverlayControl x:Name="SelectionOverlay"/>
       </Grid>
     </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"

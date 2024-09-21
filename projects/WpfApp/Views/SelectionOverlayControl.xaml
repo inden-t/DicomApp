@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:DicomApp.ViewModels"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewModels:SelectionOverlayControlViewModel}"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <UserControl.Resources>
@@ -12,8 +14,8 @@
 
     <Image x:Name="OverlayImage"
            Stretch="None"
-           Source="{Binding OverlaySource, RelativeSource={RelativeSource AncestorType=UserControl}}"
+           Source="{Binding OverlaySource.Value}"
            Opacity="0.5"
            IsHitTestVisible="False"
-           Visibility="{Binding IsVisible, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+           Visibility="{Binding IsVisible.Value, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 </UserControl>
