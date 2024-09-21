@@ -12,22 +12,19 @@ namespace DicomApp.Views
         private Point _lastMousePosition;
         private bool _isScrolling;
 
-        public ImageViewer(ImageViewerViewModel imageViewerViewModel)
+        public ImageViewer(ImageViewerViewModel imageViewerViewModel,
+            SelectionOverlayControl selectionOverlay)
         {
             InitializeComponent();
 
             _viewModel = imageViewerViewModel;
             DataContext = _viewModel;
 
-            // SelectionOverlayControlのViewModelを設定
-            _viewModel.OverlayImageSource.Subscribe(source =>
-            {
-                SelectionOverlay.ViewModel.SetOverlaySource(source);
-            });
+            SelectionOverlay.Content = selectionOverlay;
 
             _viewModel.IsSelectionVisible.Subscribe(isVisible =>
             {
-                SelectionOverlay.ViewModel.SetVisibility(isVisible);
+                selectionOverlay.ViewModel.SetVisibility(isVisible);
             });
         }
 

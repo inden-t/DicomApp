@@ -4,17 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:DicomApp.ViewModels"
-             xmlns:views="clr-namespace:DicomApp.Views"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:interactivity="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
              MouseWheel="UserControl_MouseWheel"
              SizeChanged="UserControl_SizeChanged">
-  <UserControl.Resources>
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-  </UserControl.Resources>
-
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
@@ -33,7 +28,7 @@
                Stretch="None"
                Source="{Binding BitmapSourceImage.Value}"
                MouseDown="DicomImage_Click"/>
-        <views:SelectionOverlayControl x:Name="SelectionOverlay"/>
+        <ContentControl x:Name="SelectionOverlay"/>
       </Grid>
     </ScrollViewer>
     <Canvas x:Name="CanvasOverlay"

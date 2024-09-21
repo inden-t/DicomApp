@@ -75,6 +75,8 @@ namespace DicomApp
             services
                 .AddScoped<GenerateSurfaceModelLinearInterpolationUseCase>();
 
+            services.AddScoped<SelectionOverlayControl>();
+            services.AddScoped<SelectionOverlayControlViewModel>();
             services.AddScoped<BloodVesselExtractionRibbonTab>();
             services.AddScoped<IImageViewerPresenter, ImageViewerPresenter>();
             services.AddScoped<BloodVesselExtractionRibbonTabViewModel>();

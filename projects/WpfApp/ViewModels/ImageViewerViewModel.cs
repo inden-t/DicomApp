@@ -22,13 +22,13 @@ namespace DicomApp.ViewModels
 
     public class ImageViewerViewModel : ViewModelBase
     {
+        private readonly SelectionOverlayControlViewModel
+            _overlayControlViewModel;
+
         private DicomImage _image;
         private double _zoom = 1.0;
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
-            new();
-
-        public ReactiveProperty<BitmapSource> OverlayImageSource { get; } =
             new();
 
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
@@ -54,8 +54,12 @@ namespace DicomApp.ViewModels
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
-        public ImageViewerViewModel()
+        public ImageViewerViewModel(
+            SelectionOverlayControlViewModel overlayControlViewModel
+        )
         {
+            _overlayControlViewModel = overlayControlViewModel;
+
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
         }
@@ -135,7 +139,8 @@ namespace DicomApp.ViewModels
             BitmapSourceImage.Value = scaledBitmap;
 
             // 選択領域の表示を更新
-            UpdateSelectedRegion();
+            _overlayControlViewModel.UpdateSelectedRegion(_selectedRegion,
+                _image, ViewerWidth, ViewerHeight, ScrollValue.Value, _zoom);
         }
 
         public void OnClick(double relativeX, double relativeY)
@@ -179,62 +184,8 @@ namespace DicomApp.ViewModels
         public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
         {
             _selectedRegion = selectedRegion;
-            UpdateSelectedRegion();
-        }
-
-        private void UpdateSelectedRegion()
-        {
-            if (_image == null || _selectedRegion == null)
-                return;
-
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-
-            // 新しいWriteableBitmapを作成し、透明な背景で初期化
-            var overlayBitmap = new WriteableBitmap(bitmapImage.PixelWidth,
-                bitmapImage.PixelHeight, bitmapImage.DpiX, bitmapImage.DpiY,
-                PixelFormats.Bgra32, null);
-            var stride = overlayBitmap.PixelWidth * 4;
-            var pixels = new byte[overlayBitmap.PixelHeight * stride];
-
-
-            // 選択された領域を描画
-            foreach (var point in _selectedRegion.SelectedVoxels)
-            {
-                if (point.Z == ScrollValue.Value) // 現在のスライスのみ描画
-                {
-                    int x = (int)point.X;
-                    int y = (int)point.Y;
-                    if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
-                        y < overlayBitmap.PixelHeight)
-                    {
-                        int index = y * stride + x * 4;
-                        pixels[index] = 0; // Blue
-                        pixels[index + 1] = 0; // Green
-                        pixels[index + 2] = 255; // Red
-                        pixels[index + 3] = 128; // Alpha (半透明)
-                    }
-                }
-            }
-
-            // ピクセルデータをWriteableBitmapに書き込む
-            overlayBitmap.WritePixels(
-                new Int32Rect(0, 0, overlayBitmap.PixelWidth,
-                    overlayBitmap.PixelHeight), pixels, stride, 0);
-
-            // 枠に対するサイズを計算
-            // 枠からはみ出ないように枠サイズの小数を切り捨てる
-            double scaleX = Math.Floor(ViewerWidth) / overlayBitmap.PixelWidth;
-            double scaleY =
-                Math.Floor(ViewerHeight) / overlayBitmap.PixelHeight;
-            double scale = Math.Min(scaleX, scaleY);
-
-            // 拡大倍率を適用
-            var scaledBitmap = new TransformedBitmap(overlayBitmap,
-                new ScaleTransform(scale * _zoom, scale * _zoom));
-
-            // OverlayImageSourceを更新
-            OverlayImageSource.Value = scaledBitmap;
+            _overlayControlViewModel.UpdateSelectedRegion(_selectedRegion,
+                _image, ViewerWidth, ViewerHeight, ScrollValue.Value, _zoom);
         }
     }
 }

@@ -7,10 +7,11 @@ namespace DicomApp.Views
 {
     public partial class SelectionOverlayControl : UserControl
     {
-        public SelectionOverlayControl()
+        public SelectionOverlayControl(
+            SelectionOverlayControlViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = new SelectionOverlayControlViewModel();
+            DataContext = viewModel;
         }
 
         public SelectionOverlayControlViewModel ViewModel =>
