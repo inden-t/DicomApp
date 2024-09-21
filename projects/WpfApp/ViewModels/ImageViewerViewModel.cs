@@ -15,9 +15,6 @@ namespace DicomApp.ViewModels
         private DicomImage _image;
         private double _zoom = 1.0;
 
-        public SelectionOverlayControlViewModel
-            SelectionOverlayControlViewModel => _overlayControlViewModel;
-
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
@@ -27,9 +24,6 @@ namespace DicomApp.ViewModels
         public ReactiveCommand<int> SwitchImageByIndexCommand { get; } = new();
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
-
-        public ReactiveProperty<bool> IsSelectionModeActive { get; } =
-            new(false);
 
         public double ViewerWidth { get; private set; }
         public double ViewerHeight { get; private set; }

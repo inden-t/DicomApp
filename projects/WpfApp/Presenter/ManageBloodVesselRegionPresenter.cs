@@ -24,7 +24,7 @@ namespace DicomApp.Presenter
         public void InitializeRegionSelection(
             BloodVessel3DRegion selectedRegion)
         {
-            _imageViewerViewModel.IsSelectionModeActive.Value = false;
+            _overlayControlViewModel.IsSelectionModeActive.Value = false;
             _overlayControlViewModel.CurrentSelectionMode.Value =
                 SelectionMode.None;
             _overlayControlViewModel.IsVisible.Value = true;

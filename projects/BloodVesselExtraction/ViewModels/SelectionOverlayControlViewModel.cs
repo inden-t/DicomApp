@@ -29,6 +29,9 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<ImageSource> OverlaySource { get; }
         public ReactiveProperty<bool> IsVisible { get; }
 
+        public ReactiveProperty<bool> IsSelectionModeActive { get; } =
+            new(false);
+
         public ReactiveProperty<SelectionMode> CurrentSelectionMode { get; } =
             new(SelectionMode.None);
 
