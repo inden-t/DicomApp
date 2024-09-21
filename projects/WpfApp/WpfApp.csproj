@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BloodVesselExtraction\BloodVesselExtraction.csproj" />
     <ProjectReference Include="..\CoreModels\CoreModels.csproj" />
+    <ProjectReference Include="..\MainUseCases\MainUseCases.csproj" />
     <ProjectReference Include="..\WpfConverters\WpfConverters.csproj" />
   </ItemGroup>
 
