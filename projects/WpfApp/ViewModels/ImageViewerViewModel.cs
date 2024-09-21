@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
 using DicomApp.Models;
-using DicomApp.UseCases;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
@@ -40,9 +36,6 @@ namespace DicomApp.ViewModels
 
         private BloodVessel3DRegion _selectedRegion = new();
 
-        private Select3DBloodVesselRegionUseCase
-            _select3DBloodVesselRegionUseCase;
-
         public ImageViewerViewModel(
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
@@ -50,13 +43,6 @@ namespace DicomApp.ViewModels
 
             ScrollValue.Subscribe(value =>
                 SwitchImageByIndexCommand.Execute(value));
-        }
-
-        public void InitializeDependencies(
-            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
-        {
-            _select3DBloodVesselRegionUseCase =
-                select3DBloodVesselRegionUseCase;
         }
 
         public void SwitchImageByOffset(int offset)
@@ -129,45 +115,6 @@ namespace DicomApp.ViewModels
             // 選択領域の表示を更新
             _overlayControlViewModel.UpdateSelectedRegion(_selectedRegion,
                 _image, ViewerWidth, ViewerHeight, ScrollValue.Value, _zoom);
-        }
-
-        public void OnClick(double relativeX, double relativeY)
-        {
-            Mouse.OverrideCursor = Cursors.Wait;
-
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-
-            Point3D seedPoint = new Point3D(relativeX * bitmapImage.PixelWidth,
-                relativeY * bitmapImage.PixelHeight,
-                ScrollValue.Value);
-
-            if (_overlayControlViewModel.CurrentSelectionMode.Value ==
-                SelectionMode.Fill3DSelection)
-            {
-                _select3DBloodVesselRegionUseCase.Execute3DFillSelection(
-                    seedPoint);
-            }
-            else if (_overlayControlViewModel.CurrentSelectionMode.Value ==
-                     SelectionMode.Clear3DFillSelection)
-            {
-                _select3DBloodVesselRegionUseCase.Clear3DFillSelection(
-                    seedPoint);
-            }
-            else if (_overlayControlViewModel.CurrentSelectionMode.Value ==
-                     SelectionMode.Fill2DSelection)
-            {
-                _select3DBloodVesselRegionUseCase.Execute2DFillSelection(
-                    seedPoint);
-            }
-            else if (_overlayControlViewModel.CurrentSelectionMode.Value ==
-                     SelectionMode.ClearFill2DSelection)
-            {
-                _select3DBloodVesselRegionUseCase.Clear2DFillSelection(
-                    seedPoint);
-            }
-
-            Mouse.OverrideCursor = null;
         }
 
         public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)

@@ -1,9 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using DicomApp.Models;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using Reactive.Bindings;
 using FellowOakDicom.Imaging;
+using DicomApp.Models;
+using DicomApp.UseCases;
 
 namespace DicomApp.ViewModels
 {
@@ -18,6 +20,12 @@ namespace DicomApp.ViewModels
 
     public class SelectionOverlayControlViewModel : ViewModelBase
     {
+        private WriteableBitmap _bitmapImage;
+        private int _scrollValue;
+
+        private Select3DBloodVesselRegionUseCase
+            _select3DBloodVesselRegionUseCase;
+
         public ReactiveProperty<ImageSource> OverlaySource { get; }
         public ReactiveProperty<bool> IsVisible { get; }
 
@@ -30,6 +38,44 @@ namespace DicomApp.ViewModels
             IsVisible = new ReactiveProperty<bool>(true);
         }
 
+        public void InitializeDependencies(
+            Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
+        {
+            _select3DBloodVesselRegionUseCase =
+                select3DBloodVesselRegionUseCase;
+        }
+
+        public void OnClick(double relativeX, double relativeY)
+        {
+            Point3D seedPoint = new Point3D(relativeX * _bitmapImage.PixelWidth,
+                relativeY * _bitmapImage.PixelHeight, _scrollValue);
+
+            if (CurrentSelectionMode.Value ==
+                SelectionMode.Fill3DSelection)
+            {
+                _select3DBloodVesselRegionUseCase.Execute3DFillSelection(
+                    seedPoint);
+            }
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.Clear3DFillSelection)
+            {
+                _select3DBloodVesselRegionUseCase.Clear3DFillSelection(
+                    seedPoint);
+            }
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.Fill2DSelection)
+            {
+                _select3DBloodVesselRegionUseCase.Execute2DFillSelection(
+                    seedPoint);
+            }
+            else if (CurrentSelectionMode.Value ==
+                     SelectionMode.ClearFill2DSelection)
+            {
+                _select3DBloodVesselRegionUseCase.Clear2DFillSelection(
+                    seedPoint);
+            }
+        }
+
         public void UpdateSelectedRegion(BloodVessel3DRegion _selectedRegion,
             DicomImage _image, double ViewerWidth, double ViewerHeight, int z,
             double _zoom)
@@ -37,8 +83,11 @@ namespace DicomApp.ViewModels
             if (_image == null || _selectedRegion == null)
                 return;
 
+            _scrollValue = z;
+
             var renderedImage = _image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
+            _bitmapImage = bitmapImage;
 
             // 新しいWriteableBitmapを作成し、透明な背景で初期化
             var overlayBitmap = new WriteableBitmap(bitmapImage.PixelWidth,

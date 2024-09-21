@@ -139,16 +139,5 @@ namespace DicomApp.Views
                 }
             }
         }
-
-        private void DicomImage_Click(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                Point mousePos = e.GetPosition(DicomImage);
-                double relativeX = mousePos.X / DicomImage.ActualWidth;
-                double relativeY = mousePos.Y / DicomImage.ActualHeight;
-                _viewModel.OnClick(relativeX, relativeY);
-            }
-        }
     }
 }

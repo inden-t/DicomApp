@@ -19,7 +19,7 @@ namespace DicomApp
             BloodVesselExtractionUseCase bloodVesselExtractionUseCase,
             Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase,
             ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase,
-            ImageViewerViewModel imageViewerViewModel)
+            SelectionOverlayControlViewModel selectionOverlayControlViewModel)
         {
             mainWindowViewModel.InitializeDependencies(openDicomFileUseCase,
                 generatePointCloudUseCase, generateSurfaceModelUseCase,
@@ -29,7 +29,7 @@ namespace DicomApp
             bloodVesselExtractionRibbonTabViewModel.InitializeDependencies(
                 bloodVesselExtractionUseCase, manageBloodVesselRegionUseCase);
 
-            imageViewerViewModel.InitializeDependencies(
+            selectionOverlayControlViewModel.InitializeDependencies(
                 select3DBloodVesselRegionUseCase);
         }
     }
