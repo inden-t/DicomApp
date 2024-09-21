@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreModels", "CoreModels\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodVesselExtraction", "BloodVesselExtraction\BloodVesselExtraction.csproj", "{F5EE1D38-E8E6-4D21-946F-7D1123AF8400}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainUseCases", "MainUseCases\MainUseCases.csproj", "{B0452330-D55D-410B-A114-05BDA5CB5164}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,22 @@ Global
 		{F5EE1D38-E8E6-4D21-946F-7D1123AF8400}.Release|x64.Build.0 = Release|Any CPU
 		{F5EE1D38-E8E6-4D21-946F-7D1123AF8400}.Release|x86.ActiveCfg = Release|Any CPU
 		{F5EE1D38-E8E6-4D21-946F-7D1123AF8400}.Release|x86.Build.0 = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|ARM64.Build.0 = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x64.Build.0 = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
