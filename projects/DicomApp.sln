@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BloodVesselExtraction", "Bl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainUseCases", "MainUseCases\MainUseCases.csproj", "{B0452330-D55D-410B-A114-05BDA5CB5164}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodVesselExtractionPresenter", "BloodVesselExtractionPresenter\BloodVesselExtractionPresenter.csproj", "{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,22 +105,6 @@ Global
 		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x64.Build.0 = Release|Any CPU
 		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x86.ActiveCfg = Release|Any CPU
 		{B0452330-D55D-410B-A114-05BDA5CB5164}.Release|x86.Build.0 = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|x64.Build.0 = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Debug|x86.Build.0 = Debug|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|ARM64.Build.0 = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x64.ActiveCfg = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x64.Build.0 = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x86.ActiveCfg = Release|Any CPU
-		{7C09EC63-FEE5-4593-8DB1-A7B50AC69F6D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
