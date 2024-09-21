@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using DicomApp.UseCases;
+using DicomApp.ViewModels;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.Presenter
 {
     class OpenDicomFilePresenter : IOpenDicomFilePresenter
     {
