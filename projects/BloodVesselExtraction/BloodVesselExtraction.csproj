@@ -10,7 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CoreModels\CoreModels.csproj" />
     <ProjectReference Include="..\MainUseCases\MainUseCases.csproj" />
-    <ProjectReference Include="..\WpfConverters\WpfConverters.csproj" />
+    <ProjectReference Include="..\WpfUtilities\WpfUtilities.csproj" />
   </ItemGroup>
 
 </Project>
