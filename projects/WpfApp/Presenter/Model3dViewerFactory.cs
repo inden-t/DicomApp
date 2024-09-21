@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using DicomApp.PresenterInterface;
 using DicomApp.UseCases;
 using DicomApp.Views;
 

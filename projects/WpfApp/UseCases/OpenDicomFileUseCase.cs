@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using DicomApp.Models;
+using DicomApp.PresenterInterface;
 
 namespace DicomApp.UseCases
 {

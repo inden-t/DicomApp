@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DicomApp.UseCases
+namespace DicomApp.PresenterInterface
 {
     public interface IOpenDicomFilePresenter
     {

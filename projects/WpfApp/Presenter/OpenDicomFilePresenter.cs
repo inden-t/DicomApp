@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using DicomApp.UseCases;
+using DicomApp.PresenterInterface;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Presenter

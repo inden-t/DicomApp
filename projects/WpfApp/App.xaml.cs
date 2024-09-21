@@ -2,6 +2,7 @@
 using System.Windows;
 using DicomApp.Models;
 using DicomApp.Presenter;
+using DicomApp.PresenterInterface;
 using DicomApp.UseCases;
 using DicomApp.ViewModels;
 using DicomApp.Views;
