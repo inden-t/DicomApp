@@ -7,11 +7,6 @@ namespace DicomApp.ViewModels
 {
     public class BloodVesselExtractionRibbonTabViewModel : ViewModelBase
     {
-        public ImageViewerViewModel ImageViewerViewModel =>
-            _imageViewerViewModel;
-
-        private readonly ImageViewerViewModel _imageViewerViewModel;
-
         private readonly SelectionOverlayControlViewModel
             _overlayControlViewModel;
 
@@ -39,11 +34,9 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<bool> CanRedo { get; } = new(false);
 
         public BloodVesselExtractionRibbonTabViewModel(
-            ImageViewerViewModel imageViewerViewModel,
             SelectionOverlayControlViewModel overlayControlViewModel,
             BloodVessel3DRegionSelector regionSelector)
         {
-            _imageViewerViewModel = imageViewerViewModel;
             _overlayControlViewModel = overlayControlViewModel;
             _regionSelector = regionSelector;
             _regionSelector.UndoRedoStateChanged += (sender, e) =>

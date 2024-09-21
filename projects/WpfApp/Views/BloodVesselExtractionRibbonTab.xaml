@@ -40,7 +40,7 @@
                   Command="{Binding ClearAllSelectionCommand}">
     </RibbonButton>
     <RibbonToggleButton Label="選択範囲を非表示"
-                        IsChecked="{Binding ImageViewerViewModel.SelectionOverlayControlViewModel.IsVisible.Value , Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}">
+                        IsChecked="{Binding SelectionOverlayControlViewModel.IsVisible.Value , Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}">
     </RibbonToggleButton>
   </RibbonGroup>
 
