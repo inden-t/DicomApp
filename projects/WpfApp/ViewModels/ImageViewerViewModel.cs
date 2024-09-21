@@ -36,7 +36,10 @@ namespace DicomApp.ViewModels
             _overlayControlViewModel = overlayControlViewModel;
 
             ScrollValue.Subscribe(value =>
-                SwitchImageByIndexCommand.Execute(value));
+            {
+                SwitchImageByIndexCommand.Execute(value);
+                _overlayControlViewModel.ScrollValue = value;
+            });
         }
 
         public void SwitchImageByOffset(int offset)
@@ -48,6 +51,7 @@ namespace DicomApp.ViewModels
         public void SetImage(DicomImage image)
         {
             _image = image;
+            _overlayControlViewModel.SetImage(image);
             Render();
         }
 
@@ -65,11 +69,13 @@ namespace DicomApp.ViewModels
             if ((_zoom < 1 && newZoom > 1) || (_zoom > 1 && newZoom < 1))
             {
                 _zoom = 1;
+                _overlayControlViewModel.Zoom = 1;
                 isZoomed = true;
             }
             else if (newZoom <= 10)
             {
                 _zoom = newZoom;
+                _overlayControlViewModel.Zoom = newZoom;
                 isZoomed = true;
             }
 
@@ -82,6 +88,8 @@ namespace DicomApp.ViewModels
         {
             ViewerWidth = width;
             ViewerHeight = height;
+            _overlayControlViewModel.ViewerWidth = width;
+            _overlayControlViewModel.ViewerHeight = height;
             Render();
         }
 
@@ -107,15 +115,7 @@ namespace DicomApp.ViewModels
             BitmapSourceImage.Value = scaledBitmap;
 
             // 選択領域の表示を更新
-            _overlayControlViewModel.UpdateSelectedRegion(_selectedRegion,
-                _image, ViewerWidth, ViewerHeight, ScrollValue.Value, _zoom);
-        }
-
-        public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
-        {
-            _selectedRegion = selectedRegion;
-            _overlayControlViewModel.UpdateSelectedRegion(_selectedRegion,
-                _image, ViewerWidth, ViewerHeight, ScrollValue.Value, _zoom);
+            _overlayControlViewModel.UpdateSelectedRegion();
         }
     }
 }

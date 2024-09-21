@@ -8,16 +8,12 @@ namespace DicomApp.Presenter
     public class
         ManageBloodVesselRegionPresenter : IManageBloodVesselRegionPresenter
     {
-        private readonly ImageViewerViewModel _imageViewerViewModel;
-
         private readonly SelectionOverlayControlViewModel
             _overlayControlViewModel;
 
         public ManageBloodVesselRegionPresenter(
-            ImageViewerViewModel imageViewerViewModel,
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
-            _imageViewerViewModel = imageViewerViewModel;
             _overlayControlViewModel = overlayControlViewModel;
         }
 
@@ -28,12 +24,12 @@ namespace DicomApp.Presenter
             _overlayControlViewModel.CurrentSelectionMode.Value =
                 SelectionMode.None;
             _overlayControlViewModel.IsVisible.Value = true;
-            _imageViewerViewModel.SetSelectedRegion(selectedRegion);
+            _overlayControlViewModel.SetSelectedRegion(selectedRegion);
         }
 
         public void UpdateSelectedRegion(BloodVessel3DRegion selectedRegion)
         {
-            _imageViewerViewModel.SetSelectedRegion(selectedRegion);
+            _overlayControlViewModel.SetSelectedRegion(selectedRegion);
         }
     }
 }

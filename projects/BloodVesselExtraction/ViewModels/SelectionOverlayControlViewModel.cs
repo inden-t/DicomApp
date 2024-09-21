@@ -21,13 +21,13 @@ namespace DicomApp.ViewModels
     public class SelectionOverlayControlViewModel : ViewModelBase
     {
         private WriteableBitmap _bitmapImage;
-        private int _scrollValue;
+        private BloodVessel3DRegion _selectedRegion = new();
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
-        public ReactiveProperty<ImageSource> OverlaySource { get; }
-        public ReactiveProperty<bool> IsVisible { get; }
+        public ReactiveProperty<ImageSource> OverlaySource { get; } = new();
+        public ReactiveProperty<bool> IsVisible { get; } = new(true);
 
         public ReactiveProperty<bool> IsSelectionModeActive { get; } =
             new(false);
@@ -35,11 +35,10 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<SelectionMode> CurrentSelectionMode { get; } =
             new(SelectionMode.None);
 
-        public SelectionOverlayControlViewModel()
-        {
-            OverlaySource = new ReactiveProperty<ImageSource>();
-            IsVisible = new ReactiveProperty<bool>(true);
-        }
+        public double ViewerWidth { get; set; }
+        public double ViewerHeight { get; set; }
+        public int ScrollValue { get; set; }
+        public double Zoom { get; set; } = 1.0;
 
         public void InitializeDependencies(
             Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
@@ -51,7 +50,7 @@ namespace DicomApp.ViewModels
         public void OnClick(double relativeX, double relativeY)
         {
             Point3D seedPoint = new Point3D(relativeX * _bitmapImage.PixelWidth,
-                relativeY * _bitmapImage.PixelHeight, _scrollValue);
+                relativeY * _bitmapImage.PixelHeight, ScrollValue);
 
             if (CurrentSelectionMode.Value ==
                 SelectionMode.Fill3DSelection)
@@ -79,22 +78,27 @@ namespace DicomApp.ViewModels
             }
         }
 
-        public void UpdateSelectedRegion(BloodVessel3DRegion _selectedRegion,
-            DicomImage _image, double ViewerWidth, double ViewerHeight, int z,
-            double _zoom)
+        public void SetImage(DicomImage image)
         {
-            if (_image == null || _selectedRegion == null)
-                return;
-
-            _scrollValue = z;
-
-            var renderedImage = _image.RenderImage();
+            var renderedImage = image.RenderImage();
             var bitmapImage = renderedImage.As<WriteableBitmap>();
             _bitmapImage = bitmapImage;
+        }
+
+        public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
+        {
+            _selectedRegion = selectedRegion;
+            UpdateSelectedRegion();
+        }
+
+        public void UpdateSelectedRegion()
+        {
+            if (_bitmapImage == null || _selectedRegion == null)
+                return;
 
             // 新しいWriteableBitmapを作成し、透明な背景で初期化
-            var overlayBitmap = new WriteableBitmap(bitmapImage.PixelWidth,
-                bitmapImage.PixelHeight, bitmapImage.DpiX, bitmapImage.DpiY,
+            var overlayBitmap = new WriteableBitmap(_bitmapImage.PixelWidth,
+                _bitmapImage.PixelHeight, _bitmapImage.DpiX, _bitmapImage.DpiY,
                 PixelFormats.Bgra32, null);
             var stride = overlayBitmap.PixelWidth * 4;
             var pixels = new byte[overlayBitmap.PixelHeight * stride];
@@ -103,7 +107,7 @@ namespace DicomApp.ViewModels
             // 選択された領域を描画
             foreach (var point in _selectedRegion.SelectedVoxels)
             {
-                if (point.Z == z) // 現在のスライスのみ描画
+                if (point.Z == ScrollValue) // 現在のスライスのみ描画
                 {
                     int x = (int)point.X;
                     int y = (int)point.Y;
@@ -133,7 +137,7 @@ namespace DicomApp.ViewModels
 
             // 拡大倍率を適用
             var scaledBitmap = new TransformedBitmap(overlayBitmap,
-                new ScaleTransform(scale * _zoom, scale * _zoom));
+                new ScaleTransform(scale * Zoom, scale * Zoom));
 
             // OverlayImageSourceを更新
             OverlaySource.Value = scaledBitmap;
