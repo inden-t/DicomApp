@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Media;
+using DicomApp.Algorithms;
 using DicomApp.Models;
 using DicomApp.PresenterInterface;
 

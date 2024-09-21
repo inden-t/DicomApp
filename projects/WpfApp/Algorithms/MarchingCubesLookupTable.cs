@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media.Media3D;
 
-namespace DicomApp.Models
+namespace DicomApp.Algorithms
 {
     public static class MarchingCubesLookupTable
     {
