@@ -4,11 +4,11 @@ using DicomApp.UseCases;
 
 namespace DicomApp.ViewModels
 {
-    class MainWindowPresenter : IMainWindowPresenter
+    class OpenDicomFilePresenter : IOpenDicomFilePresenter
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
 
-        public MainWindowPresenter(MainWindowViewModel mainWindowViewModel)
+        public OpenDicomFilePresenter(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
         }

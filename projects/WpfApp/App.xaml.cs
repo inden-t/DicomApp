@@ -60,7 +60,8 @@ namespace DicomApp
             // クラスの登録
             services.AddScoped<CommandFactory>();
             services.AddScoped<MainWindow>();
-            services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
+            services
+                .AddScoped<IOpenDicomFilePresenter, OpenDicomFilePresenter>();
             services.AddScoped<MainWindowViewModel>();
             services.AddScoped<IModel3dViewer, Model3dViewer>();
             services.AddScoped<IProgressWindow, ProgressWindow>();

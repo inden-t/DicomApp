@@ -2,7 +2,7 @@
 
 namespace DicomApp.UseCases
 {
-    public interface IMainWindowPresenter
+    public interface IOpenDicomFilePresenter
     {
         void UpdateDisplayedImage(IEnumerable<DICOMFile> dicomFiles);
     }
