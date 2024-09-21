@@ -3,28 +3,32 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using DicomApp.Models;
+using DicomApp.ViewModels;
 
 namespace DicomApp.UseCases
 {
     public class ManageBloodVesselRegionUseCase
     {
         private readonly BloodVessel3DRegionSelector _regionSelector;
-        private readonly IImageViewerPresenter _imageViewerPresenter;
+
+        private readonly IManageBloodVesselRegionPresenter
+            _manageBloodVesselRegionPresenter;
 
         public ManageBloodVesselRegionUseCase(
             BloodVessel3DRegionSelector regionSelector,
-            IImageViewerPresenter imageViewerPresenter)
+            IManageBloodVesselRegionPresenter manageBloodVesselRegionPresenter)
         {
             _regionSelector = regionSelector;
-            _imageViewerPresenter = imageViewerPresenter;
+            _manageBloodVesselRegionPresenter =
+                manageBloodVesselRegionPresenter;
         }
 
         public void InitializeRegionSelection()
         {
             _regionSelector.Initialize();
-            _imageViewerPresenter.SetSelectionModeActive(false);
-            _imageViewerPresenter.ResetSelectionMode();
-            UpdateSelectedRegion();
+            var selectedRegion = _regionSelector.GetSelectedRegion();
+            _manageBloodVesselRegionPresenter.InitializeRegionSelection(
+                selectedRegion);
         }
 
         public void UndoSelection()
@@ -154,7 +158,8 @@ namespace DicomApp.UseCases
         private void UpdateSelectedRegion()
         {
             var selectedRegion = _regionSelector.GetSelectedRegion();
-            _imageViewerPresenter.SetSelectedRegion(selectedRegion);
+            _manageBloodVesselRegionPresenter.UpdateSelectedRegion(
+                selectedRegion);
         }
     }
 }

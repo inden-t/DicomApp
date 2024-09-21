@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using DicomApp.Models;
+using DicomApp.Presenter;
 using DicomApp.UseCases;
 using DicomApp.ViewModels;
 using DicomApp.Views;
@@ -79,6 +80,8 @@ namespace DicomApp
             services.AddScoped<SelectionOverlayControlViewModel>();
             services.AddScoped<BloodVesselExtractionRibbonTab>();
             services.AddScoped<IImageViewerPresenter, ImageViewerPresenter>();
+            services.AddScoped<IManageBloodVesselRegionPresenter,
+                ManageBloodVesselRegionPresenter>();
             services.AddScoped<BloodVesselExtractionRibbonTabViewModel>();
             services.AddScoped<BloodVesselExtractionUseCase>();
             services.AddScoped<Select3DBloodVesselRegionUseCase>();
