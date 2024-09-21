@@ -26,5 +26,9 @@
     <PackageReference Include="ReactiveProperty" Version="9.6.0" />
     <PackageReference Include="ReactiveProperty.WPF" Version="9.6.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\WpfConverters\WpfConverters.csproj" />
+  </ItemGroup>
 
 </Project>
