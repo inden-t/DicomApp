@@ -28,6 +28,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\BloodVesselExtractionPresenter\BloodVesselExtractionPresenter.csproj" />
     <ProjectReference Include="..\BloodVesselExtraction\BloodVesselExtraction.csproj" />
     <ProjectReference Include="..\CoreModels\CoreModels.csproj" />
     <ProjectReference Include="..\MainUseCases\MainUseCases.csproj" />
