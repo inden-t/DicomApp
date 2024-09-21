@@ -1,6 +1,5 @@
 ﻿using System.Windows.Media.Media3D;
 using DicomApp.Models;
-using DicomApp.ViewModels;
 
 namespace DicomApp.UseCases
 {

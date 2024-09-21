@@ -1,7 +1,7 @@
-﻿using DicomApp.Models;
-using System;
+﻿using System;
+using DicomApp.Models;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.UseCases
 {
     public interface IManageBloodVesselRegionPresenter
     {
