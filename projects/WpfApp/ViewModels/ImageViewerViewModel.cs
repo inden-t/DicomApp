@@ -64,7 +64,7 @@ namespace DicomApp.WpfApp.ViewModels
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
-            overlayControlViewModel.ScrollValue = ScrollValue;
+            _overlayControlViewModel.ScrollValue = ScrollValue;
 
             ScrollValue.Subscribe(value =>
             {
