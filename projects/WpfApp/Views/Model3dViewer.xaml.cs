@@ -206,5 +206,11 @@ namespace DicomApp.WpfApp.Views
         {
             _saveModel3dUseCase.Execute(_currentModel);
         }
+
+        private void LoadModel_Click(object sender, RoutedEventArgs e)
+        {
+            var loadModel3dUseCase = new LoadModel3dUseCase(this);
+            loadModel3dUseCase.Execute();
+        }
     }
 }
