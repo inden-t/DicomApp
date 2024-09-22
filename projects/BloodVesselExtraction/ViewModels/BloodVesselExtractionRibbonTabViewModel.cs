@@ -125,7 +125,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                 manageBloodVesselRegionUseCase.ClearAllSelection());
 
             DiscardSelectionCommand.Subscribe(() =>
-                manageBloodVesselRegionUseCase.InitializeRegionSelection());
+                manageBloodVesselRegionUseCase.EndRegionSelection());
         }
     }
 }

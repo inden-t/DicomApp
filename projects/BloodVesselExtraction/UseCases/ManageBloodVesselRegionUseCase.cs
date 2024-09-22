@@ -22,7 +22,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 manageBloodVesselRegionPresenter;
         }
 
-        public void InitializeRegionSelection()
+        public void EndRegionSelection()
         {
             _regionSelector.Initialize();
             var selectedRegion = _regionSelector.GetSelectedRegion();
