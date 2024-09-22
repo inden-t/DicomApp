@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using DicomApp.MainUseCases.PresenterInterface;
+using DicomApp.MainUseCases.UseCases;
 
 namespace DicomApp.WpfApp.Views
 {
@@ -14,6 +15,7 @@ namespace DicomApp.WpfApp.Views
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
+        private readonly SaveModel3dUseCase _saveModel3dUseCase = new();
 
         public Model3dViewer()
         {
@@ -200,34 +202,7 @@ namespace DicomApp.WpfApp.Views
 
         private void SaveModel_Click(object sender, RoutedEventArgs e)
         {
-            // モデル保存のロジックをここに実装
-            SaveModel();
+            _saveModel3dUseCase.Execute(model3DGroup);
         }
-
-        private void SaveModel()
-        {
-            // モデルを保存するロジックを実装
-            // 例: ファイル保存ダイアログを表示し、選択されたパスにモデルを保存
-            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
-            {
-                Filter = "3Dモデルファイル (*.obj)|*.obj|すべてのファイル (*.*)|*.*",
-                DefaultExt = ".obj"
-            };
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                string filePath = saveFileDialog.FileName;
-                // ここでモデルを実際に保存するメソッドを呼び出す
-                // 例: SaveModelToFile(filePath);
-                MessageBox.Show($"モデルを {filePath} に保存しました。", "保存完了",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-
-        // private void SaveModelToFile(string filePath)
-        // {
-        //     // 実際のモデル保存ロジックをここに実装
-        //     // これは3Dモデルの形式やアプリケーションの要件に応じて異なります
-        // }
     }
 }
