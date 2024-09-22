@@ -32,12 +32,12 @@ namespace DicomApp.BloodVesselExtraction.Models
         public BloodVessel3DRegionSelector(FileManager fileManager)
         {
             _fileManager = fileManager;
-            Threshold = 220; // デフォルト値
             Initialize();
         }
 
         public void Initialize()
         {
+            Threshold = -1;
             _selectedRegion = new BloodVessel3DRegion();
             _renderedImages = new List<byte[]>();
             _selectionHistory = new List<HashSet<(int X, int Y, int Z)>>();
@@ -47,13 +47,14 @@ namespace DicomApp.BloodVesselExtraction.Models
 
         public void StartSelection(int threshold)
         {
-            Threshold = threshold;
             Initialize();
+            Threshold = threshold;
             PreRenderImages();
         }
 
         public void EndSelection()
         {
+            Threshold = -1;
             _selectedRegion.Clear();
             _renderedImages.Clear();
             _selectionHistory.Clear();
@@ -153,7 +154,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         // 3D塗りつぶし選択の実装
         public void Select3DRegion(Point3D seedPoint)
         {
-            if (_fileManager.DicomFiles.Count == 0)
+            if (_fileManager.DicomFiles.Count == 0 || Threshold < 0)
             {
                 return;
             }
@@ -242,7 +243,7 @@ namespace DicomApp.BloodVesselExtraction.Models
 
         public void Select2DRegion(Point3D seedPoint)
         {
-            if (_renderedImages.Count == 0)
+            if (_renderedImages.Count == 0 || Threshold < 0)
             {
                 return;
             }
