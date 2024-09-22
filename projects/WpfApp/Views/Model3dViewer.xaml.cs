@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using DicomApp.MainUseCases.PresenterInterface;
+using DicomApp.MainUseCases.UseCases;
 
 namespace DicomApp.WpfApp.Views
 {
@@ -14,6 +15,8 @@ namespace DicomApp.WpfApp.Views
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
+        private readonly SaveModel3dUseCase _saveModel3dUseCase = new();
+        private Model3DGroup _currentModel;
 
         public Model3dViewer()
         {
@@ -33,6 +36,7 @@ namespace DicomApp.WpfApp.Views
 
         public void SetModel(Model3DGroup model)
         {
+            _currentModel = model;
             model3DGroup.Children.Clear();
             model3DGroup.Children.Add(model);
 
@@ -196,6 +200,11 @@ namespace DicomApp.WpfApp.Views
                     CenterMarkCanvas.ActualHeight / 2);
             Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
             Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
+        }
+
+        private void SaveModel_Click(object sender, RoutedEventArgs e)
+        {
+            _saveModel3dUseCase.Execute(_currentModel);
         }
     }
 }

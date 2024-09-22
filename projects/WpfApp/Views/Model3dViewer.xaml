@@ -4,43 +4,58 @@
         Title="Model 3D Viewer"
         Height="1200"
         Width="1600">
-  <Grid Background="#303030"
-        MouseDown="Grid_MouseDown"
-        MouseUp="Grid_MouseUp"
-        MouseMove="Grid_MouseMove"
-        MouseWheel="Grid_MouseWheel">
-    <Viewport3D x:Name="viewport3D"
-                IsHitTestVisible="False">
-      <Viewport3D.Camera>
-        <PerspectiveCamera Position="255,-256,-384"
-                           LookDirection="0,1,1"
-                           UpDirection="0,1,-1"
-                           FieldOfView="60"/>
-      </Viewport3D.Camera>
-      <ModelVisual3D x:Name="modelVisual">
-        <ModelVisual3D.Content>
-          <Model3DGroup x:Name="model3DGroup"/>
-        </ModelVisual3D.Content>
-      </ModelVisual3D>
-      <ModelVisual3D>
-        <ModelVisual3D.Content>
-          <Model3DGroup>
-            <AmbientLight Color="#404040"/>
-            <DirectionalLight Color="White"
-                              Direction="1,2,3"/>
-          </Model3DGroup>
-        </ModelVisual3D.Content>
-      </ModelVisual3D>
-    </Viewport3D>
-    <Canvas x:Name="CenterMarkCanvas"
-            Grid.Row="0"
-            Grid.Column="0">
-      <Ellipse x:Name="CenterMark"
-               Width="6"
-               Height="6"
-               Fill="Yellow"
-               Stroke="DarkBlue"
-               StrokeThickness="1"/>
-    </Canvas>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <StackPanel Grid.Row="0" Background="#F0F0F0">
+      <Button Content="モデルを保存..."
+              Click="SaveModel_Click"
+              HorizontalAlignment="Left"
+              Padding="3"/>
+    </StackPanel>
+
+    <Grid Grid.Row="1"
+          Background="#303030"
+          MouseDown="Grid_MouseDown"
+          MouseUp="Grid_MouseUp"
+          MouseMove="Grid_MouseMove"
+          MouseWheel="Grid_MouseWheel">
+      <Viewport3D x:Name="viewport3D"
+                  IsHitTestVisible="False">
+        <Viewport3D.Camera>
+          <PerspectiveCamera Position="255,-256,-384"
+                             LookDirection="0,1,1"
+                             UpDirection="0,1,-1"
+                             FieldOfView="60"/>
+        </Viewport3D.Camera>
+        <ModelVisual3D x:Name="modelVisual">
+          <ModelVisual3D.Content>
+            <Model3DGroup x:Name="model3DGroup"/>
+          </ModelVisual3D.Content>
+        </ModelVisual3D>
+        <ModelVisual3D>
+          <ModelVisual3D.Content>
+            <Model3DGroup>
+              <AmbientLight Color="#404040"/>
+              <DirectionalLight Color="White"
+                                Direction="1,2,3"/>
+            </Model3DGroup>
+          </ModelVisual3D.Content>
+        </ModelVisual3D>
+      </Viewport3D>
+      <Canvas x:Name="CenterMarkCanvas"
+              Grid.Row="0"
+              Grid.Column="0">
+        <Ellipse x:Name="CenterMark"
+                 Width="6"
+                 Height="6"
+                 Fill="Yellow"
+                 Stroke="DarkBlue"
+                 StrokeThickness="1"/>
+      </Canvas>
+    </Grid>
   </Grid>
 </Window>

@@ -80,6 +80,7 @@ namespace DicomApp.WpfApp
             services.AddScoped<ImageViewerViewModel>();
 
             services.AddScoped<OpenDicomFileUseCase>();
+            services.AddScoped<LoadModel3dUseCase>();
             services.AddScoped<GeneratePointCloudUseCase>();
             services.AddScoped<GenerateSurfaceModelUseCase>();
             services
