@@ -163,12 +163,12 @@ namespace DicomApp.WpfApp.ViewModels
 
         public void ZoomIn()
         {
-            _imageViewerViewModel.Zoom(1.25);
+            _imageViewerViewModel.SetZoomValue(1.25);
         }
 
         public void ZoomOut()
         {
-            _imageViewerViewModel.Zoom(0.8);
+            _imageViewerViewModel.SetZoomValue(0.8);
         }
     }
 }

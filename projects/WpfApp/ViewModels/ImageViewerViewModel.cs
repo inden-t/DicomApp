@@ -15,6 +15,8 @@ namespace DicomApp.WpfApp.ViewModels
 
         private DicomImage _image;
         private double _zoom = 1.0;
+        private double _viewerWidth;
+        private double _viewerHeight;
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
@@ -26,8 +28,35 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
 
-        public double ViewerWidth { get; private set; }
-        public double ViewerHeight { get; private set; }
+        public double Zoom
+        {
+            get => _zoom;
+            private set
+            {
+                _zoom = value;
+                _overlayControlViewModel.Zoom = value;
+            }
+        }
+
+        public double ViewerWidth
+        {
+            get => _viewerWidth;
+            private set
+            {
+                _viewerWidth = value;
+                _overlayControlViewModel.ViewerWidth = value;
+            }
+        }
+
+        public double ViewerHeight
+        {
+            get => _viewerHeight;
+            private set
+            {
+                _viewerHeight = value;
+                _overlayControlViewModel.ViewerHeight = value;
+            }
+        }
 
         private BloodVessel3DRegion _selectedRegion = new();
 
@@ -35,11 +64,11 @@ namespace DicomApp.WpfApp.ViewModels
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
+            _overlayControlViewModel.ScrollValue = ScrollValue;
 
             ScrollValue.Subscribe(value =>
             {
                 SwitchImageByIndexCommand.Execute(value);
-                _overlayControlViewModel.ScrollValue = value;
             });
         }
 
@@ -61,22 +90,20 @@ namespace DicomApp.WpfApp.ViewModels
             MaximumScrollValue.Value = value;
         }
 
-        public bool Zoom(double factor)
+        public bool SetZoomValue(double factor)
 
         {
             bool isZoomed = false;
 
-            double newZoom = _zoom * factor;
-            if ((_zoom < 1 && newZoom > 1) || (_zoom > 1 && newZoom < 1))
+            double newZoom = Zoom * factor;
+            if ((Zoom < 1 && newZoom > 1) || (Zoom > 1 && newZoom < 1))
             {
-                _zoom = 1;
-                _overlayControlViewModel.Zoom = 1;
+                Zoom = 1;
                 isZoomed = true;
             }
             else if (newZoom <= 10)
             {
-                _zoom = newZoom;
-                _overlayControlViewModel.Zoom = newZoom;
+                Zoom = newZoom;
                 isZoomed = true;
             }
 
@@ -89,8 +116,6 @@ namespace DicomApp.WpfApp.ViewModels
         {
             ViewerWidth = width;
             ViewerHeight = height;
-            _overlayControlViewModel.ViewerWidth = width;
-            _overlayControlViewModel.ViewerHeight = height;
             Render();
         }
 
@@ -111,7 +136,7 @@ namespace DicomApp.WpfApp.ViewModels
 
             // 拡大倍率を適用
             var scaledBitmap = new TransformedBitmap(bitmapImage,
-                new ScaleTransform(scale * _zoom, scale * _zoom));
+                new ScaleTransform(scale * Zoom, scale * Zoom));
 
             BitmapSourceImage.Value = scaledBitmap;
 

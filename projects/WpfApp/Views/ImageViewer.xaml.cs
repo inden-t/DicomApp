@@ -107,7 +107,7 @@ namespace DicomApp.WpfApp.Views
                 double verticalOffset = ImageScrollViewer.VerticalOffset;
 
                 // ズーム処理
-                bool isZoomed = _viewModel.Zoom(zoomFactor);
+                bool isZoomed = _viewModel.SetZoomValue(zoomFactor);
 
                 if (isZoomed)
                 {
