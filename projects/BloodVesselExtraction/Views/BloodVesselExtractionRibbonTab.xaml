@@ -3,8 +3,8 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           xmlns:converters="clr-namespace:DicomApp.Converters"
            xmlns:viewmodels="clr-namespace:DicomApp.ViewModels"
+           xmlns:converters="clr-namespace:DicomApp.Converters;assembly=WpfUtilities"
            mc:Ignorable="d"
            d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">
@@ -40,7 +40,7 @@
                   Command="{Binding ClearAllSelectionCommand}">
     </RibbonButton>
     <RibbonToggleButton Label="選択範囲を非表示"
-                        IsChecked="{Binding ImageViewerViewModel.IsSelectionVisible.Value , Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}">
+                        IsChecked="{Binding SelectionOverlayControlViewModel.IsVisible.Value , Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}">
     </RibbonToggleButton>
   </RibbonGroup>
 
@@ -51,7 +51,7 @@
         <Style TargetType="RibbonButton"
                BasedOn="{StaticResource {x:Type RibbonButton}}">
           <Style.Triggers>
-            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+            <DataTrigger Binding="{Binding SelectionOverlayControlViewModel.CurrentSelectionMode.Value}"
                          Value="Fill3DSelection">
               <Setter Property="Background"
                       Value="LightBlue"/>
@@ -68,7 +68,7 @@
         <Style TargetType="RibbonButton"
                BasedOn="{StaticResource {x:Type RibbonButton}}">
           <Style.Triggers>
-            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+            <DataTrigger Binding="{Binding SelectionOverlayControlViewModel.CurrentSelectionMode.Value}"
                          Value="Clear3DFillSelection">
               <Setter Property="Background"
                       Value="LightBlue"/>
@@ -90,7 +90,7 @@
         <Style TargetType="RibbonButton"
                BasedOn="{StaticResource {x:Type RibbonButton}}">
           <Style.Triggers>
-            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+            <DataTrigger Binding="{Binding SelectionOverlayControlViewModel.CurrentSelectionMode.Value}"
                          Value="Fill2DSelection">
               <Setter Property="Background"
                       Value="LightBlue"/>
@@ -107,7 +107,7 @@
         <Style TargetType="RibbonButton"
                BasedOn="{StaticResource {x:Type RibbonButton}}">
           <Style.Triggers>
-            <DataTrigger Binding="{Binding ImageViewerViewModel.CurrentSelectionMode.Value}"
+            <DataTrigger Binding="{Binding SelectionOverlayControlViewModel.CurrentSelectionMode.Value}"
                          Value="ClearFill2DSelection">
               <Setter Property="Background"
                       Value="LightBlue"/>

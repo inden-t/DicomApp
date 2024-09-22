@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using DicomApp.Models;
+using DicomApp.PresenterInterface;
 
 namespace DicomApp.UseCases
 {

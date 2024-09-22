@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using DicomApp.UseCases;
+using DicomApp.PresenterInterface;
+using DicomApp.ViewModels;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.Presenter
 {
-    class MainWindowPresenter : IMainWindowPresenter
+    class OpenDicomFilePresenter : IOpenDicomFilePresenter
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
 
-        public MainWindowPresenter(MainWindowViewModel mainWindowViewModel)
+        public OpenDicomFilePresenter(MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
         }

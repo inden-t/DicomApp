@@ -1,21 +1,25 @@
 ﻿using System.Windows.Media.Media3D;
 using DicomApp.Models;
+using DicomApp.PresenterInterface;
 
 namespace DicomApp.UseCases
 {
     public class Select3DBloodVesselRegionUseCase
     {
         private readonly BloodVessel3DRegionSelector _regionSelector;
-        private readonly IImageViewerPresenter _imageViewerPresenter;
+
+        private readonly IManageBloodVesselRegionPresenter
+            _manageBloodVesselRegionPresenter;
 
         private int _threshold = 220;
 
         public Select3DBloodVesselRegionUseCase(
             BloodVessel3DRegionSelector regionSelector,
-            IImageViewerPresenter imageViewerPresenter)
+            IManageBloodVesselRegionPresenter manageBloodVesselRegionPresenter)
         {
             _regionSelector = regionSelector;
-            _imageViewerPresenter = imageViewerPresenter;
+            _manageBloodVesselRegionPresenter =
+                manageBloodVesselRegionPresenter;
         }
 
         public void StartSelection(int threshold)
@@ -51,7 +55,8 @@ namespace DicomApp.UseCases
         private void UpdateSelectedRegion()
         {
             var selectedRegion = _regionSelector.GetSelectedRegion();
-            _imageViewerPresenter.SetSelectedRegion(selectedRegion);
+            _manageBloodVesselRegionPresenter.UpdateSelectedRegion(
+                selectedRegion);
         }
     }
 }

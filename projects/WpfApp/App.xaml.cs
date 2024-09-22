@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using DicomApp.Models;
+using DicomApp.Presenter;
+using DicomApp.PresenterInterface;
 using DicomApp.UseCases;
 using DicomApp.ViewModels;
 using DicomApp.Views;
@@ -59,7 +61,8 @@ namespace DicomApp
             // クラスの登録
             services.AddScoped<CommandFactory>();
             services.AddScoped<MainWindow>();
-            services.AddScoped<IMainWindowPresenter, MainWindowPresenter>();
+            services
+                .AddScoped<IOpenDicomFilePresenter, OpenDicomFilePresenter>();
             services.AddScoped<MainWindowViewModel>();
             services.AddScoped<IModel3dViewer, Model3dViewer>();
             services.AddScoped<IProgressWindow, ProgressWindow>();
@@ -75,8 +78,11 @@ namespace DicomApp
             services
                 .AddScoped<GenerateSurfaceModelLinearInterpolationUseCase>();
 
+            services.AddScoped<SelectionOverlayControl>();
+            services.AddScoped<SelectionOverlayControlViewModel>();
             services.AddScoped<BloodVesselExtractionRibbonTab>();
-            services.AddScoped<IImageViewerPresenter, ImageViewerPresenter>();
+            services.AddScoped<IManageBloodVesselRegionPresenter,
+                ManageBloodVesselRegionPresenter>();
             services.AddScoped<BloodVesselExtractionRibbonTabViewModel>();
             services.AddScoped<BloodVesselExtractionUseCase>();
             services.AddScoped<Select3DBloodVesselRegionUseCase>();

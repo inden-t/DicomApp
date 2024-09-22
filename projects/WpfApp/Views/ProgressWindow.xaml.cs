@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
-using DicomApp.UseCases;
+using DicomApp.PresenterInterface;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Views

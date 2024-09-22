@@ -12,12 +12,15 @@ namespace DicomApp.Views
         private Point _lastMousePosition;
         private bool _isScrolling;
 
-        public ImageViewer(ImageViewerViewModel imageViewerViewModel)
+        public ImageViewer(ImageViewerViewModel imageViewerViewModel,
+            SelectionOverlayControl selectionOverlay)
         {
             InitializeComponent();
 
             _viewModel = imageViewerViewModel;
-            DataContext = imageViewerViewModel;
+            DataContext = _viewModel;
+
+            SelectionOverlay.Content = selectionOverlay;
         }
 
         private void UserControl_MouseWheel(object sender,
@@ -134,17 +137,6 @@ namespace DicomApp.Views
                     var parent = ((Control)sender).Parent as UIElement;
                     parent.RaiseEvent(eventArg);
                 }
-            }
-        }
-
-        private void DicomImage_Click(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                Point mousePos = e.GetPosition(DicomImage);
-                double relativeX = mousePos.X / DicomImage.ActualWidth;
-                double relativeY = mousePos.Y / DicomImage.ActualHeight;
-                _viewModel.OnClick(relativeX, relativeY);
             }
         }
     }

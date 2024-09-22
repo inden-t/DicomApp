@@ -1,6 +1,6 @@
-using DicomApp.UseCases;
+﻿using System;
 
-namespace DicomApp.UseCases
+namespace DicomApp.PresenterInterface
 {
     public interface IProgressWindowFactory
     {

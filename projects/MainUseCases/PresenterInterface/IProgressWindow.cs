@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 
-namespace DicomApp.UseCases
+namespace DicomApp.PresenterInterface
 {
     public interface IProgressWindow
     {

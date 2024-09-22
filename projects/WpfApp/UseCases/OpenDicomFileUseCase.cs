@@ -3,12 +3,13 @@ using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using DicomApp.Models;
+using DicomApp.PresenterInterface;
 
 namespace DicomApp.UseCases
 {
     public class OpenDicomFileUseCase
     {
-        private readonly IMainWindowPresenter _mainWindowPresenter;
+        private readonly IOpenDicomFilePresenter _openDicomFilePresenter;
         private readonly IProgressWindowFactory _progressWindowFactory;
         private readonly FileManager _fileManager;
 
@@ -17,12 +18,13 @@ namespace DicomApp.UseCases
 
         private IProgressWindow _progressWindow;
 
-        public OpenDicomFileUseCase(IMainWindowPresenter mainWindowPresenter,
+        public OpenDicomFileUseCase(
+            IOpenDicomFilePresenter openDicomFilePresenter,
             IProgressWindowFactory progressWindowFactory,
             FileManager fileManager,
             ManageBloodVesselRegionUseCase manageBloodVesselRegionUseCase)
         {
-            _mainWindowPresenter = mainWindowPresenter;
+            _openDicomFilePresenter = openDicomFilePresenter;
             _progressWindowFactory = progressWindowFactory;
             _fileManager = fileManager;
             _manageBloodVesselRegionUseCase = manageBloodVesselRegionUseCase;
@@ -121,7 +123,7 @@ namespace DicomApp.UseCases
 
                 if (_fileManager.DicomFiles.Count > 0)
                 {
-                    _mainWindowPresenter.UpdateDisplayedImage(
+                    _openDicomFilePresenter.UpdateDisplayedImage(
                         _fileManager.DicomFiles);
                 }
             }

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DicomApp.UseCases
+namespace DicomApp.PresenterInterface
 {
-    public interface IMainWindowPresenter
+    public interface IOpenDicomFilePresenter
     {
         void UpdateDisplayedImage(IEnumerable<DICOMFile> dicomFiles);
     }

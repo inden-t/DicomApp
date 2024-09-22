@@ -9,13 +9,16 @@ namespace DicomApp.ViewModels
     {
         private readonly ImageViewerViewModel _imageViewerViewModel;
 
+        private readonly SelectionOverlayControlViewModel
+            _overlayControlViewModel;
+
         private BloodVesselExtractionUseCase _bloodVesselExtractionUseCase;
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
-        public ImageViewerViewModel ImageViewerViewModel =>
-            _imageViewerViewModel;
+        public SelectionOverlayControlViewModel
+            SelectionOverlayControlViewModel => _overlayControlViewModel;
 
         public ReactiveCommand OpenDicomFileCommand { get; } = new();
         public ReactiveCommand OpenDicomFolderCommand { get; } = new();
@@ -47,9 +50,11 @@ namespace DicomApp.ViewModels
         public ReactiveProperty<bool>
             IsBloodVesselExtractionUiEnabled { get; } = new(true);
 
-        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel)
+        public MainWindowViewModel(ImageViewerViewModel imageViewerViewModel,
+            SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _imageViewerViewModel = imageViewerViewModel;
+            _overlayControlViewModel = overlayControlViewModel;
 
             ZoomInCommand.Subscribe(_ => ZoomIn());
             ZoomOutCommand.Subscribe(_ => ZoomOut());
@@ -73,7 +78,7 @@ namespace DicomApp.ViewModels
 
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {
-                _imageViewerViewModel.IsSelectionModeActive.Value = true;
+                _overlayControlViewModel.IsSelectionModeActive.Value = true;
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
                 _select3DBloodVesselRegionUseCase?.StartSelection(ThresholdValue
                     .Value);
@@ -81,7 +86,7 @@ namespace DicomApp.ViewModels
                     .Value);
             });
 
-            _imageViewerViewModel.IsSelectionModeActive.Subscribe((value) =>
+            _overlayControlViewModel.IsSelectionModeActive.Subscribe((value) =>
                 IsBloodVesselExtractionUiEnabled.Value = !value);
         }
 

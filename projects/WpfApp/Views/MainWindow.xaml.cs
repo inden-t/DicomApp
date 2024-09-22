@@ -31,14 +31,14 @@ namespace DicomApp.Views
         private void SetupVisibilityBinding(FrameworkElement targetControl)
         {
             // バインディングを作成
-            var binding =
-                new Binding(nameof(MainWindowViewModel.ImageViewerViewModel) +
-                            "." + nameof(ImageViewerViewModel
-                                .IsSelectionModeActive) + ".Value")
-                {
-                    Source = DataContext,
-                    Converter = new BooleanToVisibilityConverter()
-                };
+            var binding = new Binding(
+                nameof(MainWindowViewModel.SelectionOverlayControlViewModel) +
+                "." + nameof(SelectionOverlayControlViewModel
+                    .IsSelectionModeActive) + ".Value")
+            {
+                Source = DataContext,
+                Converter = new BooleanToVisibilityConverter()
+            };
 
             // バインディングを適用
             targetControl.SetBinding(UIElement.VisibilityProperty, binding);
