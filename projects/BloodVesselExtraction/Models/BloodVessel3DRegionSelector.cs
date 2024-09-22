@@ -23,7 +23,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         private int _imageWidth;
         private int _imageHeight;
 
-        public int Threshold { get; set; }
+        public int Threshold { get; private set; }
 
         private List<HashSet<(int X, int Y, int Z)>> _selectionHistory = new();
 
@@ -45,9 +45,11 @@ namespace DicomApp.BloodVesselExtraction.Models
             SaveCurrentState();
         }
 
-        public void StartSelection()
+        public void StartSelection(int threshold)
         {
+            Threshold = threshold;
             Initialize();
+            PreRenderImages();
         }
 
         public void EndSelection()
