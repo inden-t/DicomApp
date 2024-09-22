@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
-using FellowOakDicom;
+﻿using FellowOakDicom;
 using FellowOakDicom.Imaging;
 
-namespace DicomApp
+namespace DicomApp.CoreModels.Models
 {
     public class DICOMFile
     {

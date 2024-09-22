@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using DicomApp.CoreModels.Models;
 using DicomApp.PresenterInterface;
 using DicomApp.ViewModels;
 

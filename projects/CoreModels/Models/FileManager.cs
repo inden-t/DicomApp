@@ -1,7 +1,6 @@
-﻿using System;
-using Reactive.Bindings;
+﻿using Reactive.Bindings;
 
-namespace DicomApp.Models
+namespace DicomApp.CoreModels.Models
 {
     public class FileManager
     {

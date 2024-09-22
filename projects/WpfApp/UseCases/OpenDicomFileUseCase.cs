@@ -2,8 +2,8 @@
 using System.IO;
 using System.Windows;
 using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.CoreModels.Models;
 using Microsoft.Win32;
-using DicomApp.Models;
 using DicomApp.PresenterInterface;
 
 namespace DicomApp.UseCases

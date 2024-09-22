@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Media;
 using DicomApp.Algorithms;
-using DicomApp.Models;
+using DicomApp.CoreModels.Models;
 using DicomApp.PresenterInterface;
 
 namespace DicomApp.UseCases

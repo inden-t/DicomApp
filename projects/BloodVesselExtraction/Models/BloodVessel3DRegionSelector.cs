@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media.Media3D;
-using DicomApp.Models;
+using DicomApp.CoreModels.Models;
 using Point = System.Drawing.Point;
 
 namespace DicomApp.BloodVesselExtraction.Models

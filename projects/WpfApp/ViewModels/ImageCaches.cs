@@ -1,5 +1,5 @@
 ﻿using System.Windows.Media.Imaging;
-using DicomApp.Models;
+using DicomApp.CoreModels.Models;
 
 namespace DicomApp.ViewModels
 {

@@ -2,6 +2,7 @@
 using System.Windows;
 using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.CoreModels.Models;
 using DicomApp.UseCases;
 using Reactive.Bindings;
 
