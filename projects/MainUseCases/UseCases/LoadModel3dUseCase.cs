@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using DicomApp.MainUseCases.PresenterInterface;
@@ -10,13 +11,16 @@ namespace DicomApp.MainUseCases.UseCases
     public class LoadModel3dUseCase
     {
         private readonly IModel3dViewerFactory _viewerFactory;
+        private readonly IProgressWindowFactory _progressWindowFactory;
 
-        public LoadModel3dUseCase(IModel3dViewerFactory viewerFactory)
+        public LoadModel3dUseCase(IModel3dViewerFactory viewerFactory,
+            IProgressWindowFactory progressWindowFactory)
         {
             _viewerFactory = viewerFactory;
+            _progressWindowFactory = progressWindowFactory;
         }
 
-        public async Task Execute()
+        public async Task ExecuteAsync()
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
@@ -27,13 +31,24 @@ namespace DicomApp.MainUseCases.UseCases
             if (openFileDialog.ShowDialog() == true)
             {
                 string filePath = openFileDialog.FileName;
+                IProgressWindow progressWindow =
+                    _progressWindowFactory.Create();
+
                 try
                 {
-                    Model3DGroup loadedModel = LoadModelFromFile(filePath);
+                    Mouse.OverrideCursor = Cursors.Wait;
+
+                    progressWindow.SetWindowTitle("モデル読み込み中");
+                    progressWindow.Start();
+                    progressWindow.SetStatusText("3Dモデルを読み込んでいます...");
+
+                    Model3DGroup loadedModel = await Task.Run(() =>
+                        LoadModelFromFile(filePath, progressWindow));
 
                     var viewer = _viewerFactory.Create();
                     viewer.SetModel(loadedModel);
 
+                    progressWindow.End();
                     viewer.Show();
                 }
                 catch (Exception ex)
@@ -41,17 +56,27 @@ namespace DicomApp.MainUseCases.UseCases
                     MessageBox.Show($"モデルの読み込み中にエラーが発生しました: {ex.Message}",
                         "エラー",
                         MessageBoxButton.OK, MessageBoxImage.Error);
+                    Console.WriteLine($"詳細なエラー情報: {ex}");
+                }
+                finally
+                {
+                    progressWindow.End();
+                    Mouse.OverrideCursor = null;
                 }
             }
         }
 
-        private Model3DGroup LoadModelFromFile(string filePath)
+        private Model3DGroup LoadModelFromFile(string filePath,
+            IProgressWindow progressWindow)
         {
             var model = new Model3DGroup();
             using var reader = new StreamReader(filePath);
             var mesh = new MeshGeometry3D();
 
             string line;
+            long totalLines = File.ReadLines(filePath).Count();
+            long processedLines = 0;
+
             while ((line = reader.ReadLine()) != null)
             {
                 var parts = line.Split(' ');
@@ -68,12 +93,22 @@ namespace DicomApp.MainUseCases.UseCases
                     mesh.TriangleIndices.Add(int.Parse(parts[2]) - 1);
                     mesh.TriangleIndices.Add(int.Parse(parts[3]) - 1);
                 }
+
+                processedLines++;
+                if (processedLines % 1000 == 0 || processedLines == totalLines)
+                {
+                    double progress = (double)processedLines / totalLines * 100;
+                    progressWindow.SetProgress(progress);
+                    progressWindow.SetStatusText(
+                        $"3Dモデルを読み込んでいます... {processedLines}/{totalLines} 行");
+                }
             }
 
             var material =
                 new DiffuseMaterial(new SolidColorBrush(Colors.Gray));
             var geometryModel = new GeometryModel3D(mesh, material);
             model.Children.Add(geometryModel);
+            model.Freeze();
 
             return model;
         }

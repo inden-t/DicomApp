@@ -111,7 +111,7 @@ namespace DicomApp.WpfApp.ViewModels
             OpenDicomFolderCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteFolderAsync());
             LoadModelCommand.Subscribe(async _ =>
-                await loadModel3dUseCase.Execute());
+                await loadModel3dUseCase.ExecuteAsync());
 
             GeneratePointCloudCommand.Subscribe(
                 async () =>
