@@ -15,6 +15,8 @@ namespace DicomApp.WpfApp.ViewModels
 
         private DicomImage _image;
         private double _zoom = 1.0;
+        private double _viewerWidth;
+        private double _viewerHeight;
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
@@ -26,8 +28,25 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
 
-        public double ViewerWidth { get; private set; }
-        public double ViewerHeight { get; private set; }
+        public double ViewerWidth
+        {
+            get => _viewerWidth;
+            private set
+            {
+                _viewerWidth = value;
+                _overlayControlViewModel.ViewerWidth = value;
+            }
+        }
+
+        public double ViewerHeight
+        {
+            get => _viewerHeight;
+            private set
+            {
+                _viewerHeight = value;
+                _overlayControlViewModel.ViewerHeight = value;
+            }
+        }
 
         private BloodVessel3DRegion _selectedRegion = new();
 
@@ -89,8 +108,6 @@ namespace DicomApp.WpfApp.ViewModels
         {
             ViewerWidth = width;
             ViewerHeight = height;
-            _overlayControlViewModel.ViewerWidth = width;
-            _overlayControlViewModel.ViewerHeight = height;
             Render();
         }
 
