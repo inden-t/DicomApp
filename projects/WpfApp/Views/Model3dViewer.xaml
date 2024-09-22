@@ -15,10 +15,6 @@
               Click="SaveModel_Click"
               HorizontalAlignment="Left"
               Padding="3"/>
-      <Button Content="モデルを読み込む..."
-              Click="LoadModel_Click"
-              HorizontalAlignment="Left"
-              Padding="3"/>
     </StackPanel>
 
     <Grid Grid.Row="1"
