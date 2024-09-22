@@ -23,7 +23,7 @@ namespace DicomApp.WpfApp
     {
         private readonly IServiceProvider _serviceProvider;
 
-        private CommandFactory _commandFactory;
+        private DependencyInitializer _dependencyInitializer;
         private MainWindow _mainWindow;
 
         public App()
@@ -49,8 +49,8 @@ namespace DicomApp.WpfApp
             base.OnStartup(e);
 
             // コマンド設定
-            _commandFactory =
-                _serviceProvider.GetRequiredService<CommandFactory>();
+            _dependencyInitializer =
+                _serviceProvider.GetRequiredService<DependencyInitializer>();
 
             // MainWindow の設定と表示
             _mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
@@ -66,7 +66,7 @@ namespace DicomApp.WpfApp
         private void ConfigureServices(IServiceCollection services)
         {
             // クラスの登録
-            services.AddScoped<CommandFactory>();
+            services.AddScoped<DependencyInitializer>();
             services.AddScoped<MainWindow>();
             services
                 .AddScoped<IOpenDicomFilePresenter, OpenDicomFilePresenter>();

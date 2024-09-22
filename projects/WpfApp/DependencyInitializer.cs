@@ -6,9 +6,9 @@ using DicomApp.WpfApp.ViewModels;
 
 namespace DicomApp.WpfApp
 {
-    class CommandFactory
+    class DependencyInitializer
     {
-        public CommandFactory(MainWindowViewModel mainWindowViewModel,
+        public DependencyInitializer(MainWindowViewModel mainWindowViewModel,
             OpenDicomFileUseCase openDicomFileUseCase,
             LoadModel3dUseCase loadModel3dUseCase,
             GeneratePointCloudUseCase generatePointCloudUseCase,
