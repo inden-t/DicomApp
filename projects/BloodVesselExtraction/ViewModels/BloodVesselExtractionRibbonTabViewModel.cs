@@ -32,6 +32,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         public ReactiveProperty<bool> CanUndo { get; } = new(false);
         public ReactiveProperty<bool> CanRedo { get; } = new(false);
+        public ReactiveProperty<int> Threshold { get; } = new(220);
 
         public BloodVesselExtractionRibbonTabViewModel(
             SelectionOverlayControlViewModel overlayControlViewModel,
