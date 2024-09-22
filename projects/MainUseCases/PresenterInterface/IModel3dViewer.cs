@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Media.Media3D;
+﻿using System.Windows.Media.Media3D;
 
-namespace DicomApp.PresenterInterface
+namespace DicomApp.MainUseCases.PresenterInterface
 {
     public interface IModel3dViewer
     {

@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
+using DicomApp.MainUseCases.PresenterInterface;
 using DicomApp.PresenterInterface;
 
 namespace DicomApp.Views

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media.Media3D;
+﻿using System.Windows;
 using System.Windows.Media;
-using DicomApp.Algorithms;
+using System.Windows.Media.Media3D;
 using DicomApp.CoreModels.Models;
-using DicomApp.PresenterInterface;
+using DicomApp.MainUseCases.Algorithms;
+using DicomApp.MainUseCases.PresenterInterface;
 
-namespace DicomApp.UseCases
+namespace DicomApp.MainUseCases.UseCases
 {
     public class GenerateSurfaceModelLinearInterpolationUseCase
     {

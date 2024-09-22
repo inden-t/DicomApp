@@ -1,8 +1,8 @@
 ﻿using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using DicomApp.Algorithms;
 using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.CoreModels.Models;
+using DicomApp.MainUseCases.Algorithms;
 
 namespace DicomApp.BloodVesselExtraction.UseCases
 {

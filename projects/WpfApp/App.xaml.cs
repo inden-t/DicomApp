@@ -7,6 +7,8 @@ using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.BloodVesselExtraction.Views;
 using DicomApp.CoreModels.Models;
+using DicomApp.MainUseCases.PresenterInterface;
+using DicomApp.MainUseCases.UseCases;
 using DicomApp.Presenter;
 using DicomApp.PresenterInterface;
 using DicomApp.UseCases;

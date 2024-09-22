@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DicomApp.PresenterInterface
+﻿namespace DicomApp.MainUseCases.PresenterInterface
 {
     public interface IProgressWindow
     {
