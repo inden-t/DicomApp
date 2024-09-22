@@ -65,7 +65,7 @@
         <RibbonGroup Header="血管抽出">
           <StackPanel Orientation="Vertical"
                       IsEnabled="{Binding IsBloodVesselExtractionUiEnabled.Value}">
-            <TextBlock Text="{Binding ThresholdValue.Value, StringFormat=血管抽出のしきい値: {0}}"
+            <TextBlock Text="{Binding ThresholdValue.Value, StringFormat=血管抽出のしきい値: {0} / 255}"
                        Margin="0,0,0,5"/>
             <Slider Minimum="0"
                     Maximum="255"
