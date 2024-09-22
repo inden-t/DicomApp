@@ -35,11 +35,11 @@ namespace DicomApp.WpfApp.ViewModels
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
+            overlayControlViewModel.ScrollValue = ScrollValue;
 
             ScrollValue.Subscribe(value =>
             {
                 SwitchImageByIndexCommand.Execute(value);
-                _overlayControlViewModel.ScrollValue = value;
             });
         }
 
