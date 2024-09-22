@@ -120,9 +120,10 @@ namespace DicomApp.BloodVesselExtraction.Models
             return _selectedRegion;
         }
 
-        public void SetSelectedRegion(BloodVessel3DRegion region)
+        public void SetSelectedRegion(BloodVessel3DRegion region, int threshold)
         {
             _selectedRegion = region;
+            Threshold = threshold;
             SaveCurrentState();
         }
 
