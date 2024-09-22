@@ -44,6 +44,8 @@
                         Command="{Binding OpenDicomFileCommand}"/>
           <RibbonButton Label="フォルダーを開く..."
                         Command="{Binding OpenDicomFolderCommand}"/>
+          <RibbonButton Label="モデルを読み込む..."
+                        Command="{Binding LoadModelCommand}"/>
         </RibbonGroup>
 
         <RibbonGroup Header="ズーム操作">

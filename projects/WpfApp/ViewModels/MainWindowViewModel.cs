@@ -26,6 +26,7 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveCommand OpenDicomFileCommand { get; } = new();
         public ReactiveCommand OpenDicomFolderCommand { get; } = new();
+        public ReactiveCommand LoadModelCommand { get; } = new();
         public ReactiveCommand ExitCommand { get; } = new();
         public ReactiveCommand ZoomInCommand { get; } = new();
         public ReactiveCommand ZoomOutCommand { get; } = new();
@@ -97,6 +98,7 @@ namespace DicomApp.WpfApp.ViewModels
 
         public void InitializeDependencies(
             OpenDicomFileUseCase openDicomFileUseCase,
+            LoadModel3dUseCase loadModel3dUseCase,
             GeneratePointCloudUseCase generatePointCloudUseCase,
             GenerateSurfaceModelUseCase generateSurfaceModelUseCase,
             GenerateSurfaceModelLinearInterpolationUseCase
@@ -108,6 +110,8 @@ namespace DicomApp.WpfApp.ViewModels
                 await openDicomFileUseCase.ExecuteAsync());
             OpenDicomFolderCommand.Subscribe(async _ =>
                 await openDicomFileUseCase.ExecuteFolderAsync());
+            LoadModelCommand.Subscribe(async _ =>
+                await loadModel3dUseCase.Execute());
 
             GeneratePointCloudCommand.Subscribe(
                 async () =>

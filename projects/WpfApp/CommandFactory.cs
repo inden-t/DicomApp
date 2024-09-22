@@ -10,10 +10,9 @@ namespace DicomApp.WpfApp
     {
         public CommandFactory(MainWindowViewModel mainWindowViewModel,
             OpenDicomFileUseCase openDicomFileUseCase,
-            GeneratePointCloudUseCase
-                generatePointCloudUseCase,
-            GenerateSurfaceModelUseCase
-                generateSurfaceModelUseCase,
+            LoadModel3dUseCase loadModel3dUseCase,
+            GeneratePointCloudUseCase generatePointCloudUseCase,
+            GenerateSurfaceModelUseCase generateSurfaceModelUseCase,
             GenerateSurfaceModelLinearInterpolationUseCase
                 generateSurfaceModelLinearInterpolationUseCase,
             BloodVesselExtractionRibbonTabViewModel
@@ -24,7 +23,8 @@ namespace DicomApp.WpfApp
             SelectionOverlayControlViewModel selectionOverlayControlViewModel)
         {
             mainWindowViewModel.InitializeDependencies(openDicomFileUseCase,
-                generatePointCloudUseCase, generateSurfaceModelUseCase,
+                loadModel3dUseCase, generatePointCloudUseCase,
+                generateSurfaceModelUseCase,
                 generateSurfaceModelLinearInterpolationUseCase,
                 bloodVesselExtractionUseCase, select3DBloodVesselRegionUseCase);
 

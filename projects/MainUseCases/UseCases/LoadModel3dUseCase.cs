@@ -16,7 +16,7 @@ namespace DicomApp.MainUseCases.UseCases
             _viewer = viewer;
         }
 
-        public void Execute()
+        public async Task Execute()
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog
             {
@@ -31,6 +31,7 @@ namespace DicomApp.MainUseCases.UseCases
                 {
                     Model3DGroup loadedModel = LoadModelFromFile(filePath);
                     _viewer.SetModel(loadedModel);
+                    _viewer.Show();
                     MessageBox.Show($"モデルを {filePath} から読み込みました。", "読み込み完了",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
