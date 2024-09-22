@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Media.Media3D;
-using DicomApp.MainUseCases.PresenterInterface;
 
 namespace DicomApp.MainUseCases.UseCases
 {
