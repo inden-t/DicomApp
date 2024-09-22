@@ -22,9 +22,9 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 manageBloodVesselRegionPresenter;
         }
 
-        public void InitializeRegionSelection()
+        public void EndRegionSelection()
         {
-            _regionSelector.Initialize();
+            _regionSelector.EndSelection();
             var selectedRegion = _regionSelector.GetSelectedRegion();
             _manageBloodVesselRegionPresenter.InitializeRegionSelection(
                 selectedRegion);
@@ -72,11 +72,13 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 {
                     var selectedFile = saveFileDialog.FileName;
                     var selectedRegion = _regionSelector.GetSelectedRegion();
+                    var threshold = _regionSelector.Threshold;
 
-                    // 選択された領域をファイルに保存する
-                    SaveRegionToFile(selectedFile, selectedRegion);
+                    // 選択された領域としきい値をファイルに保存する
+                    SaveRegionToFile(selectedFile, selectedRegion, threshold);
 
-                    MessageBox.Show($"選択された領域を {selectedFile} に保存しました。", "保存完了",
+                    MessageBox.Show($"選択された領域としきい値を {selectedFile} に保存しました。",
+                        "保存完了",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -103,11 +105,13 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 {
                     var selectedFile = openFileDialog.FileName;
 
-                    // ファイルから領域を読み込む
-                    var loadedRegion = LoadRegionFromFile(selectedFile);
+                    // ファイルから領域としきい値を読み込む
+                    var (loadedRegion, loadedThreshold) =
+                        LoadRegionFromFile(selectedFile);
 
-                    // 読み込んだ領域を_regionSelectorに設定
-                    _regionSelector.SetSelectedRegion(loadedRegion);
+                    // 読み込んだ領域としきい値を_regionSelectorに設定
+                    _regionSelector.SetSelectedRegion(loadedRegion,
+                        loadedThreshold);
                 }
 
                 UpdateSelectedRegion();
@@ -121,11 +125,12 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         }
 
         private void SaveRegionToFile(string filePath,
-            BloodVessel3DRegion region)
+            BloodVessel3DRegion region, int threshold)
         {
-            // 選択された領域をファイルに保存する処理を実装
+            // 選択された領域としきい値をファイルに保存する処理を実装
             using var stream = new FileStream(filePath, FileMode.Create);
             using var writer = new BinaryWriter(stream);
+            writer.Write(threshold);
             writer.Write(region.SelectedVoxels.Count);
             foreach (var voxel in region.SelectedVoxels)
             {
@@ -135,13 +140,13 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             }
         }
 
-        private BloodVessel3DRegion LoadRegionFromFile(
-            string filePath)
+        private (BloodVessel3DRegion, int) LoadRegionFromFile(string filePath)
         {
             var region = new BloodVessel3DRegion();
 
             using var stream = new FileStream(filePath, FileMode.Open);
             using var reader = new BinaryReader(stream);
+            int threshold = reader.ReadInt32();
             int voxelCount = reader.ReadInt32();
             for (int i = 0; i < voxelCount; i++)
             {
@@ -151,7 +156,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 region.AddVoxel(new Point3D(x, y, z));
             }
 
-            return region;
+            return (region, threshold);
         }
 
         private void UpdateSelectedRegion()

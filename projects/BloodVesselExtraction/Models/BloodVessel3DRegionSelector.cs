@@ -16,12 +16,26 @@ namespace DicomApp.BloodVesselExtraction.Models
         public event EventHandler<UndoRedoStateChangedEventArgs>
             UndoRedoStateChanged;
 
+        public event EventHandler<int> ThresholdChanged;
+
         private readonly FileManager _fileManager;
         private BloodVessel3DRegion _selectedRegion;
 
         private List<byte[]> _renderedImages = new();
         private int _imageWidth;
         private int _imageHeight;
+
+        private int _threshold;
+
+        public int Threshold
+        {
+            get => _threshold;
+            private set
+            {
+                _threshold = value;
+                ThresholdChanged?.Invoke(this, value);
+            }
+        }
 
         private List<HashSet<(int X, int Y, int Z)>> _selectionHistory = new();
 
@@ -35,11 +49,28 @@ namespace DicomApp.BloodVesselExtraction.Models
 
         public void Initialize()
         {
+            Threshold = -1;
             _selectedRegion = new BloodVessel3DRegion();
             _renderedImages = new List<byte[]>();
             _selectionHistory = new List<HashSet<(int X, int Y, int Z)>>();
             SetCurrentHistoryIndex(-1);
             SaveCurrentState();
+        }
+
+        public void StartSelection(int threshold)
+        {
+            Initialize();
+            Threshold = threshold;
+            PreRenderImages();
+        }
+
+        public void EndSelection()
+        {
+            Threshold = -1;
+            _selectedRegion.Clear();
+            _renderedImages.Clear();
+            _selectionHistory.Clear();
+            SetCurrentHistoryIndex(-1);
         }
 
         private void SetCurrentHistoryIndex(int index)
@@ -101,9 +132,10 @@ namespace DicomApp.BloodVesselExtraction.Models
             return _selectedRegion;
         }
 
-        public void SetSelectedRegion(BloodVessel3DRegion region)
+        public void SetSelectedRegion(BloodVessel3DRegion region, int threshold)
         {
             _selectedRegion = region;
+            Threshold = threshold;
             SaveCurrentState();
         }
 
@@ -133,9 +165,9 @@ namespace DicomApp.BloodVesselExtraction.Models
         }
 
         // 3D塗りつぶし選択の実装
-        public void Select3DRegion(Point3D seedPoint, int threshold)
+        public void Select3DRegion(Point3D seedPoint)
         {
-            if (_fileManager.DicomFiles.Count == 0)
+            if (_fileManager.DicomFiles.Count == 0 || Threshold < 0)
             {
                 return;
             }
@@ -171,7 +203,7 @@ namespace DicomApp.BloodVesselExtraction.Models
                 int y = (int)current.Y;
                 int z = (int)current.Z;
 
-                if (GetVoxelIntensity(x, y, z) > threshold)
+                if (GetVoxelIntensity(x, y, z) > Threshold)
                 {
                     _selectedRegion.AddVoxel(current);
 
@@ -222,9 +254,9 @@ namespace DicomApp.BloodVesselExtraction.Models
             return pixels[index]; // Blue channel
         }
 
-        public void Select2DRegion(Point3D seedPoint, int threshold)
+        public void Select2DRegion(Point3D seedPoint)
         {
-            if (_renderedImages.Count == 0)
+            if (_renderedImages.Count == 0 || Threshold < 0)
             {
                 return;
             }
@@ -254,7 +286,7 @@ namespace DicomApp.BloodVesselExtraction.Models
                 x = current.X;
                 y = current.Y;
 
-                if (GetVoxelIntensity(x, y, z) > threshold)
+                if (GetVoxelIntensity(x, y, z) > Threshold)
                 {
                     _selectedRegion.AddVoxel(new Point3D(x, y, z));
 

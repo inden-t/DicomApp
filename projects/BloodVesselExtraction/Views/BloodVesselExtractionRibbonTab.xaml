@@ -129,4 +129,16 @@
     <RibbonButton Label="選択を破棄して終了"
                   Command="{Binding DiscardSelectionCommand}"/>
   </RibbonGroup>
+
+  <RibbonGroup Header="血管抽出のしきい値">
+    <StackPanel Orientation="Vertical">
+      <TextBlock Text="{Binding Threshold.Value, StringFormat=しきい値: {0} / 255}"
+                 Margin="0,0,0,5"/>
+      <ProgressBar Minimum="0"
+                   Maximum="255"
+                   Width="100"
+                   Height="16"
+                   Value="{Binding Threshold.Value, Mode=OneWay}"/>
+    </StackPanel>
+  </RibbonGroup>
 </RibbonTab>
