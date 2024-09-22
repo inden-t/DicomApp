@@ -1,7 +1,8 @@
 ﻿using System.Windows.Media.Media3D;
+using DicomApp.Models;
 using Point = System.Drawing.Point;
 
-namespace DicomApp.Models
+namespace DicomApp.BloodVesselExtraction.Models
 {
     public class UndoRedoStateChangedEventArgs(bool canUndo, bool canRedo)
         : EventArgs

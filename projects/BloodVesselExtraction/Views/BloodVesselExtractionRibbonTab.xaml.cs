@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls.Ribbon;
-using DicomApp.ViewModels;
+using DicomApp.BloodVesselExtraction.ViewModels;
 
-namespace DicomApp.Views
+namespace DicomApp.BloodVesselExtraction.Views
 {
     public partial class BloodVesselExtractionRibbonTab : RibbonTab
     {

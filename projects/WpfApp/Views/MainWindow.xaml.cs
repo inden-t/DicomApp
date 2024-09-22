@@ -2,6 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Data;
+using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.BloodVesselExtraction.Views;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Views

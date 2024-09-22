@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using DicomApp.Algorithms;
+using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.Models;
 
-namespace DicomApp.UseCases
+namespace DicomApp.BloodVesselExtraction.UseCases
 {
     public class BloodVesselSurfaceModelGenerator
     {

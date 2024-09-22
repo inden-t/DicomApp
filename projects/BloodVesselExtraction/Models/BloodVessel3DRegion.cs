@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Windows.Media.Media3D;
+﻿using System.Windows.Media.Media3D;
 
-namespace DicomApp.Models
+namespace DicomApp.BloodVesselExtraction.Models
 {
     public class BloodVessel3DRegion
     {

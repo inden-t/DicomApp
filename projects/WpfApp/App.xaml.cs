@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Windows;
+using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.Presenter;
+using DicomApp.BloodVesselExtraction.PresenterInterface;
+using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.BloodVesselExtraction.Views;
 using DicomApp.Models;
 using DicomApp.Presenter;
 using DicomApp.PresenterInterface;

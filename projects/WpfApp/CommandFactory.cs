@@ -1,4 +1,6 @@
 ﻿using System;
+using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.UseCases;
 using DicomApp.ViewModels;
 

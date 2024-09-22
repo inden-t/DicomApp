@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.Models;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;

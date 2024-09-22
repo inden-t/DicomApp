@@ -1,8 +1,9 @@
 ﻿using System.Windows;
+using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.Models;
 using DicomApp.PresenterInterface;
 
-namespace DicomApp.UseCases
+namespace DicomApp.BloodVesselExtraction.UseCases
 {
     public class BloodVesselExtractionUseCase
     {

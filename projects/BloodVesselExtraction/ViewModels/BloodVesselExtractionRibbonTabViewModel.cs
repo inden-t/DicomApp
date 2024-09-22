@@ -1,9 +1,8 @@
-﻿using System;
-using DicomApp.Models;
-using DicomApp.UseCases;
+﻿using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.UseCases;
 using Reactive.Bindings;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.BloodVesselExtraction.ViewModels
 {
     public class BloodVesselExtractionRibbonTabViewModel : ViewModelBase
     {

@@ -1,9 +1,8 @@
-﻿using System;
-using DicomApp.Models;
-using DicomApp.PresenterInterface;
-using DicomApp.ViewModels;
+﻿using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.PresenterInterface;
+using DicomApp.BloodVesselExtraction.ViewModels;
 
-namespace DicomApp.Presenter
+namespace DicomApp.BloodVesselExtraction.Presenter
 {
     public class
         ManageBloodVesselRegionPresenter : IManageBloodVesselRegionPresenter

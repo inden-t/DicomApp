@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DicomApp.BloodVesselExtraction.Views;
 using DicomApp.ViewModels;
 
 namespace DicomApp.Views

@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using DicomApp.ViewModels;
+using DicomApp.BloodVesselExtraction.ViewModels;
 
-namespace DicomApp.Views
+namespace DicomApp.BloodVesselExtraction.Views
 {
     public partial class SelectionOverlayControl : UserControl
     {
