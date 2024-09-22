@@ -59,5 +59,25 @@ namespace DicomApp.CoreModels.Models
 
             return _image;
         }
+
+        public double GetSliceLocation()
+        {
+            if (_dataset.Contains(DicomTag.SliceLocation))
+            {
+                return _dataset.GetSingleValue<double>(DicomTag.SliceLocation);
+            }
+            else if (_dataset.Contains(DicomTag.ImagePositionPatient))
+            {
+                // ImagePositionPatientの3番目の値（Z軸）をスライス位置として使用
+                var position =
+                    _dataset.GetValues<double>(DicomTag.ImagePositionPatient);
+                return position[2];
+            }
+            else
+            {
+                // スライス位置情報が見つからない場合は、適切なデフォルト値または例外処理を行う
+                return 0;
+            }
+        }
     }
 }

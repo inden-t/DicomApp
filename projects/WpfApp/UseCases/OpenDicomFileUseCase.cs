@@ -99,6 +99,8 @@ namespace DicomApp.WpfApp.UseCases
                 _progressWindow.Start();
 
                 int totalFiles = filePaths.Length;
+                var dicomFiles = new List<DICOMFile>();
+
                 for (int i = 0; i < totalFiles; i++)
                 {
                     string filePath = filePaths[i];
@@ -106,7 +108,7 @@ namespace DicomApp.WpfApp.UseCases
                     {
                         DICOMFile dicomFile = new DICOMFile(filePath);
                         await Task.Run(() => dicomFile.Load());
-                        _fileManager.AddFile(dicomFile);
+                        dicomFiles.Add(dicomFile);
 
                         double progress = (i + 1) / (double)totalFiles * 100;
                         _progressWindow.SetProgress(progress);
@@ -120,6 +122,17 @@ namespace DicomApp.WpfApp.UseCases
                             $"Error opening DICOM file: {ex.Message}", "Error",
                             MessageBoxButton.OK, MessageBoxImage.Error);
                     }
+                }
+
+                // スライス位置でソート
+                var sortedDicomFiles = dicomFiles
+                    .OrderBy(file => file.GetSliceLocation()).ToList();
+
+                // ソートされたファイルをFileManagerに追加
+                _fileManager.ClearFiles();
+                foreach (var dicomFile in sortedDicomFiles)
+                {
+                    _fileManager.AddFile(dicomFile);
                 }
 
                 if (_fileManager.DicomFiles.Count > 0)
