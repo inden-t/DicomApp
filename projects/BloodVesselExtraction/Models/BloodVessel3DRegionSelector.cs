@@ -42,6 +42,11 @@ namespace DicomApp.BloodVesselExtraction.Models
             SaveCurrentState();
         }
 
+        public void StartSelection()
+        {
+            Initialize();
+        }
+
         public void EndSelection()
         {
             _selectedRegion.Clear();
