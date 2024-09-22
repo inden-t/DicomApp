@@ -1,12 +1,10 @@
-﻿using Reactive.Bindings;
-
-namespace DicomApp.CoreModels.Models
+﻿namespace DicomApp.CoreModels.Models
 {
     public class FileManager
     {
         private readonly IImageCaches _imageCaches;
 
-        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
+        public List<DICOMFile> DicomFiles { get; } = new();
 
         public FileManager(IImageCaches imageCaches)
         {
