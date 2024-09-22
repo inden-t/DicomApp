@@ -197,5 +197,37 @@ namespace DicomApp.WpfApp.Views
             Canvas.SetLeft(CenterMark, center.X - CenterMark.Width / 2);
             Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
         }
+
+        private void SaveModel_Click(object sender, RoutedEventArgs e)
+        {
+            // モデル保存のロジックをここに実装
+            SaveModel();
+        }
+
+        private void SaveModel()
+        {
+            // モデルを保存するロジックを実装
+            // 例: ファイル保存ダイアログを表示し、選択されたパスにモデルを保存
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "3Dモデルファイル (*.obj)|*.obj|すべてのファイル (*.*)|*.*",
+                DefaultExt = ".obj"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+                // ここでモデルを実際に保存するメソッドを呼び出す
+                // 例: SaveModelToFile(filePath);
+                MessageBox.Show($"モデルを {filePath} に保存しました。", "保存完了",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        // private void SaveModelToFile(string filePath)
+        // {
+        //     // 実際のモデル保存ロジックをここに実装
+        //     // これは3Dモデルの形式やアプリケーションの要件に応じて異なります
+        // }
     }
 }
