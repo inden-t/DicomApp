@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Windows.Media;
 using System.Windows.Media.Media3D;
-using System.Windows.Media;
 
-namespace DicomApp.UseCases
+namespace DicomApp.MainUseCases.UseCases
 {
     // 簡単な球体を作成するヘルパークラス
     public class SphereBuilder

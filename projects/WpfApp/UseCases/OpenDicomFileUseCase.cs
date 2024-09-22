@@ -1,11 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
+using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.CoreModels.Models;
+using DicomApp.MainUseCases.PresenterInterface;
+using DicomApp.WpfApp.PresenterInterface;
 using Microsoft.Win32;
-using DicomApp.Models;
-using DicomApp.PresenterInterface;
 
-namespace DicomApp.UseCases
+namespace DicomApp.WpfApp.UseCases
 {
     public class OpenDicomFileUseCase
     {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using DicomApp.WpfUtilities.ViewModels;
 using Reactive.Bindings;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.WpfApp.ViewModels
 {
     public class ProgressWindowViewModel : ViewModelBase
     {

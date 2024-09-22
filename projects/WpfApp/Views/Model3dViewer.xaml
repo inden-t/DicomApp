@@ -1,4 +1,4 @@
-﻿<Window x:Class="DicomApp.Views.Model3dViewer"
+﻿<Window x:Class="DicomApp.WpfApp.Views.Model3dViewer"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Model 3D Viewer"

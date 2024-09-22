@@ -2,9 +2,11 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Data;
-using DicomApp.ViewModels;
+using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.BloodVesselExtraction.Views;
+using DicomApp.WpfApp.ViewModels;
 
-namespace DicomApp.Views
+namespace DicomApp.WpfApp.Views
 {
     public partial class MainWindow : RibbonWindow
     {

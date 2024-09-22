@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using DicomApp.ViewModels;
+using DicomApp.BloodVesselExtraction.Views;
+using DicomApp.WpfApp.ViewModels;
 
-namespace DicomApp.Views
+namespace DicomApp.WpfApp.Views
 {
     public partial class ImageViewer : UserControl
     {

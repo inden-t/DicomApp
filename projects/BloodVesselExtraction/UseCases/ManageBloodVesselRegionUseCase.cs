@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Media.Media3D;
-using DicomApp.Models;
-using DicomApp.PresenterInterface;
+using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.PresenterInterface;
 
-namespace DicomApp.UseCases
+namespace DicomApp.BloodVesselExtraction.UseCases
 {
     public class ManageBloodVesselRegionUseCase
     {

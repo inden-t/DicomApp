@@ -1,9 +1,8 @@
 ﻿using System.Windows;
-using DicomApp.PresenterInterface;
-using DicomApp.UseCases;
-using DicomApp.Views;
+using DicomApp.MainUseCases.PresenterInterface;
+using DicomApp.WpfApp.Views;
 
-namespace DicomApp.Presenter
+namespace DicomApp.WpfApp.Presenter
 {
     public class Model3dViewerFactory : IModel3dViewerFactory
     {

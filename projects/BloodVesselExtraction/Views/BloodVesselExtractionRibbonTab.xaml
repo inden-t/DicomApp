@@ -1,12 +1,12 @@
-﻿<RibbonTab x:Class="DicomApp.Views.BloodVesselExtractionRibbonTab"
+﻿<RibbonTab x:Class="DicomApp.BloodVesselExtraction.Views.BloodVesselExtractionRibbonTab"
            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-           xmlns:viewmodels="clr-namespace:DicomApp.ViewModels"
-           xmlns:converters="clr-namespace:DicomApp.Converters;assembly=WpfUtilities"
+           xmlns:viewModels="clr-namespace:DicomApp.BloodVesselExtraction.ViewModels"
+           xmlns:converters="clr-namespace:DicomApp.WpfUtilities.Converters;assembly=WpfUtilities"
            mc:Ignorable="d"
-           d:DataContext="{d:DesignInstance Type=viewmodels:BloodVesselExtractionRibbonTabViewModel}"
+           d:DataContext="{d:DesignInstance Type=viewModels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">
   <RibbonTab.Resources>
     <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>

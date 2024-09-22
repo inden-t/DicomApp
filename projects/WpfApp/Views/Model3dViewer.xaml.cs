@@ -2,9 +2,9 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
-using DicomApp.PresenterInterface;
+using DicomApp.MainUseCases.PresenterInterface;
 
-namespace DicomApp.Views
+namespace DicomApp.WpfApp.Views
 {
     public partial class Model3dViewer : Window, IModel3dViewer
     {

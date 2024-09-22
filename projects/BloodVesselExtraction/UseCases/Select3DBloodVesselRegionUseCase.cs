@@ -1,8 +1,8 @@
 ﻿using System.Windows.Media.Media3D;
-using DicomApp.Models;
-using DicomApp.PresenterInterface;
+using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.PresenterInterface;
 
-namespace DicomApp.UseCases
+namespace DicomApp.BloodVesselExtraction.UseCases
 {
     public class Select3DBloodVesselRegionUseCase
     {

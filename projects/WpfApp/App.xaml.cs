@@ -1,16 +1,23 @@
-﻿using System;
-using System.Windows;
-using DicomApp.Models;
-using DicomApp.Presenter;
-using DicomApp.PresenterInterface;
-using DicomApp.UseCases;
-using DicomApp.ViewModels;
-using DicomApp.Views;
+﻿using System.Windows;
+using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.Presenter;
+using DicomApp.BloodVesselExtraction.PresenterInterface;
+using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.BloodVesselExtraction.Views;
+using DicomApp.CoreModels.Models;
+using DicomApp.MainUseCases.PresenterInterface;
+using DicomApp.MainUseCases.UseCases;
+using DicomApp.WpfApp.Presenter;
+using DicomApp.WpfApp.PresenterInterface;
+using DicomApp.WpfApp.UseCases;
+using DicomApp.WpfApp.ViewModels;
+using DicomApp.WpfApp.Views;
 using FellowOakDicom;
 using FellowOakDicom.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DicomApp
+namespace DicomApp.WpfApp
 {
     public partial class App : Application
     {

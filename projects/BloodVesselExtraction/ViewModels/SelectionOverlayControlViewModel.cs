@@ -2,12 +2,13 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
-using Reactive.Bindings;
+using DicomApp.BloodVesselExtraction.Models;
+using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.WpfUtilities.ViewModels;
 using FellowOakDicom.Imaging;
-using DicomApp.Models;
-using DicomApp.UseCases;
+using Reactive.Bindings;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.BloodVesselExtraction.ViewModels
 {
     public enum SelectionMode
     {

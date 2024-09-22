@@ -1,4 +1,4 @@
-﻿namespace DicomApp.Models
+﻿namespace DicomApp.CoreModels.Models
 {
     public interface IImageCaches
     {

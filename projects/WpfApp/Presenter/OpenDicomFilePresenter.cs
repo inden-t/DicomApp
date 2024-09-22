@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using DicomApp.PresenterInterface;
-using DicomApp.ViewModels;
+﻿using System.Collections.ObjectModel;
+using DicomApp.CoreModels.Models;
+using DicomApp.WpfApp.PresenterInterface;
+using DicomApp.WpfApp.ViewModels;
 
-namespace DicomApp.Presenter
+namespace DicomApp.WpfApp.Presenter
 {
     class OpenDicomFilePresenter : IOpenDicomFilePresenter
     {
