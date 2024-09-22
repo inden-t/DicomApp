@@ -16,6 +16,8 @@ namespace DicomApp.BloodVesselExtraction.Models
         public event EventHandler<UndoRedoStateChangedEventArgs>
             UndoRedoStateChanged;
 
+        public event EventHandler<int> ThresholdChanged;
+
         private readonly FileManager _fileManager;
         private BloodVessel3DRegion _selectedRegion;
 
@@ -23,7 +25,17 @@ namespace DicomApp.BloodVesselExtraction.Models
         private int _imageWidth;
         private int _imageHeight;
 
-        public int Threshold { get; private set; }
+        private int _threshold;
+
+        public int Threshold
+        {
+            get => _threshold;
+            private set
+            {
+                _threshold = value;
+                ThresholdChanged?.Invoke(this, value);
+            }
+        }
 
         private List<HashSet<(int X, int Y, int Z)>> _selectionHistory = new();
 

@@ -45,6 +45,10 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                 CanUndo.Value = e.CanUndo;
                 CanRedo.Value = e.CanRedo;
             };
+            _regionSelector.ThresholdChanged += (sender, threshold) =>
+            {
+                Threshold.Value = threshold;
+            };
 
             Execute3DFillSelectionCommand.Subscribe(() =>
             {
