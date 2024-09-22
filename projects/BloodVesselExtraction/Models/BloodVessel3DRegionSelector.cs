@@ -23,6 +23,8 @@ namespace DicomApp.BloodVesselExtraction.Models
         private int _imageWidth;
         private int _imageHeight;
 
+        public int Threshold { get; set; }
+
         private List<HashSet<(int X, int Y, int Z)>> _selectionHistory = new();
 
         private int _currentHistoryIndex = -1;
@@ -30,6 +32,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         public BloodVessel3DRegionSelector(FileManager fileManager)
         {
             _fileManager = fileManager;
+            Threshold = 220; // デフォルト値
             Initialize();
         }
 
@@ -146,7 +149,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         }
 
         // 3D塗りつぶし選択の実装
-        public void Select3DRegion(Point3D seedPoint, int threshold)
+        public void Select3DRegion(Point3D seedPoint)
         {
             if (_fileManager.DicomFiles.Count == 0)
             {
@@ -184,7 +187,7 @@ namespace DicomApp.BloodVesselExtraction.Models
                 int y = (int)current.Y;
                 int z = (int)current.Z;
 
-                if (GetVoxelIntensity(x, y, z) > threshold)
+                if (GetVoxelIntensity(x, y, z) > Threshold)
                 {
                     _selectedRegion.AddVoxel(current);
 
@@ -235,7 +238,7 @@ namespace DicomApp.BloodVesselExtraction.Models
             return pixels[index]; // Blue channel
         }
 
-        public void Select2DRegion(Point3D seedPoint, int threshold)
+        public void Select2DRegion(Point3D seedPoint)
         {
             if (_renderedImages.Count == 0)
             {
@@ -267,7 +270,7 @@ namespace DicomApp.BloodVesselExtraction.Models
                 x = current.X;
                 y = current.Y;
 
-                if (GetVoxelIntensity(x, y, z) > threshold)
+                if (GetVoxelIntensity(x, y, z) > Threshold)
                 {
                     _selectedRegion.AddVoxel(new Point3D(x, y, z));
 
