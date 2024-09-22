@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media.Imaging;
 using DicomApp.CoreModels.Models;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.WpfApp.ViewModels
 {
     public class ImageCaches : IImageCaches
     {

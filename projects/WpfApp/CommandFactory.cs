@@ -1,11 +1,10 @@
-﻿using System;
-using DicomApp.BloodVesselExtraction.UseCases;
+﻿using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.MainUseCases.UseCases;
-using DicomApp.UseCases;
-using DicomApp.ViewModels;
+using DicomApp.WpfApp.UseCases;
+using DicomApp.WpfApp.ViewModels;
 
-namespace DicomApp
+namespace DicomApp.WpfApp
 {
     class CommandFactory
     {

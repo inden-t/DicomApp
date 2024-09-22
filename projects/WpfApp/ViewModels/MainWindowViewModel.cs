@@ -1,13 +1,12 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.CoreModels.Models;
 using DicomApp.MainUseCases.UseCases;
-using DicomApp.UseCases;
+using DicomApp.WpfApp.UseCases;
 using Reactive.Bindings;
 
-namespace DicomApp.ViewModels
+namespace DicomApp.WpfApp.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

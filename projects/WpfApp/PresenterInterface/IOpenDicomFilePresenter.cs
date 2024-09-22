@@ -1,7 +1,6 @@
-﻿using System;
-using DicomApp.CoreModels.Models;
+﻿using DicomApp.CoreModels.Models;
 
-namespace DicomApp.PresenterInterface
+namespace DicomApp.WpfApp.PresenterInterface
 {
     public interface IOpenDicomFilePresenter
     {

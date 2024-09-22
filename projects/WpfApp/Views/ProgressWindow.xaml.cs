@@ -1,10 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using DicomApp.MainUseCases.PresenterInterface;
-using DicomApp.PresenterInterface;
-using DicomApp.ViewModels;
+using DicomApp.WpfApp.ViewModels;
 
-namespace DicomApp.Views
+namespace DicomApp.WpfApp.Views
 {
     public partial class ProgressWindow : Window, IProgressWindow
     {
