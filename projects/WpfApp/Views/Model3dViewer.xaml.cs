@@ -209,8 +209,8 @@ namespace DicomApp.WpfApp.Views
 
         private void LoadModel_Click(object sender, RoutedEventArgs e)
         {
-            var loadModel3dUseCase = new LoadModel3dUseCase(this);
-            loadModel3dUseCase.Execute();
+            //var loadModel3dUseCase = new LoadModel3dUseCase();
+            //loadModel3dUseCase.Execute();
         }
     }
 }

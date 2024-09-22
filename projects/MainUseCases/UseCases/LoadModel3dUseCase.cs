@@ -9,11 +9,11 @@ namespace DicomApp.MainUseCases.UseCases
 {
     public class LoadModel3dUseCase
     {
-        private readonly IModel3dViewer _viewer;
+        private readonly IModel3dViewerFactory _viewerFactory;
 
-        public LoadModel3dUseCase(IModel3dViewer viewer)
+        public LoadModel3dUseCase(IModel3dViewerFactory viewerFactory)
         {
-            _viewer = viewer;
+            _viewerFactory = viewerFactory;
         }
 
         public async Task Execute()
@@ -30,10 +30,11 @@ namespace DicomApp.MainUseCases.UseCases
                 try
                 {
                     Model3DGroup loadedModel = LoadModelFromFile(filePath);
-                    _viewer.SetModel(loadedModel);
-                    _viewer.Show();
-                    MessageBox.Show($"モデルを {filePath} から読み込みました。", "読み込み完了",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    var viewer = _viewerFactory.Create();
+                    viewer.SetModel(loadedModel);
+
+                    viewer.Show();
                 }
                 catch (Exception ex)
                 {
