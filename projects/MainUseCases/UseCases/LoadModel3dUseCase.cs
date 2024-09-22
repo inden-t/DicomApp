@@ -104,14 +104,29 @@ namespace DicomApp.MainUseCases.UseCases
                 }
             }
 
-            var material =
-                new DiffuseMaterial(new SolidColorBrush(Colors.Gray));
-            var geometryModel = new GeometryModel3D(mesh, material);
+            var materialGroup = new MaterialGroup();
+
+            // 拡散反射（基本的な色と陰影）
+            materialGroup.Children.Add(
+                new DiffuseMaterial(
+                    new SolidColorBrush(Color.FromRgb(200, 0, 0))));
+
+            // 鏡面反射（ハイライト）
+            materialGroup.Children.Add(new SpecularMaterial(
+                new SolidColorBrush(Color.FromArgb(100, 255, 100, 100)), 10));
+
+            var geometryModel = new GeometryModel3D(mesh, materialGroup);
 
             // 両面レンダリングを有効にする
-            geometryModel.BackMaterial = material;
+            geometryModel.BackMaterial = materialGroup;
+
+            // 光源を追加
+            var directionalLight =
+                new DirectionalLight(Color.FromRgb(200, 200, 200),
+                    new Vector3D(-1, -1, -1));
 
             model.Children.Add(geometryModel);
+            model.Children.Add(directionalLight);
             model.Freeze();
 
             return model;
