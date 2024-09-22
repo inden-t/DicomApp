@@ -42,6 +42,14 @@ namespace DicomApp.BloodVesselExtraction.Models
             SaveCurrentState();
         }
 
+        public void EndSelection()
+        {
+            _selectedRegion.Clear();
+            _renderedImages.Clear();
+            _selectionHistory.Clear();
+            SetCurrentHistoryIndex(-1);
+        }
+
         private void SetCurrentHistoryIndex(int index)
         {
             _currentHistoryIndex = index;
