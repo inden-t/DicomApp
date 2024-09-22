@@ -1,8 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace DicomApp.Converters
+namespace DicomApp.WpfUtilities.Converters
 {
     public class InverseBooleanConverter : IValueConverter
     {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reactive.Disposables;
-using Prism.Mvvm;
+﻿using System.Reactive.Disposables;
 
-namespace DicomApp
+namespace DicomApp.WpfUtilities.ViewModels
 {
     public abstract class ViewModelBase : BindableBase, IDisposable
     {

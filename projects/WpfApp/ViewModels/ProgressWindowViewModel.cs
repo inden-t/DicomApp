@@ -1,4 +1,5 @@
-﻿using Reactive.Bindings;
+﻿using DicomApp.WpfUtilities.ViewModels;
+using Reactive.Bindings;
 
 namespace DicomApp.WpfApp.ViewModels
 {

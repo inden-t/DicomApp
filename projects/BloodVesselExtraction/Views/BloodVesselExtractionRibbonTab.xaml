@@ -4,7 +4,7 @@
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:viewModels="clr-namespace:DicomApp.BloodVesselExtraction.ViewModels"
-           xmlns:converters="clr-namespace:DicomApp.Converters;assembly=WpfUtilities"
+           xmlns:converters="clr-namespace:DicomApp.WpfUtilities.Converters;assembly=WpfUtilities"
            mc:Ignorable="d"
            d:DataContext="{d:DesignInstance Type=viewModels:BloodVesselExtractionRibbonTabViewModel}"
            Header="血管抽出">

@@ -1,5 +1,6 @@
 ﻿using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.UseCases;
+using DicomApp.WpfUtilities.ViewModels;
 using Reactive.Bindings;
 
 namespace DicomApp.BloodVesselExtraction.ViewModels
