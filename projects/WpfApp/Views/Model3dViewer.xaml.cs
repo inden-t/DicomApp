@@ -16,6 +16,7 @@ namespace DicomApp.WpfApp.Views
         private Point3D _modelCenter;
         private double _cameraDistance;
         private readonly SaveModel3dUseCase _saveModel3dUseCase = new();
+        private Model3DGroup _currentModel;
 
         public Model3dViewer()
         {
@@ -35,6 +36,7 @@ namespace DicomApp.WpfApp.Views
 
         public void SetModel(Model3DGroup model)
         {
+            _currentModel = model;
             model3DGroup.Children.Clear();
             model3DGroup.Children.Add(model);
 
@@ -202,7 +204,7 @@ namespace DicomApp.WpfApp.Views
 
         private void SaveModel_Click(object sender, RoutedEventArgs e)
         {
-            _saveModel3dUseCase.Execute(model3DGroup);
+            _saveModel3dUseCase.Execute(_currentModel);
         }
     }
 }

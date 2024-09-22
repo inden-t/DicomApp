@@ -47,32 +47,28 @@ namespace DicomApp.MainUseCases.UseCases
             {
                 foreach (var model3D in model.Children)
                 {
-                    if (model3D is Model3DGroup model3DG)
-                        foreach (var model3D2 in model3DG.Children)
+                    if (model3D is GeometryModel3D geometryModel)
+                    {
+                        if (geometryModel.Geometry is MeshGeometry3D
+                            mesh)
                         {
-                            if (model3D2 is GeometryModel3D geometryModel)
+                            // 頂点を書き込む
+                            foreach (Point3D point in mesh.Positions)
                             {
-                                if (geometryModel.Geometry is MeshGeometry3D
-                                    mesh)
-                                {
-                                    // 頂点を書き込む
-                                    foreach (Point3D point in mesh.Positions)
-                                    {
-                                        writer.WriteLine(
-                                            $"v {point.X} {point.Y} {point.Z}");
-                                    }
+                                writer.WriteLine(
+                                    $"v {point.X} {point.Y} {point.Z}");
+                            }
 
-                                    // 面を書き込む
-                                    for (int i = 0;
-                                         i < mesh.TriangleIndices.Count;
-                                         i += 3)
-                                    {
-                                        writer.WriteLine(
-                                            $"f {mesh.TriangleIndices[i] + 1} {mesh.TriangleIndices[i + 1] + 1} {mesh.TriangleIndices[i + 2] + 1}");
-                                    }
-                                }
+                            // 面を書き込む
+                            for (int i = 0;
+                                 i < mesh.TriangleIndices.Count;
+                                 i += 3)
+                            {
+                                writer.WriteLine(
+                                    $"f {mesh.TriangleIndices[i] + 1} {mesh.TriangleIndices[i + 1] + 1} {mesh.TriangleIndices[i + 2] + 1}");
                             }
                         }
+                    }
                 }
             }
         }
