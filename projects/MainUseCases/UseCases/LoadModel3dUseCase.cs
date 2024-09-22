@@ -107,6 +107,10 @@ namespace DicomApp.MainUseCases.UseCases
             var material =
                 new DiffuseMaterial(new SolidColorBrush(Colors.Gray));
             var geometryModel = new GeometryModel3D(mesh, material);
+
+            // 両面レンダリングを有効にする
+            geometryModel.BackMaterial = material;
+
             model.Children.Add(geometryModel);
             model.Freeze();
 
