@@ -28,6 +28,16 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
 
+        public double Zoom
+        {
+            get => _zoom;
+            private set
+            {
+                _zoom = value;
+                _overlayControlViewModel.Zoom = value;
+            }
+        }
+
         public double ViewerWidth
         {
             get => _viewerWidth;
@@ -80,22 +90,20 @@ namespace DicomApp.WpfApp.ViewModels
             MaximumScrollValue.Value = value;
         }
 
-        public bool Zoom(double factor)
+        public bool SetZoomValue(double factor)
 
         {
             bool isZoomed = false;
 
-            double newZoom = _zoom * factor;
-            if ((_zoom < 1 && newZoom > 1) || (_zoom > 1 && newZoom < 1))
+            double newZoom = Zoom * factor;
+            if ((Zoom < 1 && newZoom > 1) || (Zoom > 1 && newZoom < 1))
             {
-                _zoom = 1;
-                _overlayControlViewModel.Zoom = 1;
+                Zoom = 1;
                 isZoomed = true;
             }
             else if (newZoom <= 10)
             {
-                _zoom = newZoom;
-                _overlayControlViewModel.Zoom = newZoom;
+                Zoom = newZoom;
                 isZoomed = true;
             }
 
@@ -128,7 +136,7 @@ namespace DicomApp.WpfApp.ViewModels
 
             // 拡大倍率を適用
             var scaledBitmap = new TransformedBitmap(bitmapImage,
-                new ScaleTransform(scale * _zoom, scale * _zoom));
+                new ScaleTransform(scale * Zoom, scale * Zoom));
 
             BitmapSourceImage.Value = scaledBitmap;
 
