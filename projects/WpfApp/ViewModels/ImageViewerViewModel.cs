@@ -1,6 +1,5 @@
 ﻿using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.CoreModels.Models;
 using DicomApp.WpfUtilities.ViewModels;
@@ -56,8 +55,6 @@ namespace DicomApp.WpfApp.ViewModels
                 _overlayControlViewModel.ViewerHeight = value;
             }
         }
-
-        private BloodVessel3DRegion _selectedRegion = new();
 
         public ImageViewerViewModel(
             SelectionOverlayControlViewModel overlayControlViewModel)
