@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.BloodVesselExtraction.ViewModels;
-using DicomApp.CoreModels.Models;
 using DicomApp.MainUseCases.UseCases;
 using DicomApp.WpfApp.UseCases;
 using DicomApp.WpfUtilities.ViewModels;
@@ -74,13 +73,6 @@ namespace DicomApp.WpfApp.ViewModels
                 SwitchImageByOffset(offset));
 
             SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
-
-            // DicomFilesの値が変更されたときにMaximumScrollValueを更新する
-            _imageViewerViewModel.DicomFiles.CollectionChanged += (sender, e) =>
-            {
-                _imageViewerViewModel.SetMaximumScrollValue(
-                    _imageViewerViewModel.DicomFiles.Count - 1);
-            };
 
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {

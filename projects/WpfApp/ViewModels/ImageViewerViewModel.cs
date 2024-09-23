@@ -69,6 +69,11 @@ namespace DicomApp.WpfApp.ViewModels
             _overlayControlViewModel = overlayControlViewModel;
             _overlayControlViewModel.ScrollValue = ScrollValue;
 
+            DicomFiles.CollectionChanged += (sender, e) =>
+            {
+                MaximumScrollValue.Value = DicomFiles.Count - 1;
+            };
+
             ScrollValue.Subscribe(value =>
             {
                 SwitchImageByIndexCommand.Execute(value);
@@ -86,11 +91,6 @@ namespace DicomApp.WpfApp.ViewModels
             _image = image;
             _overlayControlViewModel.SetImage(image);
             Render();
-        }
-
-        public void SetMaximumScrollValue(int value)
-        {
-            MaximumScrollValue.Value = value;
         }
 
         public bool SetZoomValue(double factor)
