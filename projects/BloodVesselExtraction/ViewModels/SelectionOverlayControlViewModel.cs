@@ -5,7 +5,6 @@ using System.Windows.Media.Media3D;
 using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.WpfUtilities.ViewModels;
-using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
 namespace DicomApp.BloodVesselExtraction.ViewModels
@@ -23,6 +22,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
     {
         private WriteableBitmap _bitmapImage;
         private BloodVessel3DRegion _selectedRegion = new();
+        private Dictionary<int, WriteableBitmap> _overlayBitmaps = new();
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
@@ -87,6 +87,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
         public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
         {
             _selectedRegion = selectedRegion;
+            _overlayBitmaps.Clear();
             UpdateSelectedRegion();
         }
 
@@ -95,37 +96,45 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
             if (_bitmapImage == null || _selectedRegion == null)
                 return;
 
-            // 新しいWriteableBitmapを作成し、透明な背景で初期化
-            var overlayBitmap = new WriteableBitmap(_bitmapImage.PixelWidth,
-                _bitmapImage.PixelHeight, _bitmapImage.DpiX, _bitmapImage.DpiY,
-                PixelFormats.Bgra32, null);
-            var stride = overlayBitmap.PixelWidth * 4;
-            var pixels = new byte[overlayBitmap.PixelHeight * stride];
+            int currentSlice = SliceIndex.Value;
 
-
-            // 選択された領域を描画
-            foreach (var point in _selectedRegion.SelectedVoxels)
+            if (!_overlayBitmaps.TryGetValue(currentSlice,
+                    out var overlayBitmap))
             {
-                if (point.Z == SliceIndex.Value) // 現在のスライスのみ描画
+                // 現在のスライスのoverlayBitmapがキャッシュにない場合、新しく作成
+                overlayBitmap = new WriteableBitmap(_bitmapImage.PixelWidth,
+                    _bitmapImage.PixelHeight, _bitmapImage.DpiX,
+                    _bitmapImage.DpiY, PixelFormats.Bgra32, null);
+                var stride = overlayBitmap.PixelWidth * 4;
+                var pixels = new byte[overlayBitmap.PixelHeight * stride];
+
+                // 選択された領域を描画
+                foreach (var point in _selectedRegion.SelectedVoxels)
                 {
-                    int x = (int)point.X;
-                    int y = (int)point.Y;
-                    if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
-                        y < overlayBitmap.PixelHeight)
+                    if (point.Z == currentSlice) // 現在のスライスのみ描画
                     {
-                        int index = y * stride + x * 4;
-                        pixels[index] = 0; // Blue
-                        pixels[index + 1] = 0; // Green
-                        pixels[index + 2] = 255; // Red
-                        pixels[index + 3] = 128; // Alpha (半透明)
+                        int x = (int)point.X;
+                        int y = (int)point.Y;
+                        if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
+                            y < overlayBitmap.PixelHeight)
+                        {
+                            int index = y * stride + x * 4;
+                            pixels[index] = 0; // Blue
+                            pixels[index + 1] = 0; // Green
+                            pixels[index + 2] = 255; // Red
+                            pixels[index + 3] = 128; // Alpha (半透明)
+                        }
                     }
                 }
-            }
 
-            // ピクセルデータをWriteableBitmapに書き込む
-            overlayBitmap.WritePixels(
-                new Int32Rect(0, 0, overlayBitmap.PixelWidth,
-                    overlayBitmap.PixelHeight), pixels, stride, 0);
+                // ピクセルデータをWriteableBitmapに書き込む
+                overlayBitmap.WritePixels(
+                    new Int32Rect(0, 0, overlayBitmap.PixelWidth,
+                        overlayBitmap.PixelHeight), pixels, stride, 0);
+
+                // キャッシュに保存
+                _overlayBitmaps[currentSlice] = overlayBitmap;
+            }
 
             // 枠に対するサイズを計算
             // 枠からはみ出ないように枠サイズの小数を切り捨てる
