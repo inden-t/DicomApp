@@ -30,8 +30,6 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveCommand<int> SwitchImageByIndexCommand { get; } = new();
 
-        public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
-
         public double Zoom
         {
             get => _zoom;
@@ -78,21 +76,12 @@ namespace DicomApp.WpfApp.ViewModels
             SwitchImageByIndexCommand.Subscribe(index =>
                 SwitchImageByIndex(index));
 
-            SwitchImageByOffsetCommand.Subscribe(offset =>
-                SwitchImageByOffset2(offset));
-
             ScrollValue.Subscribe(value =>
             {
                 SwitchImageByIndexCommand.Execute(value);
             });
 
             SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
-        }
-
-        public void SwitchImageByOffset(int offset)
-        {
-            // MainWindowViewModelに画像切り替えを通知
-            SwitchImageByOffsetCommand.Execute(offset);
         }
 
         private void SwitchImageByIndex(int index)
@@ -103,7 +92,7 @@ namespace DicomApp.WpfApp.ViewModels
             }
         }
 
-        private void SwitchImageByOffset2(int offset)
+        public void SwitchImageByOffset(int offset)
         {
             if (DicomFiles.Count == 0) return;
 
