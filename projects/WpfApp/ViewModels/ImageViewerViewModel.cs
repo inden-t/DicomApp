@@ -5,7 +5,6 @@ using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.CoreModels.Models;
 using DicomApp.WpfUtilities.ViewModels;
-using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
 namespace DicomApp.WpfApp.ViewModels
