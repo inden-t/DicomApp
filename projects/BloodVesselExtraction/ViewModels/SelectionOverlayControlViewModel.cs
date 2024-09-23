@@ -5,7 +5,6 @@ using System.Windows.Media.Media3D;
 using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.WpfUtilities.ViewModels;
-using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
 namespace DicomApp.BloodVesselExtraction.ViewModels
@@ -21,8 +20,10 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
     public class SelectionOverlayControlViewModel : ViewModelBase
     {
-        private WriteableBitmap _bitmapImage;
         private BloodVessel3DRegion _selectedRegion = new();
+
+        private readonly Dictionary<int, WriteableBitmap> _overlayBitmaps =
+            new();
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
@@ -41,6 +42,12 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
         public ReactiveProperty<int> SliceIndex { get; set; } = new();
         public double Zoom { get; set; } = 1.0;
 
+        public Func<int, WriteableBitmap?> GetSliceImage { get; set; } =
+            _ => null;
+
+        public WriteableBitmap? CurrentSliceImage =>
+            GetSliceImage(SliceIndex.Value);
+
         public void InitializeDependencies(
             Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
         {
@@ -50,8 +57,12 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         public void OnClick(double relativeX, double relativeY)
         {
-            Point3D seedPoint = new Point3D(relativeX * _bitmapImage.PixelWidth,
-                relativeY * _bitmapImage.PixelHeight, SliceIndex.Value);
+            var currentSliceImage = CurrentSliceImage;
+            if (currentSliceImage == null) return;
+
+            Point3D seedPoint = new Point3D(
+                relativeX * currentSliceImage.PixelWidth,
+                relativeY * currentSliceImage.PixelHeight, SliceIndex.Value);
 
             if (CurrentSelectionMode.Value ==
                 SelectionMode.Fill3DSelection)
@@ -79,55 +90,22 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
             }
         }
 
-        public void SetImage(DicomImage image)
-        {
-            var renderedImage = image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
-            _bitmapImage = bitmapImage;
-        }
 
         public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
         {
             _selectedRegion = selectedRegion;
+            _overlayBitmaps.Clear();
             UpdateSelectedRegion();
         }
 
         public void UpdateSelectedRegion()
         {
-            if (_bitmapImage == null || _selectedRegion == null)
+            if (_selectedRegion == null)
                 return;
 
-            // 新しいWriteableBitmapを作成し、透明な背景で初期化
-            var overlayBitmap = new WriteableBitmap(_bitmapImage.PixelWidth,
-                _bitmapImage.PixelHeight, _bitmapImage.DpiX, _bitmapImage.DpiY,
-                PixelFormats.Bgra32, null);
-            var stride = overlayBitmap.PixelWidth * 4;
-            var pixels = new byte[overlayBitmap.PixelHeight * stride];
-
-
-            // 選択された領域を描画
-            foreach (var point in _selectedRegion.SelectedVoxels)
-            {
-                if (point.Z == SliceIndex.Value) // 現在のスライスのみ描画
-                {
-                    int x = (int)point.X;
-                    int y = (int)point.Y;
-                    if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
-                        y < overlayBitmap.PixelHeight)
-                    {
-                        int index = y * stride + x * 4;
-                        pixels[index] = 0; // Blue
-                        pixels[index + 1] = 0; // Green
-                        pixels[index + 2] = 255; // Red
-                        pixels[index + 3] = 128; // Alpha (半透明)
-                    }
-                }
-            }
-
-            // ピクセルデータをWriteableBitmapに書き込む
-            overlayBitmap.WritePixels(
-                new Int32Rect(0, 0, overlayBitmap.PixelWidth,
-                    overlayBitmap.PixelHeight), pixels, stride, 0);
+            int currentSlice = SliceIndex.Value;
+            var overlayBitmap = GetOverlayBitmap(currentSlice);
+            if (overlayBitmap == null) return;
 
             // 枠に対するサイズを計算
             // 枠からはみ出ないように枠サイズの小数を切り捨てる
@@ -142,6 +120,52 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
             // OverlayImageSourceを更新
             OverlaySource.Value = scaledBitmap;
+        }
+
+        private WriteableBitmap? GetOverlayBitmap(int sliceIndex)
+        {
+            if (!_overlayBitmaps.TryGetValue(sliceIndex, out var overlayBitmap))
+            {
+                var currentSliceImage = GetSliceImage(sliceIndex);
+                if (currentSliceImage == null) return null;
+
+                // 現在のスライスのoverlayBitmapがキャッシュにない場合、新しく作成
+                overlayBitmap = new WriteableBitmap(
+                    currentSliceImage.PixelWidth, currentSliceImage.PixelHeight,
+                    currentSliceImage.DpiX, currentSliceImage.DpiY,
+                    PixelFormats.Bgra32, null);
+                var stride = overlayBitmap.PixelWidth * 4;
+                var pixels = new byte[overlayBitmap.PixelHeight * stride];
+
+                // 選択された領域を描画
+                foreach (var point in _selectedRegion.SelectedVoxels)
+                {
+                    if (point.Z == sliceIndex) // 現在のスライスのみ描画
+                    {
+                        int x = point.X;
+                        int y = point.Y;
+                        if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
+                            y < overlayBitmap.PixelHeight)
+                        {
+                            int index = y * stride + x * 4;
+                            pixels[index] = 0; // Blue
+                            pixels[index + 1] = 0; // Green
+                            pixels[index + 2] = 255; // Red
+                            pixels[index + 3] = 128; // Alpha (半透明)
+                        }
+                    }
+                }
+
+                // ピクセルデータをWriteableBitmapに書き込む
+                overlayBitmap.WritePixels(
+                    new Int32Rect(0, 0, overlayBitmap.PixelWidth,
+                        overlayBitmap.PixelHeight), pixels, stride, 0);
+
+                // キャッシュに保存
+                _overlayBitmaps[sliceIndex] = overlayBitmap;
+            }
+
+            return overlayBitmap;
         }
     }
 }

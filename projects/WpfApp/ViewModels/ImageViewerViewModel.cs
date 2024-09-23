@@ -1,9 +1,10 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.CoreModels.Models;
 using DicomApp.WpfUtilities.ViewModels;
-using FellowOakDicom.Imaging;
 using Reactive.Bindings;
 
 namespace DicomApp.WpfApp.ViewModels
@@ -13,10 +14,11 @@ namespace DicomApp.WpfApp.ViewModels
         private readonly SelectionOverlayControlViewModel
             _overlayControlViewModel;
 
-        private DicomImage _image;
         private double _zoom = 1.0;
         private double _viewerWidth;
         private double _viewerHeight;
+
+        private readonly Dictionary<int, WriteableBitmap> _bitmapCache = new();
 
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
@@ -61,13 +63,22 @@ namespace DicomApp.WpfApp.ViewModels
         {
             _overlayControlViewModel = overlayControlViewModel;
             _overlayControlViewModel.SliceIndex = SelectedFileIndex;
+            _overlayControlViewModel.GetSliceImage = GetBitmapImage;
 
             DicomFiles.CollectionChanged += (sender, e) =>
             {
                 MaximumScrollValue.Value = DicomFiles.Count - 1;
             };
 
-            SelectedFileIndex.Subscribe(index => ChangeDisplayedImage(index));
+            SelectedFileIndex.Subscribe(index => Render());
+        }
+
+        public void SetDicomFiles(IEnumerable<DICOMFile> dicomFiles)
+        {
+            DicomFiles.Clear();
+            DicomFiles.AddRange(dicomFiles);
+            SelectedFileIndex.Value = 0;
+            SelectedFileIndex.ForceNotify();
         }
 
         public void SwitchImageByOffset(int offset)
@@ -79,31 +90,7 @@ namespace DicomApp.WpfApp.ViewModels
             SelectedFileIndex.Value = newIndex;
         }
 
-        private void ChangeDisplayedImage(int index)
-        {
-            if (index < 0 || index >= DicomFiles.Count)
-            {
-                return;
-            }
-
-            var selectedFile = DicomFiles[index];
-            if (selectedFile != null)
-            {
-                var image = selectedFile.GetImage();
-                SetImage(image);
-            }
-        }
-
-
-        public void SetImage(DicomImage image)
-        {
-            _image = image;
-            _overlayControlViewModel.SetImage(image);
-            Render();
-        }
-
         public bool SetZoomValue(double factor)
-
         {
             bool isZoomed = false;
 
@@ -133,12 +120,11 @@ namespace DicomApp.WpfApp.ViewModels
 
         public void Render()
         {
-            if (_image == null)
-                return;
+            int currentIndex = SelectedFileIndex.Value;
+            if (currentIndex < 0 || currentIndex >= DicomFiles.Count) return;
 
-            // 画像を描画
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
+            var bitmapImage = GetBitmapImage(currentIndex);
+            if (bitmapImage == null) return;
 
             // 枠に対するサイズを計算
             // 枠からはみ出ないように枠サイズの小数を切り捨てる
@@ -154,6 +140,22 @@ namespace DicomApp.WpfApp.ViewModels
 
             // 選択領域の表示を更新
             _overlayControlViewModel.UpdateSelectedRegion();
+        }
+
+        private WriteableBitmap? GetBitmapImage(int index)
+        {
+            if (index < 0 || index >= DicomFiles.Count) return null;
+
+            if (!_bitmapCache.TryGetValue(index, out var bitmapImage))
+            {
+                var selectedFile = DicomFiles[index];
+                var dicomImage = selectedFile.GetImage();
+                var renderedImage = dicomImage.RenderImage();
+                bitmapImage = renderedImage.As<WriteableBitmap>();
+                _bitmapCache[index] = bitmapImage;
+            }
+
+            return bitmapImage;
         }
     }
 }
