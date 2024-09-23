@@ -86,7 +86,7 @@
     <!-- リストビュー -->
     <ListView Grid.Column="0"
               Grid.Row="1"
-              ItemsSource="{Binding DicomFiles}"
+              ItemsSource="{Binding ImageViewerViewModel.DicomFiles}"
               SelectedIndex="{Binding SelectedIndex.Value, Mode=TwoWay}">
       <ListView.ItemTemplate>
         <DataTemplate>

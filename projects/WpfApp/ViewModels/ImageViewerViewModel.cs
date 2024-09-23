@@ -2,6 +2,7 @@
 using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.CoreModels.Models;
 using DicomApp.WpfUtilities.ViewModels;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
@@ -17,6 +18,8 @@ namespace DicomApp.WpfApp.ViewModels
         private double _zoom = 1.0;
         private double _viewerWidth;
         private double _viewerHeight;
+
+        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();

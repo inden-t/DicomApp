@@ -21,6 +21,9 @@ namespace DicomApp.WpfApp.ViewModels
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
 
+        public ImageViewerViewModel ImageViewerViewModel =>
+            _imageViewerViewModel;
+
         public SelectionOverlayControlViewModel
             SelectionOverlayControlViewModel => _overlayControlViewModel;
 
@@ -44,8 +47,6 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveCommand StartBloodVesselSelectionCommand { get; } =
             new();
-
-        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
@@ -75,10 +76,10 @@ namespace DicomApp.WpfApp.ViewModels
             SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
 
             // DicomFilesの値が変更されたときにMaximumScrollValueを更新する
-            DicomFiles.CollectionChanged += (sender, e) =>
+            _imageViewerViewModel.DicomFiles.CollectionChanged += (sender, e) =>
             {
                 _imageViewerViewModel.SetMaximumScrollValue(
-                    DicomFiles.Count - 1);
+                    _imageViewerViewModel.DicomFiles.Count - 1);
             };
 
             StartBloodVesselSelectionCommand.Subscribe(() =>
@@ -133,7 +134,7 @@ namespace DicomApp.WpfApp.ViewModels
 
         private void SwitchImageByIndex(int index)
         {
-            if (index >= 0 && index < DicomFiles.Count)
+            if (index >= 0 && index < _imageViewerViewModel.DicomFiles.Count)
             {
                 SelectedIndex.Value = index;
             }
@@ -141,22 +142,22 @@ namespace DicomApp.WpfApp.ViewModels
 
         private void SwitchImageByOffset(int offset)
         {
-            if (DicomFiles.Count == 0) return;
+            if (_imageViewerViewModel.DicomFiles.Count == 0) return;
 
             int newIndex = SelectedIndex.Value + offset;
             newIndex = Math.Max(0,
-                Math.Min(newIndex, DicomFiles.Count - 1));
+                Math.Min(newIndex, _imageViewerViewModel.DicomFiles.Count - 1));
             SelectedIndex.Value = newIndex;
         }
 
         private void ChangeDisplayedImage(int index)
         {
-            if (index < 0 || index >= DicomFiles.Count)
+            if (index < 0 || index >= _imageViewerViewModel.DicomFiles.Count)
             {
                 return;
             }
 
-            var selectedFile = DicomFiles[index];
+            var selectedFile = _imageViewerViewModel.DicomFiles[index];
             if (selectedFile != null)
             {
                 var image = selectedFile.GetImage();
