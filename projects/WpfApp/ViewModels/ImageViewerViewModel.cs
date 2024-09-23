@@ -19,6 +19,8 @@ namespace DicomApp.WpfApp.ViewModels
         private double _viewerWidth;
         private double _viewerHeight;
 
+        private readonly Dictionary<int, WriteableBitmap> _bitmapCache = new();
+
         public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
 
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
@@ -103,7 +105,6 @@ namespace DicomApp.WpfApp.ViewModels
             }
         }
 
-
         public void SetImage(DicomImage image)
         {
             _image = image;
@@ -112,7 +113,6 @@ namespace DicomApp.WpfApp.ViewModels
         }
 
         public bool SetZoomValue(double factor)
-
         {
             bool isZoomed = false;
 
@@ -145,9 +145,16 @@ namespace DicomApp.WpfApp.ViewModels
             if (_image == null)
                 return;
 
-            // 画像を描画
-            var renderedImage = _image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
+            int currentIndex = SelectedFileIndex.Value;
+            if (!_bitmapCache.TryGetValue(currentIndex, out var bitmapImage))
+            {
+                // 画像を描画
+                var renderedImage = _image.RenderImage();
+                bitmapImage = renderedImage.As<WriteableBitmap>();
+
+                // キャッシュに保存
+                _bitmapCache[currentIndex] = bitmapImage;
+            }
 
             // 枠に対するサイズを計算
             // 枠からはみ出ないように枠サイズの小数を切り捨てる
