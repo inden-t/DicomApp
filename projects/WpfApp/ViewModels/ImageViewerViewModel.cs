@@ -92,22 +92,11 @@ namespace DicomApp.WpfApp.ViewModels
 
         private void ChangeDisplayedImage(int index)
         {
-            if (index < 0 || index >= DicomFiles.Count)
-            {
-                return;
-            }
+            if (index < 0 || index >= DicomFiles.Count) return;
 
-            var selectedFile = DicomFiles[index];
-            if (selectedFile != null)
-            {
-                var image = selectedFile.GetImage();
-                SetImage(image);
-            }
-        }
-
-        public void SetImage(DicomImage image)
-        {
-            _overlayControlViewModel.SetImage(image);
+            var bitmapImage = GetBitmapImage(index);
+            if (bitmapImage == null) return;
+            _overlayControlViewModel.SetImage(bitmapImage);
             Render();
         }
 
@@ -144,17 +133,8 @@ namespace DicomApp.WpfApp.ViewModels
             int currentIndex = SelectedFileIndex.Value;
             if (currentIndex < 0 || currentIndex >= DicomFiles.Count) return;
 
-            if (!_bitmapCache.TryGetValue(currentIndex, out var bitmapImage))
-            {
-                // 画像を描画
-                var selectedFile = DicomFiles[currentIndex];
-                var dicomImage = selectedFile.GetImage();
-                var renderedImage = dicomImage.RenderImage();
-                bitmapImage = renderedImage.As<WriteableBitmap>();
-
-                // キャッシュに保存
-                _bitmapCache[currentIndex] = bitmapImage;
-            }
+            var bitmapImage = GetBitmapImage(currentIndex);
+            if (bitmapImage == null) return;
 
             // 枠に対するサイズを計算
             // 枠からはみ出ないように枠サイズの小数を切り捨てる
@@ -170,6 +150,22 @@ namespace DicomApp.WpfApp.ViewModels
 
             // 選択領域の表示を更新
             _overlayControlViewModel.UpdateSelectedRegion();
+        }
+
+        private WriteableBitmap? GetBitmapImage(int index)
+        {
+            if (index < 0 || index >= DicomFiles.Count) return null;
+
+            if (!_bitmapCache.TryGetValue(index, out var bitmapImage))
+            {
+                var selectedFile = DicomFiles[index];
+                var dicomImage = selectedFile.GetImage();
+                var renderedImage = dicomImage.RenderImage();
+                bitmapImage = renderedImage.As<WriteableBitmap>();
+                _bitmapCache[index] = bitmapImage;
+            }
+
+            return bitmapImage;
         }
     }
 }

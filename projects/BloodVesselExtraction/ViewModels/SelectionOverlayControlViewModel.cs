@@ -79,10 +79,8 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
             }
         }
 
-        public void SetImage(DicomImage image)
+        public void SetImage(WriteableBitmap bitmapImage)
         {
-            var renderedImage = image.RenderImage();
-            var bitmapImage = renderedImage.As<WriteableBitmap>();
             _bitmapImage = bitmapImage;
         }
 
