@@ -71,9 +71,6 @@ namespace DicomApp.WpfApp.ViewModels
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
                 SwitchImageByOffset(offset));
 
-            _imageViewerViewModel.SelectedIndex.Subscribe(index =>
-                ChangeDisplayedImage(index));
-
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {
                 _overlayControlViewModel.IsSelectionModeActive.Value = true;
@@ -140,22 +137,6 @@ namespace DicomApp.WpfApp.ViewModels
             newIndex = Math.Max(0,
                 Math.Min(newIndex, _imageViewerViewModel.DicomFiles.Count - 1));
             _imageViewerViewModel.SelectedIndex.Value = newIndex;
-        }
-
-        private void ChangeDisplayedImage(int index)
-        {
-            if (index < 0 || index >= _imageViewerViewModel.DicomFiles.Count)
-            {
-                return;
-            }
-
-            var selectedFile = _imageViewerViewModel.DicomFiles[index];
-            if (selectedFile != null)
-            {
-                var image = selectedFile.GetImage();
-                _imageViewerViewModel.ScrollValue.Value = index;
-                _imageViewerViewModel.SetImage(image);
-            }
         }
 
         public void ZoomIn()

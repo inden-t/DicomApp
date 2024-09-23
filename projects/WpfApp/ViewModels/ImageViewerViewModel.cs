@@ -79,6 +79,8 @@ namespace DicomApp.WpfApp.ViewModels
             {
                 SwitchImageByIndexCommand.Execute(value);
             });
+
+            SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
         }
 
         public void SwitchImageByOffset(int offset)
@@ -86,6 +88,23 @@ namespace DicomApp.WpfApp.ViewModels
             // MainWindowViewModelに画像切り替えを通知
             SwitchImageByOffsetCommand.Execute(offset);
         }
+
+        private void ChangeDisplayedImage(int index)
+        {
+            if (index < 0 || index >= DicomFiles.Count)
+            {
+                return;
+            }
+
+            var selectedFile = DicomFiles[index];
+            if (selectedFile != null)
+            {
+                var image = selectedFile.GetImage();
+                ScrollValue.Value = index;
+                SetImage(image);
+            }
+        }
+
 
         public void SetImage(DicomImage image)
         {
