@@ -7,13 +7,10 @@ namespace DicomApp.WpfApp.Presenter
 {
     class OpenDicomFilePresenter : IOpenDicomFilePresenter
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly ImageViewerViewModel _imageViewerViewModel;
 
-        public OpenDicomFilePresenter(MainWindowViewModel mainWindowViewModel,
-            ImageViewerViewModel imageViewerViewModel)
+        public OpenDicomFilePresenter(ImageViewerViewModel imageViewerViewModel)
         {
-            _mainWindowViewModel = mainWindowViewModel;
             _imageViewerViewModel = imageViewerViewModel;
         }
 
