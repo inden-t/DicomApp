@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using DicomApp.BloodVesselExtraction.UseCases;
 using DicomApp.BloodVesselExtraction.ViewModels;
-using DicomApp.CoreModels.Models;
 using DicomApp.MainUseCases.UseCases;
 using DicomApp.WpfApp.UseCases;
 using DicomApp.WpfUtilities.ViewModels;
@@ -20,6 +19,9 @@ namespace DicomApp.WpfApp.ViewModels
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
+
+        public ImageViewerViewModel ImageViewerViewModel =>
+            _imageViewerViewModel;
 
         public SelectionOverlayControlViewModel
             SelectionOverlayControlViewModel => _overlayControlViewModel;
@@ -45,9 +47,6 @@ namespace DicomApp.WpfApp.ViewModels
         public ReactiveCommand StartBloodVesselSelectionCommand { get; } =
             new();
 
-        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
-
-        public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
         public ReactiveProperty<int> ThresholdValue { get; } = new(220);
@@ -65,21 +64,6 @@ namespace DicomApp.WpfApp.ViewModels
             ZoomOutCommand.Subscribe(_ => ZoomOut());
 
             ExitCommand.Subscribe(_ => Application.Current.Shutdown());
-
-            _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
-                SwitchImageByIndex(index));
-
-            _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
-                SwitchImageByOffset(offset));
-
-            SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
-
-            // DicomFilesの値が変更されたときにMaximumScrollValueを更新する
-            DicomFiles.CollectionChanged += (sender, e) =>
-            {
-                _imageViewerViewModel.SetMaximumScrollValue(
-                    DicomFiles.Count - 1);
-            };
 
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {
@@ -129,40 +113,6 @@ namespace DicomApp.WpfApp.ViewModels
             _bloodVesselExtractionUseCase = bloodVesselExtractionUseCase;
             _select3DBloodVesselRegionUseCase =
                 select3DBloodVesselRegionUseCase;
-        }
-
-        private void SwitchImageByIndex(int index)
-        {
-            if (index >= 0 && index < DicomFiles.Count)
-            {
-                SelectedIndex.Value = index;
-            }
-        }
-
-        private void SwitchImageByOffset(int offset)
-        {
-            if (DicomFiles.Count == 0) return;
-
-            int newIndex = SelectedIndex.Value + offset;
-            newIndex = Math.Max(0,
-                Math.Min(newIndex, DicomFiles.Count - 1));
-            SelectedIndex.Value = newIndex;
-        }
-
-        private void ChangeDisplayedImage(int index)
-        {
-            if (index < 0 || index >= DicomFiles.Count)
-            {
-                return;
-            }
-
-            var selectedFile = DicomFiles[index];
-            if (selectedFile != null)
-            {
-                var image = selectedFile.GetImage();
-                _imageViewerViewModel.ScrollValue.Value = index;
-                _imageViewerViewModel.SetImage(image);
-            }
         }
 
         public void ZoomIn()

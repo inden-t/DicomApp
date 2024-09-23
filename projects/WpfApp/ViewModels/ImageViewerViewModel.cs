@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.ViewModels;
+using DicomApp.CoreModels.Models;
 using DicomApp.WpfUtilities.ViewModels;
 using FellowOakDicom.Imaging;
 using Reactive.Bindings;
@@ -18,15 +18,13 @@ namespace DicomApp.WpfApp.ViewModels
         private double _viewerWidth;
         private double _viewerHeight;
 
+        public ReactiveCollection<DICOMFile> DicomFiles { get; } = new();
+
         public ReactiveProperty<BitmapSource> BitmapSourceImage { get; } =
             new();
 
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
-        public ReactiveProperty<int> ScrollValue { get; } = new();
-
-        public ReactiveCommand<int> SwitchImageByIndexCommand { get; } = new();
-
-        public ReactiveCommand<int> SwitchImageByOffsetCommand { get; } = new();
+        public ReactiveProperty<int> SelectedFileIndex { get; } = new();
 
         public double Zoom
         {
@@ -58,36 +56,50 @@ namespace DicomApp.WpfApp.ViewModels
             }
         }
 
-        private BloodVessel3DRegion _selectedRegion = new();
-
         public ImageViewerViewModel(
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
-            _overlayControlViewModel.ScrollValue = ScrollValue;
+            _overlayControlViewModel.SliceIndex = SelectedFileIndex;
 
-            ScrollValue.Subscribe(value =>
+            DicomFiles.CollectionChanged += (sender, e) =>
             {
-                SwitchImageByIndexCommand.Execute(value);
-            });
+                MaximumScrollValue.Value = DicomFiles.Count - 1;
+            };
+
+            SelectedFileIndex.Subscribe(index => ChangeDisplayedImage(index));
         }
 
         public void SwitchImageByOffset(int offset)
         {
-            // MainWindowViewModelに画像切り替えを通知
-            SwitchImageByOffsetCommand.Execute(offset);
+            if (DicomFiles.Count == 0) return;
+
+            int newIndex = SelectedFileIndex.Value + offset;
+            newIndex = Math.Max(0, Math.Min(newIndex, DicomFiles.Count - 1));
+            SelectedFileIndex.Value = newIndex;
         }
+
+        private void ChangeDisplayedImage(int index)
+        {
+            if (index < 0 || index >= DicomFiles.Count)
+            {
+                return;
+            }
+
+            var selectedFile = DicomFiles[index];
+            if (selectedFile != null)
+            {
+                var image = selectedFile.GetImage();
+                SetImage(image);
+            }
+        }
+
 
         public void SetImage(DicomImage image)
         {
             _image = image;
             _overlayControlViewModel.SetImage(image);
             Render();
-        }
-
-        public void SetMaximumScrollValue(int value)
-        {
-            MaximumScrollValue.Value = value;
         }
 
         public bool SetZoomValue(double factor)

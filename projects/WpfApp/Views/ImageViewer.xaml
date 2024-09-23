@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:DicomApp.WpfApp.ViewModels"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:interactivity="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=viewModels:ImageViewerViewModel}"
              MouseWheel="UserControl_MouseWheel"
@@ -36,14 +34,9 @@
                Orientation="Vertical"
                Minimum="0"
                Maximum="{Binding MaximumScrollValue.Value}"
-               Value="{Binding ScrollValue.Value, Mode=TwoWay}"
+               Value="{Binding SelectedFileIndex.Value, Mode=TwoWay}"
                ViewportSize="8"
                SmallChange="1"
                LargeChange="1"/>
-    <b:Interaction.Triggers>
-      <b:EventTrigger EventName="MouseMove">
-        <interactivity:EventToReactiveProperty ReactiveProperty="{Binding MouseMove}"/>
-      </b:EventTrigger>
-    </b:Interaction.Triggers>
   </Grid>
 </UserControl>
