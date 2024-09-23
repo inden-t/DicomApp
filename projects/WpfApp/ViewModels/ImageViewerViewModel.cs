@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.ViewModels;
 using DicomApp.CoreModels.Models;
@@ -68,6 +69,14 @@ namespace DicomApp.WpfApp.ViewModels
             };
 
             SelectedFileIndex.Subscribe(index => ChangeDisplayedImage(index));
+        }
+
+        public void SetDicomFiles(IEnumerable<DICOMFile> dicomFiles)
+        {
+            DicomFiles.Clear();
+            DicomFiles.AddRange(dicomFiles);
+            SelectedFileIndex.Value = 0;
+            SelectedFileIndex.ForceNotify();
         }
 
         public void SwitchImageByOffset(int offset)

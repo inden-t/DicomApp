@@ -16,10 +16,7 @@ namespace DicomApp.WpfApp.Presenter
 
         public void UpdateDisplayedImage(IEnumerable<DICOMFile> dicomFiles)
         {
-            _imageViewerViewModel.DicomFiles.Clear();
-            _imageViewerViewModel.DicomFiles.AddRange(dicomFiles);
-            _imageViewerViewModel.SelectedFileIndex.Value = 0;
-            _imageViewerViewModel.SelectedFileIndex.ForceNotify();
+            _imageViewerViewModel.SetDicomFiles(dicomFiles);
         }
     }
 }
