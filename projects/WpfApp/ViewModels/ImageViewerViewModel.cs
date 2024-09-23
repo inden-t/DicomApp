@@ -70,7 +70,7 @@ namespace DicomApp.WpfApp.ViewModels
                 MaximumScrollValue.Value = DicomFiles.Count - 1;
             };
 
-            SelectedFileIndex.Subscribe(index => ChangeDisplayedImage(index));
+            SelectedFileIndex.Subscribe(index => Render());
         }
 
         public void SetDicomFiles(IEnumerable<DICOMFile> dicomFiles)
@@ -88,15 +88,6 @@ namespace DicomApp.WpfApp.ViewModels
             int newIndex = SelectedFileIndex.Value + offset;
             newIndex = Math.Max(0, Math.Min(newIndex, DicomFiles.Count - 1));
             SelectedFileIndex.Value = newIndex;
-        }
-
-        private void ChangeDisplayedImage(int index)
-        {
-            if (index < 0 || index >= DicomFiles.Count) return;
-
-            var bitmapImage = GetBitmapImage(index);
-            if (bitmapImage == null) return;
-            Render();
         }
 
         public bool SetZoomValue(double factor)
