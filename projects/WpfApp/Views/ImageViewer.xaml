@@ -36,7 +36,7 @@
                Orientation="Vertical"
                Minimum="0"
                Maximum="{Binding MaximumScrollValue.Value}"
-               Value="{Binding ScrollValue.Value, Mode=TwoWay}"
+               Value="{Binding SelectedIndex.Value, Mode=TwoWay}"
                ViewportSize="8"
                SmallChange="1"
                LargeChange="1"/>

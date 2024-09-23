@@ -25,7 +25,6 @@ namespace DicomApp.WpfApp.ViewModels
             new();
 
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
-        public ReactiveProperty<int> ScrollValue { get; } = new();
         public ReactiveProperty<int> SelectedIndex { get; } = new(); //仮
 
         public double Zoom
@@ -64,24 +63,14 @@ namespace DicomApp.WpfApp.ViewModels
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
-            _overlayControlViewModel.ScrollValue = ScrollValue;
+            _overlayControlViewModel.ScrollValue = SelectedIndex;
 
             DicomFiles.CollectionChanged += (sender, e) =>
             {
                 MaximumScrollValue.Value = DicomFiles.Count - 1;
             };
 
-            ScrollValue.Subscribe(value => SwitchImageByIndex(value));
-
             SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
-        }
-
-        private void SwitchImageByIndex(int index)
-        {
-            if (index >= 0 && index < DicomFiles.Count)
-            {
-                SelectedIndex.Value = index;
-            }
         }
 
         public void SwitchImageByOffset(int offset)
@@ -104,7 +93,6 @@ namespace DicomApp.WpfApp.ViewModels
             if (selectedFile != null)
             {
                 var image = selectedFile.GetImage();
-                ScrollValue.Value = index;
                 SetImage(image);
             }
         }
