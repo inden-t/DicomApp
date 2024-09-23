@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.ViewModels;
@@ -14,7 +15,6 @@ namespace DicomApp.WpfApp.ViewModels
         private readonly SelectionOverlayControlViewModel
             _overlayControlViewModel;
 
-        private DicomImage _image;
         private double _zoom = 1.0;
         private double _viewerWidth;
         private double _viewerHeight;
@@ -107,7 +107,6 @@ namespace DicomApp.WpfApp.ViewModels
 
         public void SetImage(DicomImage image)
         {
-            _image = image;
             _overlayControlViewModel.SetImage(image);
             Render();
         }
@@ -142,14 +141,15 @@ namespace DicomApp.WpfApp.ViewModels
 
         public void Render()
         {
-            if (_image == null)
-                return;
-
             int currentIndex = SelectedFileIndex.Value;
+            if (currentIndex < 0 || currentIndex >= DicomFiles.Count) return;
+
             if (!_bitmapCache.TryGetValue(currentIndex, out var bitmapImage))
             {
                 // 画像を描画
-                var renderedImage = _image.RenderImage();
+                var selectedFile = DicomFiles[currentIndex];
+                var dicomImage = selectedFile.GetImage();
+                var renderedImage = dicomImage.RenderImage();
                 bitmapImage = renderedImage.As<WriteableBitmap>();
 
                 // キャッシュに保存
