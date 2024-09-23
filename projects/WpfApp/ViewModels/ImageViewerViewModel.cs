@@ -28,8 +28,6 @@ namespace DicomApp.WpfApp.ViewModels
         public ReactiveProperty<int> ScrollValue { get; } = new();
         public ReactiveProperty<int> SelectedIndex { get; } = new(); //仮
 
-        public ReactiveCommand<int> SwitchImageByIndexCommand { get; } = new();
-
         public double Zoom
         {
             get => _zoom;
@@ -73,13 +71,7 @@ namespace DicomApp.WpfApp.ViewModels
                 MaximumScrollValue.Value = DicomFiles.Count - 1;
             };
 
-            SwitchImageByIndexCommand.Subscribe(index =>
-                SwitchImageByIndex(index));
-
-            ScrollValue.Subscribe(value =>
-            {
-                SwitchImageByIndexCommand.Execute(value);
-            });
+            ScrollValue.Subscribe(value => SwitchImageByIndex(value));
 
             SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
         }
