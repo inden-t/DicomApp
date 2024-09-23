@@ -42,13 +42,11 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
         public ReactiveProperty<int> SliceIndex { get; set; } = new();
         public double Zoom { get; set; } = 1.0;
 
-        private WriteableBitmap _currentSliceImage;
+        public Func<int, WriteableBitmap?> GetSliceImage { get; set; } =
+            _ => null;
 
-        public WriteableBitmap CurrentSliceImage
-        {
-            get => _currentSliceImage;
-            set => _currentSliceImage = value;
-        }
+        public WriteableBitmap? CurrentSliceImage =>
+            GetSliceImage(SliceIndex.Value);
 
         public void InitializeDependencies(
             Select3DBloodVesselRegionUseCase select3DBloodVesselRegionUseCase)
@@ -59,9 +57,12 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         public void OnClick(double relativeX, double relativeY)
         {
+            var currentSliceImage = CurrentSliceImage;
+            if (currentSliceImage == null) return;
+
             Point3D seedPoint = new Point3D(
-                relativeX * CurrentSliceImage.PixelWidth,
-                relativeY * CurrentSliceImage.PixelHeight, SliceIndex.Value);
+                relativeX * currentSliceImage.PixelWidth,
+                relativeY * currentSliceImage.PixelHeight, SliceIndex.Value);
 
             if (CurrentSelectionMode.Value ==
                 SelectionMode.Fill3DSelection)
@@ -89,10 +90,6 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
             }
         }
 
-        public void SetImage(WriteableBitmap bitmapImage)
-        {
-            CurrentSliceImage = bitmapImage;
-        }
 
         public void SetSelectedRegion(BloodVessel3DRegion selectedRegion)
         {
@@ -103,7 +100,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         public void UpdateSelectedRegion()
         {
-            if (CurrentSliceImage == null || _selectedRegion == null)
+            if (_selectedRegion == null)
                 return;
 
             int currentSlice = SliceIndex.Value;
@@ -127,14 +124,16 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         private WriteableBitmap? GetOverlayBitmap(int sliceIndex)
         {
-            if (!_overlayBitmaps.TryGetValue(sliceIndex,
-                    out var overlayBitmap))
+            if (!_overlayBitmaps.TryGetValue(sliceIndex, out var overlayBitmap))
             {
+                var currentSliceImage = GetSliceImage(sliceIndex);
+                if (currentSliceImage == null) return null;
+
                 // 現在のスライスのoverlayBitmapがキャッシュにない場合、新しく作成
                 overlayBitmap = new WriteableBitmap(
-                    CurrentSliceImage.PixelWidth,
-                    CurrentSliceImage.PixelHeight, CurrentSliceImage.DpiX,
-                    CurrentSliceImage.DpiY, PixelFormats.Bgra32, null);
+                    currentSliceImage.PixelWidth, currentSliceImage.PixelHeight,
+                    currentSliceImage.DpiX, currentSliceImage.DpiY,
+                    PixelFormats.Bgra32, null);
                 var stride = overlayBitmap.PixelWidth * 4;
                 var pixels = new byte[overlayBitmap.PixelHeight * stride];
 

@@ -63,6 +63,7 @@ namespace DicomApp.WpfApp.ViewModels
         {
             _overlayControlViewModel = overlayControlViewModel;
             _overlayControlViewModel.SliceIndex = SelectedFileIndex;
+            _overlayControlViewModel.GetSliceImage = GetBitmapImage;
 
             DicomFiles.CollectionChanged += (sender, e) =>
             {
@@ -95,7 +96,6 @@ namespace DicomApp.WpfApp.ViewModels
 
             var bitmapImage = GetBitmapImage(index);
             if (bitmapImage == null) return;
-            _overlayControlViewModel.SetImage(bitmapImage);
             Render();
         }
 
