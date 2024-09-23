@@ -97,8 +97,27 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                 return;
 
             int currentSlice = SliceIndex.Value;
+            var overlayBitmap = GetOverlayBitmap(currentSlice);
+            if (overlayBitmap == null) return;
 
-            if (!_overlayBitmaps.TryGetValue(currentSlice,
+            // 枠に対するサイズを計算
+            // 枠からはみ出ないように枠サイズの小数を切り捨てる
+            double scaleX = Math.Floor(ViewerWidth) / overlayBitmap.PixelWidth;
+            double scaleY =
+                Math.Floor(ViewerHeight) / overlayBitmap.PixelHeight;
+            double scale = Math.Min(scaleX, scaleY);
+
+            // 拡大倍率を適用
+            var scaledBitmap = new TransformedBitmap(overlayBitmap,
+                new ScaleTransform(scale * Zoom, scale * Zoom));
+
+            // OverlayImageSourceを更新
+            OverlaySource.Value = scaledBitmap;
+        }
+
+        private WriteableBitmap? GetOverlayBitmap(int sliceIndex)
+        {
+            if (!_overlayBitmaps.TryGetValue(sliceIndex,
                     out var overlayBitmap))
             {
                 // 現在のスライスのoverlayBitmapがキャッシュにない場合、新しく作成
@@ -111,10 +130,10 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                 // 選択された領域を描画
                 foreach (var point in _selectedRegion.SelectedVoxels)
                 {
-                    if (point.Z == currentSlice) // 現在のスライスのみ描画
+                    if (point.Z == sliceIndex) // 現在のスライスのみ描画
                     {
-                        int x = (int)point.X;
-                        int y = (int)point.Y;
+                        int x = point.X;
+                        int y = point.Y;
                         if (x >= 0 && x < overlayBitmap.PixelWidth && y >= 0 &&
                             y < overlayBitmap.PixelHeight)
                         {
@@ -133,22 +152,10 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                         overlayBitmap.PixelHeight), pixels, stride, 0);
 
                 // キャッシュに保存
-                _overlayBitmaps[currentSlice] = overlayBitmap;
+                _overlayBitmaps[sliceIndex] = overlayBitmap;
             }
 
-            // 枠に対するサイズを計算
-            // 枠からはみ出ないように枠サイズの小数を切り捨てる
-            double scaleX = Math.Floor(ViewerWidth) / overlayBitmap.PixelWidth;
-            double scaleY =
-                Math.Floor(ViewerHeight) / overlayBitmap.PixelHeight;
-            double scale = Math.Min(scaleX, scaleY);
-
-            // 拡大倍率を適用
-            var scaledBitmap = new TransformedBitmap(overlayBitmap,
-                new ScaleTransform(scale * Zoom, scale * Zoom));
-
-            // OverlayImageSourceを更新
-            OverlaySource.Value = scaledBitmap;
+            return overlayBitmap;
         }
     }
 }
