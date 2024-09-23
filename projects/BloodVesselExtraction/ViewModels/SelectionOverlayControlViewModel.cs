@@ -38,7 +38,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         public double ViewerWidth { get; set; }
         public double ViewerHeight { get; set; }
-        public ReactiveProperty<int> ScrollValue { get; set; } = new();
+        public ReactiveProperty<int> SliceIndex { get; set; } = new();
         public double Zoom { get; set; } = 1.0;
 
         public void InitializeDependencies(
@@ -51,7 +51,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
         public void OnClick(double relativeX, double relativeY)
         {
             Point3D seedPoint = new Point3D(relativeX * _bitmapImage.PixelWidth,
-                relativeY * _bitmapImage.PixelHeight, ScrollValue.Value);
+                relativeY * _bitmapImage.PixelHeight, SliceIndex.Value);
 
             if (CurrentSelectionMode.Value ==
                 SelectionMode.Fill3DSelection)
@@ -108,7 +108,7 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
             // 選択された領域を描画
             foreach (var point in _selectedRegion.SelectedVoxels)
             {
-                if (point.Z == ScrollValue.Value) // 現在のスライスのみ描画
+                if (point.Z == SliceIndex.Value) // 現在のスライスのみ描画
                 {
                     int x = (int)point.X;
                     int y = (int)point.Y;

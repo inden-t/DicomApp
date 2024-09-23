@@ -63,7 +63,7 @@ namespace DicomApp.WpfApp.ViewModels
             SelectionOverlayControlViewModel overlayControlViewModel)
         {
             _overlayControlViewModel = overlayControlViewModel;
-            _overlayControlViewModel.ScrollValue = SelectedFileIndex;
+            _overlayControlViewModel.SliceIndex = SelectedFileIndex;
 
             DicomFiles.CollectionChanged += (sender, e) =>
             {
