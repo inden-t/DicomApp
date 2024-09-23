@@ -65,12 +65,6 @@ namespace DicomApp.WpfApp.ViewModels
 
             ExitCommand.Subscribe(_ => Application.Current.Shutdown());
 
-            _imageViewerViewModel.SwitchImageByIndexCommand.Subscribe(index =>
-                SwitchImageByIndex(index));
-
-            _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
-                SwitchImageByOffset(offset));
-
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {
                 _overlayControlViewModel.IsSelectionModeActive.Value = true;
@@ -119,24 +113,6 @@ namespace DicomApp.WpfApp.ViewModels
             _bloodVesselExtractionUseCase = bloodVesselExtractionUseCase;
             _select3DBloodVesselRegionUseCase =
                 select3DBloodVesselRegionUseCase;
-        }
-
-        private void SwitchImageByIndex(int index)
-        {
-            if (index >= 0 && index < _imageViewerViewModel.DicomFiles.Count)
-            {
-                _imageViewerViewModel.SelectedIndex.Value = index;
-            }
-        }
-
-        private void SwitchImageByOffset(int offset)
-        {
-            if (_imageViewerViewModel.DicomFiles.Count == 0) return;
-
-            int newIndex = _imageViewerViewModel.SelectedIndex.Value + offset;
-            newIndex = Math.Max(0,
-                Math.Min(newIndex, _imageViewerViewModel.DicomFiles.Count - 1));
-            _imageViewerViewModel.SelectedIndex.Value = newIndex;
         }
 
         public void ZoomIn()
