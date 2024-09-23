@@ -21,7 +21,9 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
     public class SelectionOverlayControlViewModel : ViewModelBase
     {
         private BloodVessel3DRegion _selectedRegion = new();
-        private Dictionary<int, WriteableBitmap> _overlayBitmaps = new();
+
+        private readonly Dictionary<int, WriteableBitmap> _overlayBitmaps =
+            new();
 
         private Select3DBloodVesselRegionUseCase
             _select3DBloodVesselRegionUseCase;
