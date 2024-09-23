@@ -47,7 +47,6 @@ namespace DicomApp.WpfApp.ViewModels
         public ReactiveCommand StartBloodVesselSelectionCommand { get; } =
             new();
 
-        public ReactiveProperty<int> SelectedIndex { get; } = new();
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
         public ReactiveProperty<int> ThresholdValue { get; } = new(220);
@@ -72,7 +71,8 @@ namespace DicomApp.WpfApp.ViewModels
             _imageViewerViewModel.SwitchImageByOffsetCommand.Subscribe(offset =>
                 SwitchImageByOffset(offset));
 
-            SelectedIndex.Subscribe(index => ChangeDisplayedImage(index));
+            _imageViewerViewModel.SelectedIndex.Subscribe(index =>
+                ChangeDisplayedImage(index));
 
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {
@@ -128,7 +128,7 @@ namespace DicomApp.WpfApp.ViewModels
         {
             if (index >= 0 && index < _imageViewerViewModel.DicomFiles.Count)
             {
-                SelectedIndex.Value = index;
+                _imageViewerViewModel.SelectedIndex.Value = index;
             }
         }
 
@@ -136,10 +136,10 @@ namespace DicomApp.WpfApp.ViewModels
         {
             if (_imageViewerViewModel.DicomFiles.Count == 0) return;
 
-            int newIndex = SelectedIndex.Value + offset;
+            int newIndex = _imageViewerViewModel.SelectedIndex.Value + offset;
             newIndex = Math.Max(0,
                 Math.Min(newIndex, _imageViewerViewModel.DicomFiles.Count - 1));
-            SelectedIndex.Value = newIndex;
+            _imageViewerViewModel.SelectedIndex.Value = newIndex;
         }
 
         private void ChangeDisplayedImage(int index)

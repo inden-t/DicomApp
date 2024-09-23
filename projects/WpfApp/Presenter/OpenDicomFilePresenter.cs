@@ -21,8 +21,8 @@ namespace DicomApp.WpfApp.Presenter
         {
             _imageViewerViewModel.DicomFiles.Clear();
             _imageViewerViewModel.DicomFiles.AddRange(dicomFiles);
-            _mainWindowViewModel.SelectedIndex.Value = 0;
-            _mainWindowViewModel.SelectedIndex.ForceNotify();
+            _imageViewerViewModel.SelectedIndex.Value = 0;
+            _imageViewerViewModel.SelectedIndex.ForceNotify();
         }
     }
 }

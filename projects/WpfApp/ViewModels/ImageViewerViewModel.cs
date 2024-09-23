@@ -26,6 +26,7 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
         public ReactiveProperty<int> ScrollValue { get; } = new();
+        public ReactiveProperty<int> SelectedIndex { get; } = new(); //仮
 
         public ReactiveCommand<int> SwitchImageByIndexCommand { get; } = new();
 
