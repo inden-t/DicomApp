@@ -28,8 +28,6 @@
         <ContentControl x:Name="SelectionOverlay"/>
       </Grid>
     </ScrollViewer>
-    <Canvas x:Name="CanvasOverlay"
-            Grid.Column="0"/>
     <ScrollBar Grid.Column="1"
                Orientation="Vertical"
                Minimum="0"
