@@ -21,7 +21,7 @@ namespace DicomApp.BloodVesselExtraction.Presenter
         {
             _overlayControlViewModel.IsSelectionModeActive.Value = false;
             _overlayControlViewModel.CurrentSelectionMode.Value =
-                SelectionMode.None;
+                SelectionMode.Fill3DSelection;
             _overlayControlViewModel.IsVisible.Value = true;
             _overlayControlViewModel.SetSelectedRegion(selectedRegion);
         }
