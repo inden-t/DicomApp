@@ -66,6 +66,18 @@ namespace DicomApp.WpfApp.ViewModels
 
             ExitCommand.Subscribe(_ => Application.Current.Shutdown());
 
+            ThresholdValue.Subscribe(value =>
+            {
+                if (ThresholdUpperLimit.Value < value)
+                    ThresholdUpperLimit.Value = value;
+            });
+
+            ThresholdUpperLimit.Subscribe(value =>
+            {
+                if (ThresholdValue.Value > value)
+                    ThresholdValue.Value = value;
+            });
+
             StartBloodVesselSelectionCommand.Subscribe(() =>
             {
                 _overlayControlViewModel.IsSelectionModeActive.Value = true;
