@@ -12,16 +12,16 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         private const byte _intensityMax = 255;
 
         public async Task<Model3DGroup> GenerateModelAsync(
-            FileManager fileManager, BloodVessel3DRegion region, int threshold,
-            int thresholdUpperLimit,
+            FileManager fileManager, BloodVessel3DRegion region,
+            int lowerThreshold, int upperThreshold,
             IProgress<(int value, string text)> progress)
         {
             return await Task.Run(() => CreateSurfaceModel(fileManager, region,
-                threshold, thresholdUpperLimit, progress));
+                lowerThreshold, upperThreshold, progress));
         }
 
         private Model3DGroup CreateSurfaceModel(FileManager fileManager,
-            BloodVessel3DRegion region, int threshold, int thresholdUpperLimit,
+            BloodVessel3DRegion region, int lowerThreshold, int upperThreshold,
             IProgress<(int value, string text)> progress)
         {
             var model3DGroup = new Model3DGroup();
@@ -38,7 +38,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
             var surfaceGeometry = CreateSurfaceFromVoxels(region,
-                imageIntensities, threshold, thresholdUpperLimit, progress,
+                imageIntensities, lowerThreshold, upperThreshold, progress,
                 width);
 
             // マテリアルを作成
@@ -82,7 +82,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
         private MeshGeometry3D CreateSurfaceFromVoxels(
             BloodVessel3DRegion region, double[,,] imageIntensities,
-            int threshold, int thresholdUpperLimit,
+            int lowerThreshold, int upperThreshold,
             IProgress<(int value, string text)> progress, int totalWidth)
         {
             var mesh = new MeshGeometry3D();
@@ -94,9 +94,10 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
             int processedVoxels = 0;
 
-            double isoValueLower = threshold / 255.0; // 下限しきい値を0.0～1.0の範囲に正規化
+            double isoValueLower =
+                lowerThreshold / 255.0; // 下限しきい値を0.0～1.0の範囲に正規化
             double isoValueUpper =
-                thresholdUpperLimit / 255.0; // 上限しきい値を0.0～1.0の範囲に正規化
+                upperThreshold / 255.0; // 上限しきい値を0.0～1.0の範囲に正規化
 
             for (int x = 0; x < width - 1; x++)
             {

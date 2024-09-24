@@ -135,8 +135,8 @@
       <TextBlock Margin="0,0,0,5">
         <TextBlock.Text>
           <MultiBinding StringFormat="しきい値: {0}-{1} / 255">
-            <Binding Path="Threshold.Value"/>
-            <Binding Path="ThresholdUpperLimit.Value"/>
+            <Binding Path="LowerThreshold.Value"/>
+            <Binding Path="UpperThreshold.Value"/>
           </MultiBinding>
         </TextBlock.Text>
       </TextBlock>
@@ -148,12 +148,12 @@
         <Border BorderThickness="1"
           BorderBrush="Transparent">
           <Canvas Height="20"
-                Width="{Binding Path=ThresholdUpperLimit.Value}"
+                Width="{Binding Path=UpperThreshold.Value}"
                 HorizontalAlignment="Left"
                 Background="Blue"/>
         </Border>
         <Canvas Height="20"
-                Width="{Binding Path=Threshold.Value}"
+                Width="{Binding Path=LowerThreshold.Value}"
                 HorizontalAlignment="Left"
                 Background="LightGray"/>
       </Grid>

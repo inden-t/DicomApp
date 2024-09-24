@@ -20,9 +20,9 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 manageBloodVesselRegionPresenter;
         }
 
-        public void StartSelection(int threshold, int thresholdUpperLimit)
+        public void StartSelection(int lowerThreshold, int upperThreshold)
         {
-            _regionSelector.StartSelection(threshold, thresholdUpperLimit);
+            _regionSelector.StartSelection(lowerThreshold, upperThreshold);
         }
 
         public void Execute3DFillSelection(Point3D seedPoint)

@@ -69,26 +69,26 @@
           <TextBlock Margin="0,0,0,5">
             <TextBlock.Text>
               <MultiBinding StringFormat="血管抽出のしきい値: {0}-{1} / 255">
-                <Binding Path="ThresholdValue.Value"/>
-                <Binding Path="ThresholdUpperLimit.Value"/>
+                <Binding Path="LowerThreshold.Value"/>
+                <Binding Path="UpperThreshold.Value"/>
               </MultiBinding>
             </TextBlock.Text>
           </TextBlock>
           <Slider Minimum="0"
                   Maximum="255"
                   Width="256"
-                  Value="{Binding ThresholdValue.Value, Mode=TwoWay}"
-                  SelectionStart="{Binding ThresholdValue.Value, Mode=TwoWay}"
-                  SelectionEnd="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
+                  Value="{Binding LowerThreshold.Value, Mode=TwoWay}"
+                  SelectionStart="{Binding LowerThreshold.Value, Mode=TwoWay}"
+                  SelectionEnd="{Binding UpperThreshold.Value, Mode=TwoWay}"
                   IsSelectionRangeEnabled="True"
                   TickFrequency="1"
                   IsSnapToTickEnabled="True"/>
           <Slider Minimum="0"
                   Maximum="255"
                   Width="256"
-                  Value="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
-                  SelectionStart="{Binding ThresholdValue.Value, Mode=TwoWay}"
-                  SelectionEnd="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
+                  Value="{Binding UpperThreshold.Value, Mode=TwoWay}"
+                  SelectionStart="{Binding LowerThreshold.Value, Mode=TwoWay}"
+                  SelectionEnd="{Binding UpperThreshold.Value, Mode=TwoWay}"
                   IsSelectionRangeEnabled="True"
                   TickFrequency="1"
                   IsSnapToTickEnabled="True"/>

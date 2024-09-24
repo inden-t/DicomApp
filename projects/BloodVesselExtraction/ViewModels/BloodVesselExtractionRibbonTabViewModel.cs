@@ -32,8 +32,8 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
 
         public ReactiveProperty<bool> CanUndo { get; } = new(false);
         public ReactiveProperty<bool> CanRedo { get; } = new(false);
-        public ReactiveProperty<int> Threshold { get; } = new(220);
-        public ReactiveProperty<int> ThresholdUpperLimit { get; } = new(255);
+        public ReactiveProperty<int> LowerThreshold { get; } = new(220);
+        public ReactiveProperty<int> UpperThreshold { get; } = new(255);
 
         public BloodVesselExtractionRibbonTabViewModel(
             SelectionOverlayControlViewModel overlayControlViewModel,
@@ -46,13 +46,13 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                 CanUndo.Value = e.CanUndo;
                 CanRedo.Value = e.CanRedo;
             };
-            _regionSelector.ThresholdChanged += (sender, threshold) =>
+            _regionSelector.LowerThresholdChanged += (sender, value) =>
             {
-                Threshold.Value = threshold;
+                LowerThreshold.Value = value;
             };
-            _regionSelector.ThresholdUpperLimitChanged += (sender, value) =>
+            _regionSelector.UpperThresholdChanged += (sender, value) =>
             {
-                ThresholdUpperLimit.Value = value;
+                UpperThreshold.Value = value;
             };
 
             Execute3DFillSelectionCommand.Subscribe(() =>
