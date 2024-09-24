@@ -127,10 +127,10 @@ namespace DicomApp.BloodVesselExtraction.ViewModels
                 manageBloodVesselRegionUseCase.UndoSelection());
             RedoSelectionCommand.Subscribe(() =>
                 manageBloodVesselRegionUseCase.RedoSelection());
-            SaveSelectionCommand.Subscribe(() =>
-                manageBloodVesselRegionUseCase.SaveSelectedRegion());
-            LoadSelectionCommand.Subscribe(() =>
-                manageBloodVesselRegionUseCase.LoadSelectedRegion());
+            SaveSelectionCommand.Subscribe(async () =>
+                await manageBloodVesselRegionUseCase.SaveSelectedRegion());
+            LoadSelectionCommand.Subscribe(async () =>
+                await manageBloodVesselRegionUseCase.LoadSelectedRegion());
             ClearAllSelectionCommand.Subscribe(() =>
                 manageBloodVesselRegionUseCase.ClearAllSelection());
 

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media.Media3D;
 using DicomApp.BloodVesselExtraction.Models;
 using DicomApp.BloodVesselExtraction.PresenterInterface;
+using DicomApp.MainUseCases.PresenterInterface;
 
 namespace DicomApp.BloodVesselExtraction.UseCases
 {
@@ -13,13 +14,17 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         private readonly IManageBloodVesselRegionPresenter
             _manageBloodVesselRegionPresenter;
 
+        private readonly IProgressWindowFactory _progressWindowFactory;
+
         public ManageBloodVesselRegionUseCase(
             BloodVessel3DRegionSelector regionSelector,
-            IManageBloodVesselRegionPresenter manageBloodVesselRegionPresenter)
+            IManageBloodVesselRegionPresenter manageBloodVesselRegionPresenter,
+            IProgressWindowFactory progressWindowFactory)
         {
             _regionSelector = regionSelector;
             _manageBloodVesselRegionPresenter =
                 manageBloodVesselRegionPresenter;
+            _progressWindowFactory = progressWindowFactory;
         }
 
         public void EndRegionSelection()
@@ -57,8 +62,10 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             }
         }
 
-        public void SaveSelectedRegion()
+        public async Task SaveSelectedRegion()
         {
+            var progressWindow = _progressWindowFactory.Create();
+
             try
             {
                 // ファイル保存ダイアログを表示
@@ -70,14 +77,20 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
+                    progressWindow.SetWindowTitle("領域保存中");
+                    progressWindow.Start();
+                    progressWindow.SetStatusText("選択された領域を保存しています...");
+
                     var selectedFile = saveFileDialog.FileName;
                     var selectedRegion = _regionSelector.GetSelectedRegion();
                     var lowerThreshold = _regionSelector.LowerThreshold;
                     var upperThreshold = _regionSelector.UpperThreshold;
 
                     // 選択された領域としきい値をファイルに保存する
-                    SaveRegionToFile(selectedFile, selectedRegion,
-                        lowerThreshold, upperThreshold);
+                    await Task.Run(() => SaveRegionToFile(selectedFile,
+                        selectedRegion, lowerThreshold, upperThreshold));
+
+                    progressWindow.End();
 
                     MessageBox.Show($"選択された領域としきい値を {selectedFile} に保存しました。",
                         "保存完了",
@@ -90,10 +103,16 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 Console.WriteLine($"詳細なエラー情報: {ex}");
             }
+            finally
+            {
+                progressWindow.End();
+            }
         }
 
-        public void LoadSelectedRegion()
+        public async Task LoadSelectedRegion()
         {
+            var progressWindow = _progressWindowFactory.Create();
+
             try
             {
                 // ファイル選択ダイアログを表示
@@ -105,16 +124,25 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
                 if (openFileDialog.ShowDialog() == true)
                 {
+                    progressWindow.SetWindowTitle("領域読み込み中");
+                    progressWindow.Start();
+                    progressWindow.SetStatusText("選択された領域を読み込んでいます...");
+
                     var selectedFile = openFileDialog.FileName;
 
-                    // ファイルから領域としきい値を読み込む
-                    var (loadedRegion, loadedLowerThreshold,
-                            loadedUpperThreshold) =
-                        LoadRegionFromFile(selectedFile);
+                    await Task.Run(() =>
+                    {
+                        // ファイルから領域としきい値を読み込む
+                        var (loadedRegion, loadedLowerThreshold,
+                                loadedUpperThreshold) =
+                            LoadRegionFromFile(selectedFile);
 
-                    // 読み込んだ領域としきい値を_regionSelectorに設定
-                    _regionSelector.SetSelectedRegion(loadedRegion,
-                        loadedLowerThreshold, loadedUpperThreshold);
+                        // 読み込んだ領域としきい値を_regionSelectorに設定
+                        _regionSelector.SetSelectedRegion(loadedRegion,
+                            loadedLowerThreshold, loadedUpperThreshold);
+                    });
+
+                    progressWindow.End();
                 }
 
                 UpdateSelectedRegion();
@@ -124,6 +152,10 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 MessageBox.Show($"領域の読み込み中にエラーが発生しました: {ex.Message}", "エラー",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 Console.WriteLine($"詳細なエラー情報: {ex}");
+            }
+            finally
+            {
+                progressWindow.End();
             }
         }
 
