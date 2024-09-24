@@ -208,6 +208,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         private double GetInterpolationFactor(double v1, double v2,
             double isoValueLower, double isoValueUpper)
         {
+            // v1とv2の値がほぼ等しい場合
             if (Math.Abs(v1 - v2) < 0.00001)
                 return 0.5;
 
@@ -216,23 +217,13 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 (v2 < isoValueLower || v2 > isoValueUpper))
                 return 0.5;
 
-            // v1がしきい値の範囲内、v2が範囲外の場合
-            if (v1 >= isoValueLower && v1 <= isoValueUpper)
-            {
-                if (v2 < isoValueLower)
-                    return (v1 - isoValueLower) / (v1 - v2);
-                else if (v2 > isoValueUpper)
-                    return (isoValueUpper - v1) / (v2 - v1);
-            }
+            // 片方がしきい値の下限を下回る場合
+            if (v1 < isoValueLower || v2 < isoValueLower)
+                return (v1 - isoValueLower) / (v1 - v2);
 
-            // v2がしきい値の範囲内、v1が範囲外の場合
-            if (v2 >= isoValueLower && v2 <= isoValueUpper)
-            {
-                if (v1 < isoValueLower)
-                    return (v1 - isoValueLower) / (v1 - v2);
-                else if (v1 > isoValueUpper)
-                    return (isoValueUpper - v1) / (v2 - v1);
-            }
+            // 片方がしきい値の上限を上回る場合
+            if (v1 > isoValueUpper || v2 > isoValueUpper)
+                return (isoValueUpper - v1) / (v2 - v1);
 
             // v1とv2が両方ともしきい値の範囲内にある場合
             return 0.5;
