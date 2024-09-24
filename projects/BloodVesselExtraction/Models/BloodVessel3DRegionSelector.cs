@@ -26,6 +26,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         private int _imageHeight;
 
         private int _threshold;
+        private int _thresholdUpperLimit;
 
         public int Threshold
         {
@@ -33,6 +34,16 @@ namespace DicomApp.BloodVesselExtraction.Models
             private set
             {
                 _threshold = value;
+                ThresholdChanged?.Invoke(this, value);
+            }
+        }
+
+        public int ThresholdUpperLimit
+        {
+            get => _thresholdUpperLimit;
+            private set
+            {
+                _thresholdUpperLimit = value;
                 ThresholdChanged?.Invoke(this, value);
             }
         }
@@ -50,6 +61,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         public void Initialize()
         {
             Threshold = -1;
+            ThresholdUpperLimit = 255;
             _selectedRegion = new BloodVessel3DRegion();
             _renderedImages = new List<byte[]>();
             _selectionHistory = new List<HashSet<(int X, int Y, int Z)>>();
@@ -57,16 +69,18 @@ namespace DicomApp.BloodVesselExtraction.Models
             SaveCurrentState();
         }
 
-        public void StartSelection(int threshold)
+        public void StartSelection(int threshold, int thresholdUpperLimit)
         {
             Initialize();
             Threshold = threshold;
+            ThresholdUpperLimit = thresholdUpperLimit;
             PreRenderImages();
         }
 
         public void EndSelection()
         {
             Threshold = -1;
+            ThresholdUpperLimit = 255;
             _selectedRegion.Clear();
             _renderedImages.Clear();
             _selectionHistory.Clear();
@@ -132,10 +146,12 @@ namespace DicomApp.BloodVesselExtraction.Models
             return _selectedRegion;
         }
 
-        public void SetSelectedRegion(BloodVessel3DRegion region, int threshold)
+        public void SetSelectedRegion(BloodVessel3DRegion region, int threshold,
+            int thresholdUpperLimit)
         {
             _selectedRegion = region;
             Threshold = threshold;
+            ThresholdUpperLimit = thresholdUpperLimit;
             SaveCurrentState();
         }
 
@@ -203,7 +219,8 @@ namespace DicomApp.BloodVesselExtraction.Models
                 int y = (int)current.Y;
                 int z = (int)current.Z;
 
-                if (GetVoxelIntensity(x, y, z) > Threshold)
+                if (GetVoxelIntensity(x, y, z) >= Threshold &&
+                    GetVoxelIntensity(x, y, z) <= ThresholdUpperLimit)
                 {
                     _selectedRegion.AddVoxel(current);
 
@@ -286,7 +303,8 @@ namespace DicomApp.BloodVesselExtraction.Models
                 x = current.X;
                 y = current.Y;
 
-                if (GetVoxelIntensity(x, y, z) > Threshold)
+                if (GetVoxelIntensity(x, y, z) >= Threshold &&
+                    GetVoxelIntensity(x, y, z) <= ThresholdUpperLimit)
                 {
                     _selectedRegion.AddVoxel(new Point3D(x, y, z));
 
