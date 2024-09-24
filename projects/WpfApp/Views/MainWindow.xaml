@@ -78,12 +78,18 @@
                   Maximum="255"
                   Width="256"
                   Value="{Binding ThresholdValue.Value, Mode=TwoWay}"
+                  SelectionStart="{Binding ThresholdValue.Value, Mode=TwoWay}"
+                  SelectionEnd="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
+                  IsSelectionRangeEnabled="True"
                   TickFrequency="1"
                   IsSnapToTickEnabled="True"/>
           <Slider Minimum="0"
                   Maximum="255"
                   Width="256"
                   Value="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
+                  SelectionStart="{Binding ThresholdValue.Value, Mode=TwoWay}"
+                  SelectionEnd="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
+                  IsSelectionRangeEnabled="True"
                   TickFrequency="1"
                   IsSnapToTickEnabled="True"/>
           <RibbonButton Label="血管抽出開始"
