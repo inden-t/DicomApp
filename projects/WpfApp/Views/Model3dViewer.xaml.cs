@@ -9,17 +9,20 @@ namespace DicomApp.WpfApp.Views
 {
     public partial class Model3dViewer : Window, IModel3dViewer
     {
+        private readonly SaveModel3dUseCase _saveModel3dUseCase;
+
         private Point _lastMousePosition;
         private bool _isRotating;
         private bool _isMiddleButtonDown;
         private PerspectiveCamera _camera;
         private Point3D _modelCenter;
         private double _cameraDistance;
-        private readonly SaveModel3dUseCase _saveModel3dUseCase = new();
         private Model3DGroup _currentModel;
 
-        public Model3dViewer()
+        public Model3dViewer(IProgressWindowFactory progressWindowFactory)
         {
+            _saveModel3dUseCase = new SaveModel3dUseCase(progressWindowFactory);
+
             InitializeComponent();
 
             // ウィンドウのCloseイベントをハンドリング
@@ -204,7 +207,7 @@ namespace DicomApp.WpfApp.Views
 
         private void SaveModel_Click(object sender, RoutedEventArgs e)
         {
-            _saveModel3dUseCase.Execute(_currentModel);
+            _saveModel3dUseCase.ExecuteAsync(_currentModel);
         }
     }
 }

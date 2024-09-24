@@ -2,12 +2,20 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Media3D;
+using DicomApp.MainUseCases.PresenterInterface;
 
 namespace DicomApp.MainUseCases.UseCases
 {
     public class SaveModel3dUseCase
     {
-        public void Execute(Model3DGroup model)
+        private readonly IProgressWindowFactory _progressWindowFactory;
+
+        public SaveModel3dUseCase(IProgressWindowFactory progressWindowFactory)
+        {
+            _progressWindowFactory = progressWindowFactory;
+        }
+
+        public async Task ExecuteAsync(Model3DGroup model)
         {
             if (model == null)
             {
@@ -22,15 +30,23 @@ namespace DicomApp.MainUseCases.UseCases
 
             if (saveFileDialog.ShowDialog() == true)
             {
+                var progressWindow = _progressWindowFactory.Create();
                 string filePath = saveFileDialog.FileName;
                 try
                 {
-                    SaveModelToFile(model, filePath);
+                    progressWindow.SetWindowTitle("モデル保存中");
+                    progressWindow.Start();
+                    progressWindow.SetStatusText("モデルを保存しています...");
+
+                    await Task.Run(() => SaveModelToFile(model, filePath));
+
+                    progressWindow.End();
                     MessageBox.Show($"モデルを {filePath} に保存しました。", "保存完了",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
+                    progressWindow.End();
                     MessageBox.Show($"モデルの保存中にエラーが発生しました: {ex.Message}", "エラー",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
