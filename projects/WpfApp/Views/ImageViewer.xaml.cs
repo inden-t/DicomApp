@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.Views;
 using DicomApp.WpfApp.ViewModels;
 
@@ -73,6 +74,14 @@ namespace DicomApp.WpfApp.Views
 
                 _lastMousePosition = currentPosition;
                 e.Handled = true;
+            }
+            else
+            {
+                Point mousePosition = e.GetPosition(DicomImage);
+                double relativeX = mousePosition.X / DicomImage.ActualWidth;
+                double relativeY = mousePosition.Y / DicomImage.ActualHeight;
+
+                _viewModel.UpdatePixelInfoOnMouseMove(relativeX, relativeY);
             }
         }
 

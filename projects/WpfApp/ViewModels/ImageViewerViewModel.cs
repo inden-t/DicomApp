@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.ViewModels;
@@ -27,6 +28,8 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
         public ReactiveProperty<int> SelectedFileIndex { get; } = new();
+
+        public ReactiveProperty<string> PixelInfo { get; } = new();
 
         public double Zoom
         {
@@ -141,6 +144,29 @@ namespace DicomApp.WpfApp.ViewModels
 
             // 選択領域の表示を更新
             _overlayControlViewModel.UpdateSelectedRegion();
+        }
+
+        public void UpdatePixelInfoOnMouseMove(double relativeX,
+            double relativeY)
+        {
+            int currentIndex = SelectedFileIndex.Value;
+            if (currentIndex < 0 || currentIndex >= DicomFiles.Count) return;
+
+            var bitmapImage = GetBitmapImage(currentIndex);
+            if (bitmapImage == null) return;
+
+            int x = (int)(relativeX * bitmapImage.PixelWidth);
+            int y = (int)(relativeY * bitmapImage.PixelHeight);
+
+            if (x >= 0 && x < bitmapImage.PixelWidth && y >= 0 &&
+                y < bitmapImage.PixelHeight)
+            {
+                byte[] pixels = new byte[4];
+                bitmapImage.CopyPixels(new Int32Rect(x, y, 1, 1), pixels,
+                    4, 0);
+                byte blue = pixels[0];
+                PixelInfo.Value = $"座標: ({x:D3}, {y:D3})\nピクセル値: {blue:D3}";
+            }
         }
 
         private WriteableBitmap? GetBitmapImage(int index)
