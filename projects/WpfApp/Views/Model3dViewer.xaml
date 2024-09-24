@@ -10,7 +10,8 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <StackPanel Grid.Row="0" Background="#F0F0F0">
+    <StackPanel Grid.Row="0"
+                Background="#F0F0F0">
       <Button Content="モデルを保存..."
               Click="SaveModel_Click"
               HorizontalAlignment="Left"
@@ -26,9 +27,9 @@
       <Viewport3D x:Name="viewport3D"
                   IsHitTestVisible="False">
         <Viewport3D.Camera>
-          <PerspectiveCamera Position="255,-256,-384"
-                             LookDirection="0,1,1"
-                             UpDirection="0,1,-1"
+          <PerspectiveCamera Position="255,-256,0"
+                             LookDirection="0,1,0"
+                             UpDirection="0,0,-1"
                              FieldOfView="60"/>
         </Viewport3D.Camera>
         <ModelVisual3D x:Name="modelVisual">
