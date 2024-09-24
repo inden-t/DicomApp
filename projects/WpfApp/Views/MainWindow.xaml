@@ -98,7 +98,7 @@
         </RibbonGroup>
 
         <RibbonGroup Header="ピクセル情報">
-          <TextBlock Text="{Binding ImageViewerViewModel.Kido.Value}"/>
+          <TextBlock Text="{Binding ImageViewerViewModel.PixelInfo.Value}"/>
         </RibbonGroup>
 
       </RibbonTab>
