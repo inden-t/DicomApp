@@ -212,8 +212,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 return 0.5;
 
             // v1とv2が両方ともしきい値の範囲外にある場合
-            if ((v1 < isoValueLower && v2 < isoValueLower) ||
-                (v1 > isoValueUpper && v2 > isoValueUpper))
+            if ((v1 < isoValueLower || v1 > isoValueUpper) &&
+                (v2 < isoValueLower || v2 > isoValueUpper))
                 return 0.5;
 
             // v1がしきい値の範囲内、v2が範囲外の場合
@@ -229,9 +229,9 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             if (v2 >= isoValueLower && v2 <= isoValueUpper)
             {
                 if (v1 < isoValueLower)
-                    return (v2 - isoValueLower) / (v2 - v1);
+                    return (v1 - isoValueLower) / (v1 - v2);
                 else if (v1 > isoValueUpper)
-                    return (isoValueUpper - v2) / (v1 - v2);
+                    return (isoValueUpper - v1) / (v2 - v1);
             }
 
             // v1とv2が両方ともしきい値の範囲内にある場合
