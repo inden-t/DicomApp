@@ -8,9 +8,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 {
     public class BloodVesselSurfaceModelGenerator
     {
-        private const byte _intensityIso = 200;
-        private const byte _intensityMax = 255;
         private const byte _intensityMin = 0;
+        private const byte _intensityMax = 255;
 
         public async Task<Model3DGroup> GenerateModelAsync(
             FileManager fileManager, BloodVessel3DRegion region, int threshold,
@@ -95,7 +94,9 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
             int processedVoxels = 0;
 
-            double isoValue = threshold / 255.0; // しきい値を0.0～1.0の範囲に正規化
+            double isoValueLower = threshold / 255.0; // 下限しきい値を0.0～1.0の範囲に正規化
+            double isoValueUpper =
+                thresholdUpperLimit / 255.0; // 上限しきい値を0.0～1.0の範囲に正規化
 
             for (int x = 0; x < width - 1; x++)
             {
@@ -134,7 +135,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                             foreach (var edge in triangle)
                             {
                                 var v = GetInterpolatedVertexPosition(edge, x,
-                                    y, z, region, imageIntensities, isoValue,
+                                    y, z, region, imageIntensities,
+                                    isoValueLower, isoValueUpper,
                                     totalWidth, boundingBox);
                                 mesh.Positions.Add(v);
                                 mesh.TriangleIndices.Add(mesh.Positions.Count -
@@ -171,7 +173,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
         private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
             int z, BloodVessel3DRegion region, double[,,] imageIntensities,
-            double isoValue, int totalWidth,
+            double isoValueLower, double isoValueUpper, int totalWidth,
             (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox)
         {
             int x1, y1, z1, x2, y2, z2;
@@ -192,7 +194,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             double v1 = imageIntensities[rx1, ry1, rz1];
             double v2 = imageIntensities[rx2, ry2, rz2];
-            double mu = GetInterpolationFactor(v1, v2, isoValue);
+            double mu =
+                GetInterpolationFactor(v1, v2, isoValueLower, isoValueUpper);
 
             // X座標を反転
             double invertedX1 = totalWidth - 1 - x1;
@@ -203,13 +206,36 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         }
 
         private double GetInterpolationFactor(double v1, double v2,
-            double isoValue)
+            double isoValueLower, double isoValueUpper)
         {
-            if (Math.Abs(v1 - v2) < 0.00001 ||
-                (isoValue - v1) * (isoValue - v2) > 0)
+            if (Math.Abs(v1 - v2) < 0.00001)
                 return 0.5;
 
-            return (isoValue - v1) / (v2 - v1);
+            // v1とv2が両方ともしきい値の範囲外にある場合
+            if ((v1 < isoValueLower && v2 < isoValueLower) ||
+                (v1 > isoValueUpper && v2 > isoValueUpper))
+                return 0.5;
+
+            // v1がしきい値の範囲内、v2が範囲外の場合
+            if (v1 >= isoValueLower && v1 <= isoValueUpper)
+            {
+                if (v2 < isoValueLower)
+                    return (v1 - isoValueLower) / (v1 - v2);
+                else if (v2 > isoValueUpper)
+                    return (isoValueUpper - v1) / (v2 - v1);
+            }
+
+            // v2がしきい値の範囲内、v1が範囲外の場合
+            if (v2 >= isoValueLower && v2 <= isoValueUpper)
+            {
+                if (v1 < isoValueLower)
+                    return (v2 - isoValueLower) / (v2 - v1);
+                else if (v1 > isoValueUpper)
+                    return (isoValueUpper - v2) / (v1 - v2);
+            }
+
+            // v1とv2が両方ともしきい値の範囲内にある場合
+            return 0.5;
         }
 
         private MaterialGroup CreateMaterial()
