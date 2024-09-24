@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using DicomApp.MainUseCases.PresenterInterface;
 using DicomApp.WpfApp.ViewModels;
 
@@ -19,12 +20,14 @@ namespace DicomApp.WpfApp.Views
         public void Start()
         {
             Application.Current.MainWindow!.IsEnabled = false;
+            Mouse.OverrideCursor = Cursors.Wait;
             Show();
         }
 
         public void End()
         {
             Close();
+            Mouse.OverrideCursor = null;
             Application.Current.MainWindow!.IsEnabled = true;
         }
 
