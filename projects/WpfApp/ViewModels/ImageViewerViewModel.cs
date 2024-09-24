@@ -156,7 +156,7 @@ namespace DicomApp.WpfApp.ViewModels
                 bitmapSource.CopyPixels(new Int32Rect(x, y, 1, 1), pixels,
                     4, 0);
                 byte blue = pixels[0];
-                Kido.Value = $"X,Y: {x}, {y}\n値: {blue}";
+                Kido.Value = $"座標: ({x}, {y})\nピクセル値: {blue}";
             }
         }
 
