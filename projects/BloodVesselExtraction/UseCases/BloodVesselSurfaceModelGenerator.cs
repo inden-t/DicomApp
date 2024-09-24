@@ -105,29 +105,25 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                     {
                         // Marching Cubesアルゴリズムの実装
                         int cubeIndex = 0;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + boundingBox.Y, z + boundingBox.Z)))
+                        if (IsVoxelInRange(x, y, z, boundingBox, region))
                             cubeIndex |= 1;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + boundingBox.Y,
-                                z + boundingBox.Z))) cubeIndex |= 2;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + 1 + boundingBox.Y,
-                                z + boundingBox.Z))) cubeIndex |= 4;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + 1 + boundingBox.Y, z + boundingBox.Z)))
+                        if (IsVoxelInRange(x + 1, y, z, boundingBox, region))
+                            cubeIndex |= 2;
+                        if (IsVoxelInRange(x + 1, y + 1, z, boundingBox,
+                                region))
+                            cubeIndex |= 4;
+                        if (IsVoxelInRange(x, y + 1, z, boundingBox, region))
                             cubeIndex |= 8;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + boundingBox.Y, z + 1 + boundingBox.Z)))
+                        if (IsVoxelInRange(x, y, z + 1, boundingBox, region))
                             cubeIndex |= 16;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + boundingBox.Y,
-                                z + 1 + boundingBox.Z))) cubeIndex |= 32;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + 1 + boundingBox.Y,
-                                z + 1 + boundingBox.Z))) cubeIndex |= 64;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + 1 + boundingBox.Y, z + 1 + boundingBox.Z)))
+                        if (IsVoxelInRange(x + 1, y, z + 1, boundingBox,
+                                region))
+                            cubeIndex |= 32;
+                        if (IsVoxelInRange(x + 1, y + 1, z + 1, boundingBox,
+                                region))
+                            cubeIndex |= 64;
+                        if (IsVoxelInRange(x, y + 1, z + 1, boundingBox,
+                                region))
                             cubeIndex |= 128;
 
                         // ルックアップテーブルを使用して三角形を生成
@@ -163,6 +159,14 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             }
 
             return mesh;
+        }
+
+        private bool IsVoxelInRange(int x, int y, int z,
+            (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox,
+            BloodVessel3DRegion region)
+        {
+            return region.ContainsVoxel(new Point3D(x + boundingBox.X,
+                y + boundingBox.Y, z + boundingBox.Z));
         }
 
         private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
