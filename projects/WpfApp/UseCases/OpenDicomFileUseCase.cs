@@ -130,9 +130,16 @@ namespace DicomApp.WpfApp.UseCases
 
                 // ソートされたファイルをFileManagerに追加
                 _fileManager.ClearFiles();
-                foreach (var dicomFile in sortedDicomFiles)
+                int totalSortedFiles = sortedDicomFiles.Count;
+                for (int i = 0; i < totalSortedFiles; i++)
                 {
-                    _fileManager.AddFile(dicomFile);
+                    var dicomFile = sortedDicomFiles[i];
+                    await Task.Run(() => _fileManager.AddFile(dicomFile));
+                    double progress = (i + 1) / (double)totalSortedFiles * 100;
+                    _progressWindow.SetProgress(progress);
+                    string statusText =
+                        $"画像をキャッシュしています... ({i + 1}/{totalSortedFiles})";
+                    _progressWindow.SetStatusText(statusText);
                 }
 
                 if (_fileManager.DicomFiles.Count > 0)
