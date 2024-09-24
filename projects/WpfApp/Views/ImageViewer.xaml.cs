@@ -75,13 +75,11 @@ namespace DicomApp.WpfApp.Views
                 _lastMousePosition = currentPosition;
                 e.Handled = true;
             }
-            else if (DicomImage.Source is BitmapSource bitmapSource)
+            else
             {
                 Point mousePosition = e.GetPosition(DicomImage);
-                int x = (int)(mousePosition.X * bitmapSource.PixelWidth /
-                              DicomImage.ActualWidth);
-                int y = (int)(mousePosition.Y * bitmapSource.PixelHeight /
-                              DicomImage.ActualHeight);
+                double x = mousePosition.X / DicomImage.ActualWidth;
+                double y = mousePosition.Y / DicomImage.ActualHeight;
 
                 _viewModel.ImageScrollViewer_MouseMove(x, y);
             }

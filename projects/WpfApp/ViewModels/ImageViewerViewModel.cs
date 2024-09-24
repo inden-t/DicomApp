@@ -146,14 +146,22 @@ namespace DicomApp.WpfApp.ViewModels
             _overlayControlViewModel.UpdateSelectedRegion();
         }
 
-        public void ImageScrollViewer_MouseMove(int x, int y)
+        public void ImageScrollViewer_MouseMove(double xf, double yf)
         {
-            var bitmapSource = BitmapSourceImage.Value;
-            if (x >= 0 && x < bitmapSource.PixelWidth && y >= 0 &&
-                y < bitmapSource.PixelHeight)
+            int currentIndex = SelectedFileIndex.Value;
+            if (currentIndex < 0 || currentIndex >= DicomFiles.Count) return;
+
+            var bitmapImage = GetBitmapImage(currentIndex);
+            if (bitmapImage == null) return;
+
+            int x = (int)(xf * bitmapImage.PixelWidth);
+            int y = (int)(yf * bitmapImage.PixelHeight);
+
+            if (x >= 0 && x < bitmapImage.PixelWidth && y >= 0 &&
+                y < bitmapImage.PixelHeight)
             {
                 byte[] pixels = new byte[4];
-                bitmapSource.CopyPixels(new Int32Rect(x, y, 1, 1), pixels,
+                bitmapImage.CopyPixels(new Int32Rect(x, y, 1, 1), pixels,
                     4, 0);
                 byte blue = pixels[0];
                 Kido.Value = $"座標: ({x}, {y})\nピクセル値: {blue}";
