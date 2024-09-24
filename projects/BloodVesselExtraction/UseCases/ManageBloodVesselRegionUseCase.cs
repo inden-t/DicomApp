@@ -108,10 +108,10 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                     // ファイルから領域としきい値を読み込む
                     var (loadedRegion, loadedThreshold) =
                         LoadRegionFromFile(selectedFile);
-
+                    int thresholdUpperLimit = 255; //仮
                     // 読み込んだ領域としきい値を_regionSelectorに設定
                     _regionSelector.SetSelectedRegion(loadedRegion,
-                        loadedThreshold);
+                        loadedThreshold, thresholdUpperLimit);
                 }
 
                 UpdateSelectedRegion();
