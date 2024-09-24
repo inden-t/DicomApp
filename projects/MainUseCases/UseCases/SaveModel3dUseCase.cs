@@ -38,7 +38,8 @@ namespace DicomApp.MainUseCases.UseCases
                     progressWindow.Start();
                     progressWindow.SetStatusText("モデルを保存しています...");
 
-                    await Task.Run(() => SaveModelToFile(model, filePath));
+                    await Task.Run(() =>
+                        SaveModelToFile(model, filePath, progressWindow));
 
                     progressWindow.End();
                     MessageBox.Show($"モデルを {filePath} に保存しました。", "保存完了",
@@ -53,9 +54,14 @@ namespace DicomApp.MainUseCases.UseCases
             }
         }
 
-        private void SaveModelToFile(Model3DGroup model, string filePath)
+        private async Task SaveModelToFile(Model3DGroup model, string filePath,
+            IProgressWindow progressWindow)
         {
             using var writer = new StreamWriter(filePath);
+            int totalVertices = model.Children.OfType<GeometryModel3D>()
+                .Sum(m => ((MeshGeometry3D)m.Geometry).Positions.Count);
+            int processedVertices = 0;
+
             foreach (var model3D in model.Children)
             {
                 if (model3D is GeometryModel3D {Geometry: MeshGeometry3D mesh})
@@ -64,6 +70,15 @@ namespace DicomApp.MainUseCases.UseCases
                     foreach (Point3D point in mesh.Positions)
                     {
                         writer.WriteLine($"v {point.X} {point.Y} {point.Z}");
+
+                        processedVertices++;
+                        if (processedVertices % 1000 == 0 ||
+                            processedVertices == totalVertices)
+                        {
+                            double progress = (double)processedVertices /
+                                totalVertices * 100;
+                            progressWindow.SetProgress(progress);
+                        }
                     }
 
                     // 面を書き込む
