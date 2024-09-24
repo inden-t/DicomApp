@@ -140,11 +140,23 @@
           </MultiBinding>
         </TextBlock.Text>
       </TextBlock>
-      <ProgressBar Minimum="0"
-                   Maximum="255"
-                   Width="100"
-                   Height="16"
-                   Value="{Binding Threshold.Value, Mode=OneWay}"/>
+      <Grid>
+        <Canvas Height="20"
+                Width="255"
+                HorizontalAlignment="Left"
+                Background="LightGray"/>
+        <Border BorderThickness="1"
+          BorderBrush="Transparent">
+          <Canvas Height="20"
+                Width="{Binding Path=ThresholdUpperLimit.Value}"
+                HorizontalAlignment="Left"
+                Background="Blue"/>
+        </Border>
+        <Canvas Height="20"
+                Width="{Binding Path=Threshold.Value}"
+                HorizontalAlignment="Left"
+                Background="LightGray"/>
+      </Grid>
     </StackPanel>
   </RibbonGroup>
 </RibbonTab>
