@@ -60,7 +60,7 @@ namespace DicomApp.BloodVesselExtraction.Models
 
         public void Initialize()
         {
-            Threshold = -1;
+            Threshold = 0;
             ThresholdUpperLimit = 255;
             _selectedRegion = new BloodVessel3DRegion();
             _renderedImages = new List<byte[]>();
@@ -79,7 +79,7 @@ namespace DicomApp.BloodVesselExtraction.Models
 
         public void EndSelection()
         {
-            Threshold = -1;
+            Threshold = 0;
             ThresholdUpperLimit = 255;
             _selectedRegion.Clear();
             _renderedImages.Clear();
