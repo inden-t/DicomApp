@@ -219,11 +219,11 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             // 片方がしきい値の下限を下回る場合
             if (v1 < isoValueLower || v2 < isoValueLower)
-                return (v1 - isoValueLower) / (v1 - v2);
+                return (isoValueLower - v1) / (v2 - v1);
 
             // 片方がしきい値の上限を上回る場合
             if (v1 > isoValueUpper || v2 > isoValueUpper)
-                return (isoValueUpper - v1) / (v2 - v1);
+                return (v1 - isoValueUpper) / (v1 - v2);
 
             // v1とv2が両方ともしきい値の範囲内にある場合
             return 0.5;
