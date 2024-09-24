@@ -84,8 +84,6 @@ namespace DicomApp.WpfApp.ViewModels
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
                 _select3DBloodVesselRegionUseCase?.StartSelection(LowerThreshold
                     .Value, UpperThreshold.Value);
-                _bloodVesselExtractionUseCase?.SetThreshold(LowerThreshold
-                    .Value, UpperThreshold.Value);
             });
 
             _overlayControlViewModel.IsSelectionModeActive.Subscribe((value) =>

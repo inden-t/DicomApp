@@ -13,9 +13,6 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         private readonly IModel3dViewerFactory _viewerFactory;
         private readonly IProgressWindowFactory _progressWindowFactory;
 
-        private int _lowerThreshold = 220;
-        private int _upperThreshold = 255;
-
         public BloodVesselExtractionUseCase(
             FileManager fileManager, BloodVessel3DRegionSelector regionSelector,
             BloodVesselSurfaceModelGenerator modelGenerator,
@@ -27,12 +24,6 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             _modelGenerator = modelGenerator;
             _viewerFactory = viewerFactory;
             _progressWindowFactory = progressWindowFactory;
-        }
-
-        public void SetThreshold(int lowerThreshold, int upperThreshold)
-        {
-            _lowerThreshold = lowerThreshold;
-            _upperThreshold = upperThreshold;
         }
 
         public async Task ExtractBloodVesselAsync()
@@ -51,9 +42,11 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 });
 
                 var region = _regionSelector.GetSelectedRegion();
+                var lowerThreshold = _regionSelector.LowerThreshold;
+                var upperThreshold = _regionSelector.UpperThreshold;
                 var model3DGroup =
                     await _modelGenerator.GenerateModelAsync(_fileManager,
-                        region, _lowerThreshold, _upperThreshold, progress);
+                        region, lowerThreshold, upperThreshold, progress);
 
                 var viewer = _viewerFactory.Create();
                 viewer.SetModel(model3DGroup);
