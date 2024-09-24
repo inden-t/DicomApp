@@ -76,6 +76,7 @@ namespace DicomApp.WpfApp.ViewModels
         public void SetDicomFiles(IEnumerable<DICOMFile> dicomFiles)
         {
             DicomFiles.Clear();
+            _bitmapCache.Clear();
             DicomFiles.AddRange(dicomFiles);
             SelectedFileIndex.Value = 0;
             SelectedFileIndex.ForceNotify();
