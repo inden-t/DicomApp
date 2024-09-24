@@ -205,9 +205,11 @@ namespace DicomApp.WpfApp.Views
             Canvas.SetTop(CenterMark, center.Y - CenterMark.Height / 2);
         }
 
-        private void SaveModel_Click(object sender, RoutedEventArgs e)
+        private　async void SaveModel_Click(object sender, RoutedEventArgs e)
         {
-            _saveModel3dUseCase.ExecuteAsync(_currentModel);
+            IsEnabled = false;
+            await _saveModel3dUseCase.ExecuteAsync(_currentModel);
+            IsEnabled = true;
         }
     }
 }
