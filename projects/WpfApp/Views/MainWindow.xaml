@@ -75,6 +75,14 @@
                     Value="{Binding ThresholdValue.Value, Mode=TwoWay}"
                     TickFrequency="1"
                     IsSnapToTickEnabled="True"/>
+            <TextBlock Text="{Binding ThresholdUpperLimit.Value, StringFormat=しきい値の上限: {0} / 255}"
+                       Margin="0,10,0,5"/>
+            <Slider Minimum="0"
+                    Maximum="255"
+                    Width="160"
+                    Value="{Binding ThresholdUpperLimit.Value, Mode=TwoWay}"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"/>
           </StackPanel>
           <RibbonButton Label="血管抽出開始"
                         Command="{Binding StartBloodVesselSelectionCommand}"

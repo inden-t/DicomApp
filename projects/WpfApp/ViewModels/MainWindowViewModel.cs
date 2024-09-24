@@ -50,6 +50,7 @@ namespace DicomApp.WpfApp.ViewModels
         public ReactiveProperty<int> SelectedRibbonTabIndex { get; } = new();
 
         public ReactiveProperty<int> ThresholdValue { get; } = new(220);
+        public ReactiveProperty<int> ThresholdUpperLimit { get; } = new(255);
 
         public ReactiveProperty<bool>
             IsBloodVesselExtractionUiEnabled { get; } = new(true);
@@ -70,9 +71,9 @@ namespace DicomApp.WpfApp.ViewModels
                 _overlayControlViewModel.IsSelectionModeActive.Value = true;
                 SelectedRibbonTabIndex.Value = 1; // 血管抽出タブ
                 _select3DBloodVesselRegionUseCase?.StartSelection(ThresholdValue
-                    .Value);
+                    .Value, ThresholdUpperLimit.Value);
                 _bloodVesselExtractionUseCase?.SetThreshold(ThresholdValue
-                    .Value);
+                    .Value, ThresholdUpperLimit.Value);
             });
 
             _overlayControlViewModel.IsSelectionModeActive.Subscribe((value) =>
