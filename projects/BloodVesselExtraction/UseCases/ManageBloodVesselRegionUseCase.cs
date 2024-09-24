@@ -73,9 +73,12 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                     var selectedFile = saveFileDialog.FileName;
                     var selectedRegion = _regionSelector.GetSelectedRegion();
                     var threshold = _regionSelector.Threshold;
+                    var thresholdUpperLimit =
+                        _regionSelector.ThresholdUpperLimit;
 
                     // 選択された領域としきい値をファイルに保存する
-                    SaveRegionToFile(selectedFile, selectedRegion, threshold);
+                    SaveRegionToFile(selectedFile, selectedRegion, threshold,
+                        thresholdUpperLimit);
 
                     MessageBox.Show($"選択された領域としきい値を {selectedFile} に保存しました。",
                         "保存完了",
@@ -106,12 +109,12 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                     var selectedFile = openFileDialog.FileName;
 
                     // ファイルから領域としきい値を読み込む
-                    var (loadedRegion, loadedThreshold) =
+                    var (loadedRegion, loadedThreshold,
+                            loadedThresholdUpperLimit) =
                         LoadRegionFromFile(selectedFile);
-                    int thresholdUpperLimit = 255; //仮
                     // 読み込んだ領域としきい値を_regionSelectorに設定
                     _regionSelector.SetSelectedRegion(loadedRegion,
-                        loadedThreshold, thresholdUpperLimit);
+                        loadedThreshold, loadedThresholdUpperLimit);
                 }
 
                 UpdateSelectedRegion();
@@ -125,12 +128,13 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         }
 
         private void SaveRegionToFile(string filePath,
-            BloodVessel3DRegion region, int threshold)
+            BloodVessel3DRegion region, int threshold, int thresholdUpperLimit)
         {
             // 選択された領域としきい値をファイルに保存する処理を実装
             using var stream = new FileStream(filePath, FileMode.Create);
             using var writer = new BinaryWriter(stream);
             writer.Write(threshold);
+            writer.Write(thresholdUpperLimit);
             writer.Write(region.SelectedVoxels.Count);
             foreach (var voxel in region.SelectedVoxels)
             {
@@ -140,13 +144,15 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             }
         }
 
-        private (BloodVessel3DRegion, int) LoadRegionFromFile(string filePath)
+        private (BloodVessel3DRegion, int, int) LoadRegionFromFile(
+            string filePath)
         {
             var region = new BloodVessel3DRegion();
 
             using var stream = new FileStream(filePath, FileMode.Open);
             using var reader = new BinaryReader(stream);
             int threshold = reader.ReadInt32();
+            int thresholdUpperLimit = reader.ReadInt32();
             int voxelCount = reader.ReadInt32();
             for (int i = 0; i < voxelCount; i++)
             {
@@ -156,7 +162,7 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                 region.AddVoxel(new Point3D(x, y, z));
             }
 
-            return (region, threshold);
+            return (region, threshold, thresholdUpperLimit);
         }
 
         private void UpdateSelectedRegion()
