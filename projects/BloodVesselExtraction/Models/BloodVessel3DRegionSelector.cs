@@ -184,7 +184,7 @@ namespace DicomApp.BloodVesselExtraction.Models
         // 3D塗りつぶし選択の実装
         public void Select3DRegion(Point3D seedPoint)
         {
-            if (_fileManager.DicomFiles.Count == 0 || LowerThreshold < 0)
+            if (_fileManager.DicomFiles.Count == 0)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace DicomApp.BloodVesselExtraction.Models
 
         public void Select2DRegion(Point3D seedPoint)
         {
-            if (_renderedImages.Count == 0 || LowerThreshold < 0)
+            if (_renderedImages.Count == 0)
             {
                 return;
             }
