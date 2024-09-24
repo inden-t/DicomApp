@@ -17,6 +17,7 @@ namespace DicomApp.BloodVesselExtraction.Models
             UndoRedoStateChanged;
 
         public event EventHandler<int> ThresholdChanged;
+        public event EventHandler<int> ThresholdUpperLimitChanged;
 
         private readonly FileManager _fileManager;
         private BloodVessel3DRegion _selectedRegion;
@@ -44,7 +45,7 @@ namespace DicomApp.BloodVesselExtraction.Models
             private set
             {
                 _thresholdUpperLimit = value;
-                ThresholdChanged?.Invoke(this, value);
+                ThresholdUpperLimitChanged?.Invoke(this, value);
             }
         }
 
