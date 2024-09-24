@@ -96,6 +96,11 @@
                         Command="{Binding StartBloodVesselSelectionCommand}"
                         IsEnabled="{Binding IsBloodVesselExtractionUiEnabled.Value}"/>
         </RibbonGroup>
+
+        <RibbonGroup  Header="情報">
+          <TextBlock Text="{Binding ImageViewerViewModel.Kido.Value}"/>
+        </RibbonGroup>
+
       </RibbonTab>
     </Ribbon>
 

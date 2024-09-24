@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DicomApp.BloodVesselExtraction.ViewModels;
@@ -27,6 +28,8 @@ namespace DicomApp.WpfApp.ViewModels
 
         public ReactiveProperty<int> MaximumScrollValue { get; } = new();
         public ReactiveProperty<int> SelectedFileIndex { get; } = new();
+
+        public ReactiveProperty<string> Kido { get; } = new();
 
         public double Zoom
         {
@@ -141,6 +144,20 @@ namespace DicomApp.WpfApp.ViewModels
 
             // 選択領域の表示を更新
             _overlayControlViewModel.UpdateSelectedRegion();
+        }
+
+        public void ImageScrollViewer_MouseMove(int x, int y)
+        {
+            var bitmapSource = BitmapSourceImage.Value;
+            if (x >= 0 && x < bitmapSource.PixelWidth && y >= 0 &&
+                y < bitmapSource.PixelHeight)
+            {
+                byte[] pixels = new byte[4];
+                bitmapSource.CopyPixels(new Int32Rect(x, y, 1, 1), pixels,
+                    4, 0);
+                byte blue = pixels[0];
+                Kido.Value = $"X,Y: {x}, {y}\n値: {blue}";
+            }
         }
 
         private WriteableBitmap? GetBitmapImage(int index)
