@@ -165,7 +165,7 @@ namespace DicomApp.WpfApp.ViewModels
                 bitmapImage.CopyPixels(new Int32Rect(x, y, 1, 1), pixels,
                     4, 0);
                 byte blue = pixels[0];
-                PixelInfo.Value = $"座標: ({x}, {y})\nピクセル値: {blue}";
+                PixelInfo.Value = $"座標: ({x:D3}, {y:D3})\nピクセル値: {blue:D3}";
             }
         }
 
