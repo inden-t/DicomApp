@@ -14,14 +14,15 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
         public async Task<Model3DGroup> GenerateModelAsync(
             FileManager fileManager, BloodVessel3DRegion region, int threshold,
+            int thresholdUpperLimit,
             IProgress<(int value, string text)> progress)
         {
-            return await Task.Run(() =>
-                CreateSurfaceModel(fileManager, region, threshold, progress));
+            return await Task.Run(() => CreateSurfaceModel(fileManager, region,
+                threshold, thresholdUpperLimit, progress));
         }
 
         private Model3DGroup CreateSurfaceModel(FileManager fileManager,
-            BloodVessel3DRegion region, int threshold,
+            BloodVessel3DRegion region, int threshold, int thresholdUpperLimit,
             IProgress<(int value, string text)> progress)
         {
             var model3DGroup = new Model3DGroup();
@@ -38,7 +39,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
             var surfaceGeometry = CreateSurfaceFromVoxels(region,
-                imageIntensities, threshold, progress, width);
+                imageIntensities, threshold, thresholdUpperLimit, progress,
+                width);
 
             // マテリアルを作成
             var materialGroup = CreateMaterial();
@@ -81,8 +83,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
         private MeshGeometry3D CreateSurfaceFromVoxels(
             BloodVessel3DRegion region, double[,,] imageIntensities,
-            int threshold, IProgress<(int value, string text)> progress,
-            int totalWidth)
+            int threshold, int thresholdUpperLimit,
+            IProgress<(int value, string text)> progress, int totalWidth)
         {
             var mesh = new MeshGeometry3D();
             var boundingBox = GetBoundingBox(region);
