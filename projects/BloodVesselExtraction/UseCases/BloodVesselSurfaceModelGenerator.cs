@@ -8,20 +8,20 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 {
     public class BloodVesselSurfaceModelGenerator
     {
-        private const byte _intensityIso = 200;
-        private const byte _intensityMax = 255;
         private const byte _intensityMin = 0;
+        private const byte _intensityMax = 255;
 
         public async Task<Model3DGroup> GenerateModelAsync(
-            FileManager fileManager, BloodVessel3DRegion region, int threshold,
+            FileManager fileManager, BloodVessel3DRegion region,
+            int lowerThreshold, int upperThreshold,
             IProgress<(int value, string text)> progress)
         {
-            return await Task.Run(() =>
-                CreateSurfaceModel(fileManager, region, threshold, progress));
+            return await Task.Run(() => CreateSurfaceModel(fileManager, region,
+                lowerThreshold, upperThreshold, progress));
         }
 
         private Model3DGroup CreateSurfaceModel(FileManager fileManager,
-            BloodVessel3DRegion region, int threshold,
+            BloodVessel3DRegion region, int lowerThreshold, int upperThreshold,
             IProgress<(int value, string text)> progress)
         {
             var model3DGroup = new Model3DGroup();
@@ -38,7 +38,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             // Marching Cubesアルゴリズムを使用してサーフェスモデルを生成
             var surfaceGeometry = CreateSurfaceFromVoxels(region,
-                imageIntensities, threshold, progress, width);
+                imageIntensities, lowerThreshold, upperThreshold, progress,
+                width);
 
             // マテリアルを作成
             var materialGroup = CreateMaterial();
@@ -81,8 +82,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
         private MeshGeometry3D CreateSurfaceFromVoxels(
             BloodVessel3DRegion region, double[,,] imageIntensities,
-            int threshold, IProgress<(int value, string text)> progress,
-            int totalWidth)
+            int lowerThreshold, int upperThreshold,
+            IProgress<(int value, string text)> progress, int totalWidth)
         {
             var mesh = new MeshGeometry3D();
             var boundingBox = GetBoundingBox(region);
@@ -93,7 +94,10 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             int totalVoxels = (width - 1) * (height - 1) * (depth - 1);
             int processedVoxels = 0;
 
-            double isoValue = threshold / 255.0; // しきい値を0.0～1.0の範囲に正規化
+            double isoValueLower =
+                lowerThreshold / 255.0; // 下限しきい値を0.0～1.0の範囲に正規化
+            double isoValueUpper =
+                upperThreshold / 255.0; // 上限しきい値を0.0～1.0の範囲に正規化
 
             for (int x = 0; x < width - 1; x++)
             {
@@ -103,29 +107,25 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                     {
                         // Marching Cubesアルゴリズムの実装
                         int cubeIndex = 0;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + boundingBox.Y, z + boundingBox.Z)))
+                        if (IsVoxelInRange(x, y, z, boundingBox, region))
                             cubeIndex |= 1;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + boundingBox.Y,
-                                z + boundingBox.Z))) cubeIndex |= 2;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + 1 + boundingBox.Y,
-                                z + boundingBox.Z))) cubeIndex |= 4;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + 1 + boundingBox.Y, z + boundingBox.Z)))
+                        if (IsVoxelInRange(x + 1, y, z, boundingBox, region))
+                            cubeIndex |= 2;
+                        if (IsVoxelInRange(x + 1, y + 1, z, boundingBox,
+                                region))
+                            cubeIndex |= 4;
+                        if (IsVoxelInRange(x, y + 1, z, boundingBox, region))
                             cubeIndex |= 8;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + boundingBox.Y, z + 1 + boundingBox.Z)))
+                        if (IsVoxelInRange(x, y, z + 1, boundingBox, region))
                             cubeIndex |= 16;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + boundingBox.Y,
-                                z + 1 + boundingBox.Z))) cubeIndex |= 32;
-                        if (region.ContainsVoxel(new Point3D(
-                                x + 1 + boundingBox.X, y + 1 + boundingBox.Y,
-                                z + 1 + boundingBox.Z))) cubeIndex |= 64;
-                        if (region.ContainsVoxel(new Point3D(x + boundingBox.X,
-                                y + 1 + boundingBox.Y, z + 1 + boundingBox.Z)))
+                        if (IsVoxelInRange(x + 1, y, z + 1, boundingBox,
+                                region))
+                            cubeIndex |= 32;
+                        if (IsVoxelInRange(x + 1, y + 1, z + 1, boundingBox,
+                                region))
+                            cubeIndex |= 64;
+                        if (IsVoxelInRange(x, y + 1, z + 1, boundingBox,
+                                region))
                             cubeIndex |= 128;
 
                         // ルックアップテーブルを使用して三角形を生成
@@ -136,7 +136,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
                             foreach (var edge in triangle)
                             {
                                 var v = GetInterpolatedVertexPosition(edge, x,
-                                    y, z, region, imageIntensities, isoValue,
+                                    y, z, region, imageIntensities,
+                                    isoValueLower, isoValueUpper,
                                     totalWidth, boundingBox);
                                 mesh.Positions.Add(v);
                                 mesh.TriangleIndices.Add(mesh.Positions.Count -
@@ -163,9 +164,17 @@ namespace DicomApp.BloodVesselExtraction.UseCases
             return mesh;
         }
 
+        private bool IsVoxelInRange(int x, int y, int z,
+            (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox,
+            BloodVessel3DRegion region)
+        {
+            return region.ContainsVoxel(new Point3D(x + boundingBox.X,
+                y + boundingBox.Y, z + boundingBox.Z));
+        }
+
         private Point3D GetInterpolatedVertexPosition(int edge, int x, int y,
             int z, BloodVessel3DRegion region, double[,,] imageIntensities,
-            double isoValue, int totalWidth,
+            double isoValueLower, double isoValueUpper, int totalWidth,
             (int X, int Y, int Z, int Width, int Height, int Depth) boundingBox)
         {
             int x1, y1, z1, x2, y2, z2;
@@ -186,7 +195,8 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             double v1 = imageIntensities[rx1, ry1, rz1];
             double v2 = imageIntensities[rx2, ry2, rz2];
-            double mu = GetInterpolationFactor(v1, v2, isoValue);
+            double mu =
+                GetInterpolationFactor(v1, v2, isoValueLower, isoValueUpper);
 
             // X座標を反転
             double invertedX1 = totalWidth - 1 - x1;
@@ -197,13 +207,27 @@ namespace DicomApp.BloodVesselExtraction.UseCases
         }
 
         private double GetInterpolationFactor(double v1, double v2,
-            double isoValue)
+            double isoValueLower, double isoValueUpper)
         {
-            if (Math.Abs(v1 - v2) < 0.00001 ||
-                (isoValue - v1) * (isoValue - v2) > 0)
+            // v1とv2の値がほぼ等しい場合
+            if (Math.Abs(v1 - v2) < 0.00001)
                 return 0.5;
 
-            return (isoValue - v1) / (v2 - v1);
+            // v1とv2が両方ともしきい値の範囲外にある場合
+            if ((v1 < isoValueLower || v1 > isoValueUpper) &&
+                (v2 < isoValueLower || v2 > isoValueUpper))
+                return 0.5;
+
+            // 片方がしきい値の下限を下回る場合
+            if (v1 < isoValueLower || v2 < isoValueLower)
+                return (isoValueLower - v1) / (v2 - v1);
+
+            // 片方がしきい値の上限を上回る場合
+            if (v1 > isoValueUpper || v2 > isoValueUpper)
+                return (v1 - isoValueUpper) / (v1 - v2);
+
+            // v1とv2が両方ともしきい値の範囲内にある場合
+            return 0.5;
         }
 
         private MaterialGroup CreateMaterial()

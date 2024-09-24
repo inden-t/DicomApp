@@ -132,13 +132,31 @@
 
   <RibbonGroup Header="血管抽出のしきい値">
     <StackPanel Orientation="Vertical">
-      <TextBlock Text="{Binding Threshold.Value, StringFormat=しきい値: {0} / 255}"
-                 Margin="0,0,0,5"/>
-      <ProgressBar Minimum="0"
-                   Maximum="255"
-                   Width="100"
-                   Height="16"
-                   Value="{Binding Threshold.Value, Mode=OneWay}"/>
+      <TextBlock Margin="0,0,0,5">
+        <TextBlock.Text>
+          <MultiBinding StringFormat="しきい値: {0}-{1} / 255">
+            <Binding Path="LowerThreshold.Value"/>
+            <Binding Path="UpperThreshold.Value"/>
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+      <Grid>
+        <Canvas Height="20"
+                Width="255"
+                HorizontalAlignment="Left"
+                Background="LightGray"/>
+        <Border BorderThickness="1"
+          BorderBrush="Transparent">
+          <Canvas Height="20"
+                Width="{Binding Path=UpperThreshold.Value}"
+                HorizontalAlignment="Left"
+                Background="Blue"/>
+        </Border>
+        <Canvas Height="20"
+                Width="{Binding Path=LowerThreshold.Value}"
+                HorizontalAlignment="Left"
+                Background="LightGray"/>
+      </Grid>
     </StackPanel>
   </RibbonGroup>
 </RibbonTab>
