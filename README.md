@@ -25,6 +25,9 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
   - ズーム
   - パン（上下左右の移動）
   - ドリー（前後の移動）
+- 3Dモデルの保存と読み込み
+  - OBJファイル形式でのモデル保存
+  - 保存したOBJファイルの読み込みと表示
 
 ### 血管抽出機能
 - 2D/3D塗りつぶし選択
@@ -89,6 +92,12 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
    - 元に戻す/やり直し: 選択操作の元に戻す/やり直し
    - サーフェスモデル生成: 選択した領域の3Dサーフェスモデルを生成
 
+### 3Dモデルの保存と読み込み
+1. 3Dモデル表示ウィンドウで、"モデルを保存..." ボタンをクリックします。
+2. 保存先とファイル名を指定して、モデルをOBJ形式で保存します。
+3. 保存したモデルを読み込むには、メインウィンドウの "モデルを読み込む..." ボタンをクリックします。
+4. 保存したOBJファイルを選択すると、3Dモデルビューワーで表示されます。
+
 ## 技術仕様
 
 ### 開発環境
@@ -119,6 +128,8 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 - `GenerateSurfaceModelWithLinearInterpolationUseCase.cs`: サーフェスモデル生成のロジックに線形補間を追加したものを実装
 - `BloodVesselExtractionUseCase.cs`: 血管抽出機能のロジックを実装
 - `Select3DBloodVesselRegionUseCase.cs`: 3D領域選択のロジックを実装
+- `SaveModel3dUseCase.cs`: 3Dモデルの保存機能を実装
+- `LoadModel3dUseCase.cs`: 保存した3Dモデルの読み込み機能を実装
 
 ## 注意事項
 
