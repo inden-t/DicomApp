@@ -254,7 +254,13 @@ namespace DicomApp.BloodVesselExtraction.UseCases
 
             for (int z = 0; z < boundingBox.Depth; z++)
             {
-                var dicomFile = fileManager.DicomFiles[z + boundingBox.Z];
+                int fileIndex = z + boundingBox.Z;
+                if (fileIndex < 0 || fileIndex >= fileManager.DicomFiles.Count)
+                {
+                    continue;
+                }
+
+                var dicomFile = fileManager.DicomFiles[fileIndex];
                 var image = dicomFile.GetImage();
                 var renderedImage = image.RenderImage()
                     .As<System.Windows.Media.Imaging.WriteableBitmap>();

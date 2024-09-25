@@ -71,6 +71,13 @@ namespace DicomApp.MainUseCases.UseCases
             var model3DGroup = new Model3DGroup();
             int totalFiles = _fileManager.DicomFiles.Count;
 
+            if (totalFiles == 0)
+            {
+                _progressWindow.SetStatusText("DICOMファイルが見つかりません。");
+                model3DGroup.Freeze();
+                return model3DGroup;
+            }
+
             // 3次元ボクセルグリッドを作成
             int width = _fileManager.DicomFiles[0].GetImage().Width;
             int height = _fileManager.DicomFiles[0].GetImage().Height;
