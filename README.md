@@ -26,6 +26,12 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
   - パン（上下左右の移動）
   - ドリー（前後の移動）
 
+### 血管抽出機能
+- 2D/3D塗りつぶし選択
+- 選択範囲の保存と読み込み
+- 選択のやり直し（Undo/Redo）
+- 選択範囲の3Dサーフェスモデル生成
+
 ## セットアップ
 
 1. リポジトリをクローンします。
@@ -62,6 +68,16 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 
 3Dビューワーの中央には黄色い点が表示され、回転の中心を示します。
 
+### 血管抽出
+1. 2D画像表示の手順に従って、DICOMファイルを読み込みます。
+2. "血管抽出開始" ボタンをクリックして、血管抽出モードに入ります。
+3. 血管抽出タブで以下の操作が可能です：
+   - 3D/2D塗りつぶし選択: 画像上でクリックして領域を選択
+   - 3D/2D塗りつぶし選択解除: 選択した領域を解除
+   - 選択範囲の保存/読み込み: 選択した領域をファイルに保存または読み込み
+   - Undo/Redo: 選択操作のやり直し
+   - サーフェスモデル生成: 選択した領域の3Dサーフェスモデルを生成
+
 ## 技術仕様
 
 ### 開発環境
@@ -88,6 +104,8 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 - `GeneratePointCloudUseCase.cs`: 点群モデル生成のロジックを実装
 - `GenerateSurfaceModelUseCase.cs`: サーフェスモデル生成のロジックを実装
 - `GenerateSurfaceModelWithLinearInterpolationUseCase.cs`: サーフェスモデル生成のロジックに線形補間を追加したものを実装
+- `BloodVesselExtractionUseCase.cs`: 血管抽出機能のロジックを実装
+- `Select3DBloodVesselRegionUseCase.cs`: 3D領域選択のロジックを実装
 
 ## 注意事項
 
