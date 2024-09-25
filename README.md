@@ -102,10 +102,12 @@ DICOM Appは、DICOM（Digital Imaging and Communications in Medicine）形式�
 - Prism.Wpf: MVVMパターンの実装サポート
 
 ### アプリケーション構成
-- `Models`: データモデルとビジネスロジック
-- `ViewModels`: ビューとモデルを橋渡しするビューモデル
 - `Views`: ユーザーインターフェース
+- `ViewModels`: ビューとモデルを橋渡しするビューモデル
 - `UseCases`: アプリケーションの主要な機能を実装するユースケース
+- `Models`: データモデルとビジネスロジック
+- `Presenters`: ユースケースとビューモデルを橋渡しするプレゼンター
+- `PresenterInterface`: プレゼンターのインターフェース
 
 ### 主要コンポーネント
 - `App.xaml.cs`: アプリケーションのエントリーポイントとDI（依存性注入）の設定
